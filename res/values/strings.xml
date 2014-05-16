@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- App -->
+    <string name="app_name">NUS Buddy</string>
+
+    <!-- Action bar -->
+    <string name="action_settings">Settings</string>
+
+    <!-- Misc -->
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_login_test">Login Test</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_nusivle">NUSIVLEActivity</string>
+    <string name="title_activity_nusivleactivity2">NUSIVLEActivity2</string>
+
+    <!-- Login Screen -->
+    <string name="EditText_userid_hint">NUS UserID</string>
+    <string name="EditText_password_hint">Password</string>
+    <string name="TextView_login">Sign in to IVLE:</string>
+    <string name="title_activity_login">Login</string>
+    <string name="Button_login_text">Sign in</string>
+    <string name="api_key_working">AaqXNkxgYT3xYQR8qQG6Z</string>
+    <string name="api_key_mine">3bBGOIdtC1T2d7SXeQAO9</string>
+    <string name="title_activity_home_page">Home Page</string>
+    
+    <!-- Nav Drawer -->
+    <string name="action_websearch">Web search</string>
+    <string name="app_not_available">Sorry, there\'s no web browser available</string>
+    <string-array name="drawer_item_names">
+        <item>Home</item>
+        <item>Announcements</item>
+        <item>Gradebook</item>
+        <item>Homework Planner</item>
+        <item>Tests and Quizzes</item>
+        <item>Final Exams</item>
+        <item>CAP Calculator</item>
+        <item>Profile</item>
+        <item>Friends</item>
+        <item>Settings</item>
+        <item>Help</item>
+        <item>About</item>
+        <item>Logout</item>
+    </string-array>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="drawer_name">Navigation</string>
+
+</resources>
