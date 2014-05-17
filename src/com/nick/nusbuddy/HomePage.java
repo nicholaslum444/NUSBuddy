@@ -1,33 +1,23 @@
 package com.nick.nusbuddy;
 
-import java.util.Locale;
-
+import java.util.ArrayList;
 
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.SearchManager;
 import android.content.Context;
-import android.content.Intent;
-import android.content.res.Configuration;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * This example illustrates a common usage of the DrawerLayout widget
@@ -61,6 +51,8 @@ public class HomePage extends BaseActivity {
 
 	Context context;
     LinearLayout layoutPageContent;
+    SharedPreferences sharedPrefs;
+    Editor sharedPrefsEditor;
     
     
     @Override
@@ -69,51 +61,61 @@ public class HomePage extends BaseActivity {
 	}
     
     @Override
-    protected int getCurrentActivityLayoutId() {
-    	return R.layout.drawer_layout;
+    protected int getCurrentActivityLayout() {
+    	return R.layout.activity_home_page;
     }
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // uses the base activity to create the drawer for us.
+        
+    	// uses the base activity to create the layout, drawer, everything.
     	super.onCreate(savedInstanceState);
         
         context = this;
-        getTitle();
+        sharedPrefs = getSharedPreferences("NUSBuddyPrefs", MODE_PRIVATE);
         
         createPageContents();
-        
     }
     
     public void createPageContents() {
-    	// creating the page contents. should move this into a method.
-        layoutPageContent = (LinearLayout) findViewById(R.id.Layout_page_content);
-        
-        TextView textViewWelcome = new TextView(context);
-        
-        textViewWelcome.setText("Welcome, Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius. Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum. Mirum est notare quam littera gothica, quam nunc putamus parum claram, anteposuerit litterarum formas humanitatis per seacula quarta decima et quinta decima. Eodem modo typi, qui nunc nobis videntur parum clari, fiant sollemnes in futurum.");
-        
-        layoutPageContent.addView(textViewWelcome, 0, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-        LinearLayout layoutCap = new LinearLayout(context);
-        TextView textViewCap1 = new TextView(context);
-        textViewCap1.setText("Target CAP:");
-        layoutCap.addView(textViewCap1, 0, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-        layoutPageContent.addView(layoutCap, 1, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-    }
-    
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return super.onCreateOptionsMenu(menu);
-    }
-    
-    /* Called whenever we call invalidateOptionsMenu() */
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        return super.onPrepareOptionsMenu(menu);
-    }
-    
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
+    	// TODO set welcome message morning evening etc and name
+    	TextView welcomeNameView = (TextView) findViewById(R.id.TextView_home_page_welcome_name);
+    	String userName = sharedPrefs.getString("userName", getResources().getString(R.string.TextView_welcome_name_default));
+    	welcomeNameView.setText(userName);
+    	
+    	
+    	// set target cap and required cap
+    	// TODO
+    	
+    	
+    	// TODO set homework list
+    	LinearLayout homeworkListLayout = (LinearLayout) findViewById(R.id.Layout_home_page_homework_list);
+    	ArrayList<String> homeworkList = new ArrayList<String>();
+    	homeworkList.add("cs1231 tutorial 3");
+    	homeworkList.add("asdasd tutoal");
+    	homeworkList.add("stuff");
+    	for (int i = 0; i < homeworkList.size(); i++) {
+    		TextView newHomework = new TextView(context, null, android.R.attr.textAppearanceMedium);
+    		newHomework.setGravity(Gravity.CENTER_HORIZONTAL);
+    		newHomework.setTextColor(Color.parseColor("#046380"));
+    		newHomework.setText(homeworkList.get(i));
+    		homeworkListLayout.addView(newHomework, i);
+    	}
+    	
+    	
+    	// TODO set test list
+    	LinearLayout testsListLayout = (LinearLayout) findViewById(R.id.Layout_home_page_tests_list);
+    	ArrayList<String> testsList = new ArrayList<String>();
+    	testsList.add("cs1231 tutorial 3");
+    	testsList.add("asdasd tutasdasoal");
+    	testsList.add("stufftests");
+    	for (int i = 0; i < testsList.size(); i++) {
+    		TextView newTest = new TextView(context, null, android.R.attr.textAppearanceMedium);
+    		newTest.setGravity(Gravity.CENTER_HORIZONTAL);
+    		newTest.setTextColor(Color.parseColor("#046380"));
+    		newTest.setText(testsList.get(i));
+    		testsListLayout.addView(newTest, i);
+    	}
+    	
     }
 }

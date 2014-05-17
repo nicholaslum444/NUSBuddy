@@ -33,6 +33,14 @@
             android:name="com.nick.nusbuddy.BaseActivity"
             android:label="@string/title_activity_base" >
         </activity>
+        <activity
+            android:name="com.nick.nusbuddy.Announcements"
+            android:label="@string/title_activity_announcements"
+            android:parentActivityName="com.nick.nusbuddy.HomePage" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.nick.nusbuddy.HomePage" />
+        </activity>
     </application>
 
 </manifest>

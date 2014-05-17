@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/Layout_home_page"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin" >
+
+    <LinearLayout android:id="@+id/Layout_home_page_welcome" 
+        android:layout_width="match_parent" 
+        android:layout_height="wrap_content" 
+        android:clickable="true" 
+        android:orientation="vertical" 
+        android:paddingBottom="5dp">
+
+        <TextView
+            android:id="@+id/TextView_home_page_welcome_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/TextView_welcome_message_default"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#002F2F" />
+
+        <TextView
+            android:id="@+id/TextView_home_page_welcome_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/TextView_welcome_name_default"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#046380"
+            android:textSize="28sp" />
+        
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/Layout_home_page_target"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border"
+        android:orientation="vertical"
+        android:paddingBottom="5dp" >
+
+        <TextView
+            android:id="@+id/TextView_home_page_target_target_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/TextView_target_target_message"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#002F2F" />
+
+        <TextView
+            android:id="@+id/TextView_home_page_target_target_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="3dp"
+            android:text="@string/TextView_target_target_value"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#046380"
+            android:textSize="32sp" />
+
+        <TextView
+            android:id="@+id/TextView_home_page_target_required_message1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/TextView_target_required_message1"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#002F2F" />
+
+        <TextView
+            android:id="@+id/TextView_home_page_target_required_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="3dp"
+            android:text="@string/TextView_target_required_value"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#046380"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/TextView_home_page_target_required_message2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/TextView_target_required_message2"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#002F2F" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/Layout_home_page_homework"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border"
+        android:orientation="vertical"
+        android:paddingBottom="5dp" >
+
+        <TextView
+            android:id="@+id/TextView_home_page_homework_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/TextView_homework_message"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#002F2F" />
+
+        <LinearLayout
+            android:id="@+id/Layout_home_page_homework_list"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:textAppearance="?android:attr/textAppearanceMedium" >
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/Layout_home_page_tests"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border"
+        android:orientation="vertical"
+        android:paddingBottom="5dp" >
+
+        <TextView
+            android:id="@+id/TextView_home_page_tests_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/TextView_tests_message"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#002F2F" />
+
+        <LinearLayout
+            android:id="@+id/Layout_home_page_tests_list"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAppearance="?android:attr/textAppearanceMedium" >
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

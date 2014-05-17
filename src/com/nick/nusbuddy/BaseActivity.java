@@ -4,11 +4,11 @@ import java.util.*;
 
 import android.os.*;
 import android.app.*;
+import android.content.*;
 import android.content.res.*;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.*;
 import android.support.v4.widget.*;
-import android.text.*;
 import android.view.*;
 import android.widget.*;
 
@@ -24,37 +24,52 @@ public abstract class BaseActivity extends Activity {
     
     private String mDrawerTitle;
     private String mTitle;
-    private String[] mPlanetTitles;
+    private String[] drawerItemNames;
     
     private Activity currentActivity;
-    private int currentActivityLayoutId;
+    private int currentActivityLayout;
     
-    
+    // needs <?> because class requires parameterisation, the ? is a wildcard
+	private ArrayList<Class<?>> drawerItems;
+	private ScrollView layoutPageContent;
     
     protected abstract Activity getCurrentActivity();
     
-    protected abstract int getCurrentActivityLayoutId();
+    protected abstract int getCurrentActivityLayout();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		currentActivityLayoutId = getCurrentActivityLayoutId();
+		
+		// adding the activity classes to the drawer so that they can be opened
+		// must add in proper order (select item 0 opens activity at position 0)
+		drawerItems = new ArrayList<Class<?>>();
+		drawerItems.add(HomePage.class);
+		drawerItems.add(Announcements.class);
+		
+		
+		// the rest of the onCreate
+		currentActivityLayout = getCurrentActivityLayout();
 		currentActivity = getCurrentActivity();
 		
 		super.onCreate(savedInstanceState);
-		setContentView(currentActivityLayoutId);
+		setContentView(R.layout.drawer_layout);
+		layoutPageContent = (ScrollView) findViewById(R.id.Layout_page_content);
+    	View v = View.inflate(currentActivity, currentActivityLayout, null);
+    	layoutPageContent.addView(v);
 		
 		
 		mTitle = (String) currentActivity.getTitle();
 		mDrawerTitle = getResources().getString(R.string.drawer_name);
-        mPlanetTitles = getResources().getStringArray(R.array.drawer_item_names);
+        drawerItemNames = getResources().getStringArray(R.array.drawer_item_names);
         mDrawerLayout = (DrawerLayout) currentActivity.findViewById(R.id.Layout_drawer);
         mDrawerList = (ListView) currentActivity.findViewById(R.id.left_drawer);
-
+        
         // set a custom shadow that overlays the main content when the drawer opens
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+        
         // set up the drawer's list view with items and click listener
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-                R.layout.drawer_list_item, mPlanetTitles));
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, drawerItemNames));
+        
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         // enable ActionBar app icon to behave as action to toggle nav drawer
@@ -82,9 +97,7 @@ public abstract class BaseActivity extends Activity {
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        if (savedInstanceState == null) {
-            selectItem(0);
-        }
+        
 	}
 
 	@Override
@@ -110,22 +123,8 @@ public abstract class BaseActivity extends Activity {
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-        // Handle action buttons
-        switch(item.getItemId()) {
-        /*case R.id.action_websearch:
-            // create intent to perform web search for this planet
-            Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
-            intent.putExtra(SearchManager.QUERY, getActionBar().getTitle());
-            // catch event that there's no activity to handle intent
-            if (intent.resolveActivity(getPackageManager()) != null) {
-                startActivity(intent);
-            } else {
-                Toast.makeText(this, R.string.app_not_available, Toast.LENGTH_LONG).show();
-            }
-            return true;*/
-        default:
-            return super.onOptionsItemSelected(item);
-        }
+        
+        return super.onOptionsItemSelected(item);
     }
 
     /* The click listner for ListView in the navigation drawer */
@@ -137,29 +136,15 @@ public abstract class BaseActivity extends Activity {
     }
 
     private void selectItem(int position) {
-        /*// update the main content by replacing fragments
-        Fragment fragment = new PlanetFragment();
-        Bundle args = new Bundle();
-        args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
-        fragment.setArguments(args);
-
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-
-        // update selected item and title, then close the drawer
-        mDrawerList.setItemChecked(position, true);
-        setTitle(mPlanetTitles[position]);*/
-    	
-    	/*
-    	 * I want to switch activities
-    	 */
+    	// switching activities when item is selected.
+    	startActivity(new Intent(currentActivity, drawerItems.get(position)));
         mDrawerLayout.closeDrawer(mDrawerList);
     }
 
     @Override
     public void setTitle(CharSequence title) {
         mTitle = (String) title;
-        getActionBar().setTitle(mTitle);
+        currentActivity.getActionBar().setTitle(mTitle);
     }
 
     /**
@@ -180,30 +165,5 @@ public abstract class BaseActivity extends Activity {
         // Pass any configuration change to the drawer toggls
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
-
-    /**
-     * Fragment that appears in the "content_frame", shows a planet
-     */
-    public static class PlanetFragment extends Fragment {
-        public static final String ARG_PLANET_NUMBER = "planet_number";
-
-        public PlanetFragment() {
-            // Empty constructor required for fragment subclasses
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_planet, container, false);
-            int i = getArguments().getInt(ARG_PLANET_NUMBER);
-            String planet = getResources().getStringArray(R.array.drawer_item_names)[i];
-
-            int imageId = getResources().getIdentifier(planet.toLowerCase(Locale.getDefault()),
-                            "drawable", getActivity().getPackageName());
-            ((ImageView) rootView.findViewById(R.id.image)).setImageResource(imageId);
-            getActivity().setTitle(planet);
-            return rootView;
-        }
-    }
-
+    
 }

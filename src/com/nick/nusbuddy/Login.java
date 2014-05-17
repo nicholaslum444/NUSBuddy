@@ -119,7 +119,9 @@ public class Login extends Activity {
 						
 						if (loginSuccess) {
 							prefsEdit.putString("loginToken", loginToken);
+							prefsEdit.putBoolean("loggedIn", true);
 							prefsEdit.commit();
+							
 							pd.setMessage(prefs.getString("loginToken", "123456789"));
 							pd.show();
 							Intent intent = new Intent(context, HomePage.class);
@@ -243,7 +245,7 @@ public class Login extends Activity {
 						prefsEdit.putString("loginToken", receivedToken);
 						prefsEdit.commit();
 						
-						GetUserIdTask getUserIdTask = new GetUserIdTask();
+						GetUserNameTask getUserIdTask = new GetUserNameTask();
 						getUserIdTask.execute(receivedToken);
 					} else {
 						pd.setMessage("Stored token invalid, please sign in again");
@@ -266,7 +268,7 @@ public class Login extends Activity {
 		
 	}
 	
-	public class GetUserIdTask extends AsyncTask<String, Void, Boolean> {
+	public class GetUserNameTask extends AsyncTask<String, Void, Boolean> {
 
 		// exceptions
 		Exception exception;
@@ -305,7 +307,7 @@ public class Login extends Activity {
 				
 				userIdToken = params[0];
 				try {
-					userIdUrl = new URL("https://ivle.nus.edu.sg/api/Lapi.svc/UserID_Get?APIKey=" + getString(R.string.api_key_mine) + "&Token="
+					userIdUrl = new URL("https://ivle.nus.edu.sg/api/Lapi.svc/UserName_Get?APIKey=" + getString(R.string.api_key_mine) + "&Token="
 							+ userIdToken + "&output=json");
 					userIdHttpsConnection = (HttpsURLConnection) userIdUrl.openConnection();
 					
@@ -345,37 +347,12 @@ public class Login extends Activity {
 			pd.dismiss();
 			
 			if (noExceptions && responseContent != null) {
-				prefsEdit.putString("userId", responseContent.substring(1, responseContent.length()-1));
+				prefsEdit.putString("userName", responseContent.substring(1, responseContent.length()-1));
 				prefsEdit.commit();
 				
 				Intent intent = new Intent(context, HomePage.class);
 				startActivity(intent);
 				finish();
-				
-				/*try {
-					JSONObject result = new JSONObject(responseContent);
-					result = result.getJSONObject("Login_JSONResult");
-					receivedToken = result.getString("Token");
-					receivedSuccess = result.getBoolean("Success");
-					
-					if (receivedSuccess) {
-						prefsEdit.putString("loginToken", receivedToken);
-						prefsEdit.commit();
-						pd.setMessage(prefs.getString("loginToken", "123456789"));
-						pd.show();
-						
-						GetUserIdTask getUserIdTask = new GetUserIdTask();
-						getUserIdTask.execute(receivedToken);
-					} else {
-						pd.setMessage("Stored token invalid, please sign in again");
-						pd.show();
-					}
-					
-				} catch (JSONException e) {
-					e.printStackTrace();
-					pd.setMessage(e.toString());
-					pd.show();
-				}*/
 				
 			} else {
 				pd.setMessage("Exception! " + exception.toString());
@@ -431,14 +408,18 @@ public class Login extends Activity {
 		prefsEdit = prefs.edit();
 		
 		String oldToken = prefs.getString("loginToken", null);
-		Toast.makeText(context, oldToken, Toast.LENGTH_LONG).show();
+		boolean loggedIn = prefs.getBoolean("loggedIn", false);
+		Toast.makeText(context, oldToken, Toast.LENGTH_SHORT).show();
 		
-		if (oldToken != null) {
+		if (loggedIn && oldToken != null) {
 			pd.setMessage("Verifying stored token");
 			pd.show();
 			
 			verifyTokenTask = new VerifyTokenTask();
 			verifyTokenTask.execute(oldToken);
+		} else {
+			prefsEdit.putBoolean("loggedIn", false);
+			prefsEdit.putString("loginToken", "");
 		}
 		
 	}

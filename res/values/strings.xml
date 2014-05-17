@@ -26,7 +26,6 @@
 
     <!-- Nav Drawer -->
     <string name="title_activity_base">Base Activity</string>
-    
     <string name="action_websearch">Web search</string>
     <string name="app_not_available">Sorry, there\'s no web browser available</string>
 
@@ -49,5 +48,24 @@
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="drawer_name">Navigation</string>
+
+    <!-- Home Page Contents -->
+    <!-- Welcome Box -->
+    <string name="TextView_welcome_message_default">Hello</string>
+    <string name="TextView_welcome_message_morning">Good morning</string>
+    <string name="TextView_welcome_message_afternoon">Good afternoon</string>
+    <string name="TextView_welcome_message_evening">Good evening</string>
+    <string name="TextView_welcome_name_default">NUS student</string>
+    <!-- Target Box -->
+    <string name="TextView_target_target_message">Target CAP</string>
+    <string name="TextView_target_target_value">5.00</string>
+    <string name="TextView_target_required_message1">You need to achieve</string>
+    <string name="TextView_target_required_value">5.00</string>
+    <string name="TextView_target_required_message2">this semester.</string>
+    <!-- Homework Box -->
+    <string name="TextView_homework_message">Approaching deadlines:</string>
+    <!-- Tests Box -->
+    <string name="TextView_tests_message">Upcoming tests:</string>
+    <string name="title_activity_announcements">Announcements</string>
 
 </resources>
