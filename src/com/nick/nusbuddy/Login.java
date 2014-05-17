@@ -16,7 +16,7 @@ import android.widget.*;
 
 public class Login extends Activity {
 	
-	// login async task to handle network
+	
 	public class LoginTask extends AsyncTask<Void, Void, Boolean> {
 		
 		// exceptions
@@ -60,7 +60,7 @@ public class Login extends Activity {
 				loginHttpsConnection.setDoInput(true);
 				loginHttpsConnection.setDoOutput(true);
 				
-				// creating the json object
+				// creating the json credentials object
 				loginJsonObject = new JSONObject();
 				loginJsonObject.put("APIKey", loginApiKey);
 				loginJsonObject.put("UserID", loginUserId);
@@ -142,7 +142,7 @@ public class Login extends Activity {
 						}
 						pd.setMessage(sb.toString());
 						pd.show();
-					} 
+					}
 				} else {
 					pd.setMessage(responseCode + ". ok =" + HttpURLConnection.HTTP_OK);
 					pd.show();
@@ -291,48 +291,53 @@ public class Login extends Activity {
 		@Override
 		protected void onPreExecute() {
 			userIdNoExceptions = true;
-			
+			exception = new Exception("empty exception");
 		}
 		
 		@Override
 		protected Boolean doInBackground(String... params) {
-			Looper.prepare();
-			
-			if (params == null) {
-				return false;
-			}
-			
-			userIdToken = params[0];
 			try {
-				userIdUrl = new URL("https://ivle.nus.edu.sg/api/Lapi.svc/UserID_Get?APIKey=" + getString(R.string.api_key_mine) + "&Token="
-						+ userIdToken + "&output=json");
-				userIdHttpsConnection = (HttpsURLConnection) userIdUrl.openConnection();
+				Looper.prepare();
 				
-				responseCode = userIdHttpsConnection.getResponseCode();
-				
-				if (responseCode == 200) {
-					BufferedReader br = new BufferedReader(new InputStreamReader(userIdHttpsConnection.getInputStream()));
-					StringBuilder sb = new StringBuilder();
-					String line = br.readLine();
-					while (line != null) {
-						sb.append(line);
-						line = br.readLine();
-					}
-					br.close();
-					responseContent = sb.toString();
+				if (params == null) {
+					return false;
 				}
 				
+				userIdToken = params[0];
+				try {
+					userIdUrl = new URL("https://ivle.nus.edu.sg/api/Lapi.svc/UserID_Get?APIKey=" + getString(R.string.api_key_mine) + "&Token="
+							+ userIdToken + "&output=json");
+					userIdHttpsConnection = (HttpsURLConnection) userIdUrl.openConnection();
+					
+					responseCode = userIdHttpsConnection.getResponseCode();
+					
+					if (responseCode == 200) {
+						BufferedReader br = new BufferedReader(new InputStreamReader(userIdHttpsConnection.getInputStream()));
+						StringBuilder sb = new StringBuilder();
+						String line = br.readLine();
+						while (line != null) {
+							sb.append(line);
+							line = br.readLine();
+						}
+						br.close();
+						responseContent = sb.toString();
+					}
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+					exception = e;
+					userIdNoExceptions = false;
+					
+				} finally {
+					userIdHttpsConnection.disconnect();
+					
+				}
+				
+				return userIdNoExceptions;
 			} catch (Exception e) {
-				e.printStackTrace();
 				exception = e;
-				userIdNoExceptions = false;
-				
-			} finally {
-				userIdHttpsConnection.disconnect();
-				
+				return false;
 			}
-			
-			return userIdNoExceptions;
 		}
 		
 		@Override
@@ -373,7 +378,7 @@ public class Login extends Activity {
 				}*/
 				
 			} else {
-				pd.setMessage("hello " + exception.toString());
+				pd.setMessage("Exception! " + exception.toString());
 				pd.show();
 				
 			}

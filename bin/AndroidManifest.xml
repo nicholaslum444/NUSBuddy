@@ -29,6 +29,10 @@
             android:name="com.nick.nusbuddy.HomePage"
             android:label="@string/title_activity_home_page" >
         </activity>
+        <activity
+            android:name="com.nick.nusbuddy.BaseActivity"
+            android:label="@string/title_activity_base" >
+        </activity>
     </application>
 
 </manifest>

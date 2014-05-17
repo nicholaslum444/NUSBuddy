@@ -23,10 +23,13 @@
     <string name="api_key_working">AaqXNkxgYT3xYQR8qQG6Z</string>
     <string name="api_key_mine">3bBGOIdtC1T2d7SXeQAO9</string>
     <string name="title_activity_home_page">Home Page</string>
-    
+
     <!-- Nav Drawer -->
+    <string name="title_activity_base">Base Activity</string>
+    
     <string name="action_websearch">Web search</string>
     <string name="app_not_available">Sorry, there\'s no web browser available</string>
+
     <string-array name="drawer_item_names">
         <item>Home</item>
         <item>Announcements</item>
@@ -42,6 +45,7 @@
         <item>About</item>
         <item>Logout</item>
     </string-array>
+
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="drawer_name">Navigation</string>
