@@ -202,6 +202,8 @@ public class Login extends Activity {
 				verifyUrl = new URL("https://ivle.nus.edu.sg/api/Lapi.svc/Validate?APIKey=" + getString(R.string.api_key_mine) + "&Token="
 						+ verifyToken + "&output=json");
 				verifyHttpsConnection = (HttpsURLConnection) verifyUrl.openConnection();
+				verifyHttpsConnection.setConnectTimeout(60000);
+				verifyHttpsConnection.setReadTimeout(60000);
 				
 				responseCode = verifyHttpsConnection.getResponseCode();
 				
@@ -245,8 +247,8 @@ public class Login extends Activity {
 						prefsEdit.putString("loginToken", receivedToken);
 						prefsEdit.commit();
 						
-						GetUserNameTask getUserIdTask = new GetUserNameTask();
-						getUserIdTask.execute(receivedToken);
+						GetUserNameTask getUserNameTask = new GetUserNameTask();
+						getUserNameTask.execute(receivedToken);
 					} else {
 						pd.setMessage("Stored token invalid, please sign in again");
 						pd.show();
@@ -272,6 +274,95 @@ public class Login extends Activity {
 
 		// exceptions
 		Exception exception;
+		boolean userNameNoExceptions;
+		
+		// for getting
+		URL userNameUrl;
+		HttpsURLConnection userNameHttpsConnection;
+		
+		// stuff for get
+		String userNameToken;
+		
+		// recieving
+		int responseCode;
+		String responseContent;
+		
+		
+		@Override
+		protected void onPreExecute() {
+			userNameNoExceptions = true;
+			exception = new Exception("empty exception");
+		}
+		
+		@Override
+		protected Boolean doInBackground(String... params) {
+			try {
+				Looper.prepare();
+				
+				if (params == null) {
+					return false;
+				}
+				
+				userNameToken = params[0];
+				try {
+					userNameUrl = new URL("https://ivle.nus.edu.sg/api/Lapi.svc/UserName_Get?APIKey=" + getString(R.string.api_key_mine) + "&Token="
+							+ userNameToken + "&output=json");
+					userNameHttpsConnection = (HttpsURLConnection) userNameUrl.openConnection();
+					userNameHttpsConnection.setConnectTimeout(60000);
+					userNameHttpsConnection.setReadTimeout(60000);
+					
+					responseCode = userNameHttpsConnection.getResponseCode();
+					
+					if (responseCode == 200) {
+						BufferedReader br = new BufferedReader(new InputStreamReader(userNameHttpsConnection.getInputStream()));
+						StringBuilder sb = new StringBuilder();
+						String line = br.readLine();
+						while (line != null) {
+							sb.append(line);
+							line = br.readLine();
+						}
+						br.close();
+						responseContent = sb.toString();
+					}
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+					exception = e;
+					userNameNoExceptions = false;
+					
+				} finally {
+					userNameHttpsConnection.disconnect();
+					
+				}
+				
+				return userNameNoExceptions;
+			} catch (Exception e) {
+				exception = e;
+				return false;
+			}
+		}
+		
+		@Override
+		protected void onPostExecute(Boolean noExceptions) {
+			pd.dismiss();
+			
+			if (noExceptions && responseContent != null) {
+				prefsEdit.putString("userName", responseContent.substring(1, responseContent.length()-1));
+				prefsEdit.commit();
+				
+				new GetUserIdTask().execute(userNameToken);
+				
+			} else {
+				pd.setMessage("Exception! " + exception.toString());
+				pd.show();	
+			}	
+		}
+	}
+	
+	public class GetUserIdTask extends AsyncTask<String, Void, Boolean> {
+
+		// exceptions
+		Exception exception;
 		boolean userIdNoExceptions;
 		
 		// for getting
@@ -284,10 +375,6 @@ public class Login extends Activity {
 		// recieving
 		int responseCode;
 		String responseContent;
-		boolean receivedSuccess;
-		String receivedToken;
-		String receivedUserId;
-		
 		
 		
 		@Override
@@ -307,9 +394,11 @@ public class Login extends Activity {
 				
 				userIdToken = params[0];
 				try {
-					userIdUrl = new URL("https://ivle.nus.edu.sg/api/Lapi.svc/UserName_Get?APIKey=" + getString(R.string.api_key_mine) + "&Token="
+					userIdUrl = new URL("https://ivle.nus.edu.sg/api/Lapi.svc/UserID_Get?APIKey=" + getString(R.string.api_key_mine) + "&Token="
 							+ userIdToken + "&output=json");
 					userIdHttpsConnection = (HttpsURLConnection) userIdUrl.openConnection();
+					userIdHttpsConnection.setConnectTimeout(60000);
+					userIdHttpsConnection.setReadTimeout(60000);
 					
 					responseCode = userIdHttpsConnection.getResponseCode();
 					
@@ -336,6 +425,7 @@ public class Login extends Activity {
 				}
 				
 				return userIdNoExceptions;
+				
 			} catch (Exception e) {
 				exception = e;
 				return false;
@@ -347,7 +437,7 @@ public class Login extends Activity {
 			pd.dismiss();
 			
 			if (noExceptions && responseContent != null) {
-				prefsEdit.putString("userName", responseContent.substring(1, responseContent.length()-1));
+				prefsEdit.putString("userId", responseContent.substring(1, responseContent.length()-1));
 				prefsEdit.commit();
 				
 				Intent intent = new Intent(context, HomePage.class);
@@ -356,14 +446,9 @@ public class Login extends Activity {
 				
 			} else {
 				pd.setMessage("Exception! " + exception.toString());
-				pd.show();
-				
-			}
-			
+				pd.show();	
+			}	
 		}
-
-		
-		
 	}
 	
 	// this view and layout

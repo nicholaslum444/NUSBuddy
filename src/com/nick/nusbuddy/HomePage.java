@@ -77,7 +77,8 @@ public class HomePage extends BaseActivity {
         createPageContents();
     }
     
-    public void createPageContents() {
+    @Override
+    protected void createPageContents() {
     	// TODO set welcome message morning evening etc and name
     	TextView welcomeNameView = (TextView) findViewById(R.id.TextView_home_page_welcome_name);
     	String userName = sharedPrefs.getString("userName", getResources().getString(R.string.TextView_welcome_name_default));

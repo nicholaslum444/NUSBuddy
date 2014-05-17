@@ -36,6 +36,8 @@ public abstract class BaseActivity extends Activity {
     protected abstract Activity getCurrentActivity();
     
     protected abstract int getCurrentActivityLayout();
+    
+    protected abstract void createPageContents();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
