@@ -66,6 +66,11 @@
     <string name="TextView_homework_message">Approaching deadlines:</string>
     <!-- Tests Box -->
     <string name="TextView_tests_message">Upcoming tests:</string>
+
+    <!-- Announcements Page Contents -->
     <string name="title_activity_announcements">Announcements</string>
+    <string name="TextView_announcements_module_code_default">Module Code</string>
+    <string name="TextView_announcements_title_default">Announcement Title - This is a sample announcement meant to test the length of the container. This is a sample announcement meant to test the length of the container. </string>
+    <string name="title_activity_gradebook">Gradebook</string>
 
 </resources>

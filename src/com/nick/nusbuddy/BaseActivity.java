@@ -12,6 +12,11 @@ import android.support.v4.widget.*;
 import android.view.*;
 import android.widget.*;
 
+/**
+ * this is some arcane, mysterious stuff
+ * @author Nicholas
+ *
+ */
 public abstract class BaseActivity extends Activity {
 	
 	public BaseActivity() {	
@@ -47,6 +52,7 @@ public abstract class BaseActivity extends Activity {
 		drawerItems = new ArrayList<Class<?>>();
 		drawerItems.add(HomePage.class);
 		drawerItems.add(Announcements.class);
+		drawerItems.add(Gradebook.class);
 		
 		
 		// the rest of the onCreate
@@ -56,7 +62,10 @@ public abstract class BaseActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.drawer_layout);
 		layoutPageContent = (ScrollView) findViewById(R.id.Layout_page_content);
-    	View v = View.inflate(currentActivity, currentActivityLayout, null);
+    	
+		// inflates the view v with the layout of currentActivityLayout
+		// then adds v to the pageContent layout
+		View v = View.inflate(currentActivity, currentActivityLayout, null);
     	layoutPageContent.addView(v);
 		
 		
@@ -75,8 +84,8 @@ public abstract class BaseActivity extends Activity {
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         // enable ActionBar app icon to behave as action to toggle nav drawer
-        currentActivity.getActionBar().setDisplayHomeAsUpEnabled(true);
-        currentActivity.getActionBar().setHomeButtonEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
 
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the sliding drawer and the action bar app icon
@@ -88,12 +97,12 @@ public abstract class BaseActivity extends Activity {
                 R.string.drawer_close  /* "close drawer" description for accessibility */
                 ) {
             public void onDrawerClosed(View view) {
-            	currentActivity.getActionBar().setTitle(mTitle);
+            	getActionBar().setTitle(mTitle);
                 //invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
 
             public void onDrawerOpened(View drawerView) {
-            	currentActivity.getActionBar().setTitle(mDrawerTitle);
+            	getActionBar().setTitle(mDrawerTitle);
                 //invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
@@ -146,7 +155,7 @@ public abstract class BaseActivity extends Activity {
     @Override
     public void setTitle(CharSequence title) {
         mTitle = (String) title;
-        currentActivity.getActionBar().setTitle(mTitle);
+        getActionBar().setTitle(mTitle);
     }
 
     /**

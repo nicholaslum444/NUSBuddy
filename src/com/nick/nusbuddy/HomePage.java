@@ -2,21 +2,16 @@ package com.nick.nusbuddy;
 
 import java.util.ArrayList;
 
-import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 /**
@@ -62,7 +57,7 @@ public class HomePage extends BaseActivity {
     
     @Override
     protected int getCurrentActivityLayout() {
-    	return R.layout.activity_home_page;
+    	return R.layout.contents_home_page;
     }
     
     @Override
@@ -73,6 +68,7 @@ public class HomePage extends BaseActivity {
         
         context = this;
         sharedPrefs = getSharedPreferences("NUSBuddyPrefs", MODE_PRIVATE);
+        sharedPrefsEditor = sharedPrefs.edit();
         
         createPageContents();
     }
@@ -119,4 +115,13 @@ public class HomePage extends BaseActivity {
     	}
     	
     }
+    
+    
+    public void logout(View v) {
+    	sharedPrefsEditor.clear();
+    	sharedPrefsEditor.commit();
+    	startActivity(new Intent(this, Login.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+    	this.finish();
+    }
+    
 }

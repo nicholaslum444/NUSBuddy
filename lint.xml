@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
+    <issue id="CommitPrefEdits">
+        <ignore path="src/com/nick/nusbuddy/Announcements.java" />
+    </issue>
     <issue id="JavascriptInterface" severity="ignore" />
     <issue id="SetJavaScriptEnabled">
         <ignore path="src/com/nick/nusbuddy/Home.java" />

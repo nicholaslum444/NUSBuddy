@@ -41,6 +41,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.nick.nusbuddy.HomePage" />
         </activity>
+        <activity
+            android:name="com.nick.nusbuddy.Gradebook"
+            android:label="@string/title_activity_gradebook" >
+        </activity>
     </application>
 
 </manifest>

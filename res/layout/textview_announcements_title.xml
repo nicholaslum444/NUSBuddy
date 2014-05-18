@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/TextView_announcements_title"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:linksClickable="false"
+    android:maxLines="1"
+    android:text="@string/TextView_announcements_title_default"
+    android:textAppearance="?android:attr/textAppearanceMedium" >
+
+</TextView>

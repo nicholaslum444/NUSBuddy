@@ -17,6 +17,7 @@ import android.R.dimen;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.app.Activity;
@@ -35,13 +36,14 @@ public class Announcements extends BaseActivity {
 	 * &Duration={System.Int32}
 	 * &IncludeAllInfo={System.Boolean}
 	 * 
-	 * prolly use this. just modules taken.
+	 * modules taken. returns all modules taken so far. does not return mcs (how dumb)
 	 * https://ivle.nus.edu.sg/api/Lapi.svc/Modules_Taken?
 	 * APIKey={System.String}
 	 * &AuthToken={System.String}
 	 * &StudentID={System.String}
 	 */
-	public class GetModuleCodesTask extends AsyncTask<Void, Void, Boolean> {
+	
+	public class GetModulesTask extends AsyncTask<Void, Void, Boolean> {
 		
 		HttpsURLConnection connection;
 		String responseContent;
@@ -55,46 +57,59 @@ public class Announcements extends BaseActivity {
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			
-			if (userId == null || loginToken == null) {
-				return false;
-			}
+			responseContent = modulesInfo;
 			
-			try {
-				URL url = new URL("https://ivle.nus.edu.sg/api/Lapi.svc/Modules_Student?APIKey=" + getString(R.string.api_key_mine)
-							+ "&AuthToken=" + loginToken + "&StudentID=" + userId + "&Duration=0" + "&IncludeAllInfo=true" + "&output=json");
-				connection = (HttpsURLConnection) url.openConnection();
-				connection.setConnectTimeout(60000);
-				connection.setReadTimeout(60000);
-				
-				responseCode = connection.getResponseCode();
-				
-				if (responseCode == 200) {
-					BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-					StringBuilder sb = new StringBuilder();
-					String line = br.readLine();
-					while (line != null) {
-						sb.append(line);
-						line = br.readLine();
-					}
-					br.close();
-					responseContent = sb.toString();
+			if (responseContent == null) {
+			
+				if (userId == null || loginToken == null) {
+					return false;
 				}
 				
+				try {
+					URL url = new URL("https://ivle.nus.edu.sg/api/Lapi.svc/Modules_Student?APIKey=" + getString(R.string.api_key_mine)
+								+ "&AuthToken=" + loginToken + "&StudentID=" + userId + "&Duration=0" + "&IncludeAllInfo=true" + "&output=json");
+					connection = (HttpsURLConnection) url.openConnection();
+					connection.setConnectTimeout(60000);
+					connection.setReadTimeout(60000);
+					
+					responseCode = connection.getResponseCode();
+					
+					if (responseCode == 200) {
+						BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+						StringBuilder sb = new StringBuilder();
+						String line = br.readLine();
+						while (line != null) {
+							sb.append(line);
+							line = br.readLine();
+						}
+						br.close();
+						responseContent = sb.toString();
+					}
+					
+					
+				} catch (MalformedURLException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 				
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+				return true;
 			
-			return true;
+			} else {
+				responseCode = 200;
+				return true;
+			}
 		}
 		
 		@Override
 		protected void onPostExecute(Boolean b) {
+			
 			pd.dismiss();
+			
 			if (responseCode == 200 && responseContent != null) {
 				try {
+					sharedPrefsEditor.putString("modulesInfo", responseContent);
+					sharedPrefsEditor.commit();
 					
 					JSONObject responseObject = new JSONObject(responseContent);
 					JSONArray modulesArray = responseObject.getJSONArray("Results");
@@ -151,16 +166,14 @@ public class Announcements extends BaseActivity {
 					
 					createPageContents();
 					
-					// debug
-					pd.setMessage(""+modulesAnnouncementsDatesList.toString()); 
-					//pd.show();
-					
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
+			} else {
+				pd.setMessage(""+responseCode);
+				pd.show();
 			}
 		}
-		
 	}
 	
 	
@@ -172,6 +185,7 @@ public class Announcements extends BaseActivity {
 	ProgressDialog pd;
 	
 	int numOfModules;
+	String modulesInfo;
 	
 	ArrayList<JSONObject> modulesList;
 	ArrayList<String> modulesCodeList;
@@ -201,56 +215,52 @@ public class Announcements extends BaseActivity {
 		
 		userId = sharedPrefs.getString("userId", null);
 		loginToken = sharedPrefs.getString("loginToken", null);
-		Log.e("token", loginToken);
+		modulesInfo = sharedPrefs.getString("modulesInfo", null);
+		
+		Log.d("token", loginToken);
 		
 		pd = new ProgressDialog(this);
 		
 		pd.setMessage(userId);
 		pd.show();
 		
-		new GetModuleCodesTask().execute((Void)null);
+		new GetModulesTask().execute((Void)null);
+			
 	}
 	
 	@Override
 	protected void createPageContents() {
 		LinearLayout layoutAnnouncements = (LinearLayout) findViewById(R.id.Layout_announcements);
 		
-		ArrayList<LinearLayout> individualModuleLayouts = new ArrayList<LinearLayout>();
-		
+		// for each module, add its container if it has announcements
 		for (int i = 0; i < numOfModules; i++) {
+			
 			int numOfAnnouncements = modulesAnnouncementsList.get(i).length();
+			
 			if (numOfAnnouncements > 0) {
-				LinearLayout containerForModule = new LinearLayout(this);
-				containerForModule.setOrientation(LinearLayout.VERTICAL);
-				containerForModule.setPadding(10, 10, 10, 10);
-				containerForModule.setBackground(getResources().getDrawable(R.drawable.border));
 				
-				TextView containerName = new TextView(this, null, android.R.attr.textAppearanceLarge);
+				LinearLayout containerForModule = (LinearLayout) View.inflate(this, R.layout.container_announcements_module, null);
+				layoutAnnouncements.addView(containerForModule);
+				
+				TextView containerName = (TextView) findViewById(R.id.TextView_announcements_module_name);
 				containerName.setText(modulesCodeList.get(i));
 				
-				LinearLayout containerForAnnouncements = new LinearLayout(this);
-				containerForAnnouncements.setOrientation(LinearLayout.VERTICAL);
+				LinearLayout containerForAnnouncements = (LinearLayout) findViewById(R.id.Layout_announcements_module_announcements);
 				
+				// for each announcement, add the announcement title into the container
 				for (int j = 0; j < numOfAnnouncements; j++) {
-					TextView announcementTitle = new TextView(this, null, android.R.attr.textAppearanceMedium);
-					announcementTitle.setMaxLines(1);
+					TextView announcementTitle = (TextView) View.inflate(this, R.layout.textview_announcements_title, null);
 					announcementTitle.setText(modulesAnnouncementsTitlesList.get(i).get(j));
-					Log.i("asdasd", modulesAnnouncementsTitlesList.get(i).get(j));
+					
+					// TODO: set a clickListener so that user can open the announcement contents if she clicks on the title.
+					
 					containerForAnnouncements.addView(announcementTitle);
 				}
-				
-				containerForModule.addView(containerName);
-				containerForModule.addView(containerForAnnouncements);
-				individualModuleLayouts.add(containerForModule);
 			}
 		}
-		
-		Log.i("asd", individualModuleLayouts.toString());
-		
-		for (int i = 0; i < individualModuleLayouts.size(); i++) {
-			layoutAnnouncements.addView(individualModuleLayouts.get(i));
-		}
-		
 	}
-
+	
+	// MAJOR TODO: set the clicklisterner to open the announcements contents. format it in xml.
+	// TODO: add a refresh button!
+	
 }

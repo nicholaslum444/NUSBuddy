@@ -2,6 +2,7 @@ package com.nick.nusbuddy;
 
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 
 import javax.net.ssl.*;
 
@@ -48,7 +49,7 @@ public class Login extends Activity {
 
 		@Override
 		protected Boolean doInBackground(Void... params) {
-			Looper.prepare();
+			//Looper.prepare();
 			try {
 				
 				// setting up the https connection
@@ -118,15 +119,12 @@ public class Login extends Activity {
 						loginValidJs = result.getString("ValidTill_js");
 						
 						if (loginSuccess) {
+							token = loginToken;
 							prefsEdit.putString("loginToken", loginToken);
 							prefsEdit.putBoolean("loggedIn", true);
 							prefsEdit.commit();
 							
-							pd.setMessage(prefs.getString("loginToken", "123456789"));
-							pd.show();
-							Intent intent = new Intent(context, HomePage.class);
-							startActivity(intent);
-							finish();
+							new GetUserNameTask().execute(loginToken);
 							
 						} else {
 							pd.setMessage(prefs.getString("loginToken", "Invalid UserID or Password"));
@@ -191,7 +189,7 @@ public class Login extends Activity {
 		
 		@Override
 		protected Boolean doInBackground(String... params) {
-			Looper.prepare();
+			//Looper.prepare();
 			
 			if (params == null) {
 				return false;
@@ -244,11 +242,13 @@ public class Login extends Activity {
 					receivedSuccess = result.getBoolean("Success");
 					
 					if (receivedSuccess) {
+						token = receivedToken;
 						prefsEdit.putString("loginToken", receivedToken);
 						prefsEdit.commit();
 						
 						GetUserNameTask getUserNameTask = new GetUserNameTask();
 						getUserNameTask.execute(receivedToken);
+						
 					} else {
 						pd.setMessage("Stored token invalid, please sign in again");
 						pd.show();
@@ -297,7 +297,7 @@ public class Login extends Activity {
 		@Override
 		protected Boolean doInBackground(String... params) {
 			try {
-				Looper.prepare();
+				//Looper.prepare();
 				
 				if (params == null) {
 					return false;
@@ -347,7 +347,8 @@ public class Login extends Activity {
 			pd.dismiss();
 			
 			if (noExceptions && responseContent != null) {
-				prefsEdit.putString("userName", responseContent.substring(1, responseContent.length()-1));
+				userName = responseContent.substring(1, responseContent.length()-1);
+				prefsEdit.putString("userName", userName);
 				prefsEdit.commit();
 				
 				new GetUserIdTask().execute(userNameToken);
@@ -386,7 +387,7 @@ public class Login extends Activity {
 		@Override
 		protected Boolean doInBackground(String... params) {
 			try {
-				Looper.prepare();
+				//Looper.prepare();
 				
 				if (params == null) {
 					return false;
@@ -437,17 +438,92 @@ public class Login extends Activity {
 			pd.dismiss();
 			
 			if (noExceptions && responseContent != null) {
-				prefsEdit.putString("userId", responseContent.substring(1, responseContent.length()-1));
+				
+				userId = responseContent.substring(1, responseContent.length()-1);
+				prefsEdit.putString("userId", userId);
 				prefsEdit.commit();
 				
-				Intent intent = new Intent(context, HomePage.class);
-				startActivity(intent);
-				finish();
+				pd.setMessage("Retrieving modules...");
+				pd.show();
+				
+				new GetModulesTask().execute(userIdToken);
 				
 			} else {
 				pd.setMessage("Exception! " + exception.toString());
 				pd.show();	
 			}	
+		}
+	}
+	
+	public class GetModulesTask extends AsyncTask<String, Void, Boolean> {
+		
+		HttpsURLConnection connection;
+		String responseContent;
+		int responseCode;
+		private String loginToken;
+		
+		@Override
+		protected void onPreExecute() {
+			
+		}
+		
+		@Override
+		protected Boolean doInBackground(String... params) {
+			
+			loginToken = params[0];
+			
+			if (userId == null || loginToken == null) {
+				return false;
+			}
+			
+			try {
+				URL url = new URL("https://ivle.nus.edu.sg/api/Lapi.svc/Modules_Student?APIKey=" + getString(R.string.api_key_mine)
+							+ "&AuthToken=" + loginToken + "&StudentID=" + userId + "&Duration=0" + "&IncludeAllInfo=true" + "&output=json");
+				connection = (HttpsURLConnection) url.openConnection();
+				connection.setConnectTimeout(60000);
+				connection.setReadTimeout(60000);
+				
+				responseCode = connection.getResponseCode();
+				
+				if (responseCode == 200) {
+					BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+					StringBuilder sb = new StringBuilder();
+					String line = br.readLine();
+					while (line != null) {
+						sb.append(line);
+						line = br.readLine();
+					}
+					br.close();
+					responseContent = sb.toString();
+				}
+				
+				
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			return true;
+		}
+		
+		@Override
+		protected void onPostExecute(Boolean b) {
+			pd.dismiss();
+			if (responseCode == 200 && responseContent != null) {
+				
+				prefsEdit.putString("modulesInfo", responseContent);
+				prefsEdit.commit();
+				
+				// go to home page
+				Intent intent = new Intent(context, HomePage.class);
+				startActivity(intent);
+				finish();
+				
+			} else {
+				pd.setMessage(responseCode+"");
+				pd.show();
+			}
 		}
 	}
 	
@@ -473,6 +549,7 @@ public class Login extends Activity {
 	
 	// actual user info
 	String userId;
+	String userName;
 	String password;
 	String token;
 
