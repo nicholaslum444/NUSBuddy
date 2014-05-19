@@ -23,7 +23,8 @@
             android:layout_gravity="center"
             android:text="@string/TextView_welcome_message_default"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="#002F2F" />
+            android:textColor="#002F2F"
+            android:textSize="28sp" />
 
         <TextView
             android:id="@+id/TextView_home_page_welcome_name"
@@ -153,7 +154,7 @@
         android:id="@+id/Button_logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Logout"
+        android:text="DO NOT PRESS"
         android:onClick="logout" />
 
 </LinearLayout>

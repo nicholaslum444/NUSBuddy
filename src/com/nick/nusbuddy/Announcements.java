@@ -15,11 +15,13 @@ import org.json.JSONObject;
 
 import android.R.dimen;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -68,6 +70,7 @@ public class Announcements extends BaseActivity {
 				try {
 					URL url = new URL("https://ivle.nus.edu.sg/api/Lapi.svc/Modules_Student?APIKey=" + getString(R.string.api_key_mine)
 								+ "&AuthToken=" + loginToken + "&StudentID=" + userId + "&Duration=0" + "&IncludeAllInfo=true" + "&output=json");
+					
 					connection = (HttpsURLConnection) url.openConnection();
 					connection.setConnectTimeout(60000);
 					connection.setReadTimeout(60000);
@@ -75,6 +78,7 @@ public class Announcements extends BaseActivity {
 					responseCode = connection.getResponseCode();
 					
 					if (responseCode == 200) {
+						
 						BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 						StringBuilder sb = new StringBuilder();
 						String line = br.readLine();
@@ -91,6 +95,8 @@ public class Announcements extends BaseActivity {
 					e.printStackTrace();
 				} catch (IOException e) {
 					e.printStackTrace();
+				} finally {
+					connection.disconnect();
 				}
 				
 				return true;
@@ -115,6 +121,8 @@ public class Announcements extends BaseActivity {
 					JSONArray modulesArray = responseObject.getJSONArray("Results");
 					numOfModules = modulesArray.length();
 					
+					
+					
 					modulesList = new ArrayList<JSONObject>(); 
 					for (int i = 0; i < numOfModules; i++) {
 						modulesList.add(modulesArray.getJSONObject(i));
@@ -128,7 +136,7 @@ public class Announcements extends BaseActivity {
 						modulesAnnouncementsList.add(obj.getJSONArray("Announcements"));
 					}
 					
-					modulesAnnouncementsTitlesList = new ArrayList<ArrayList<String>>();
+					/*modulesAnnouncementsTitlesList = new ArrayList<ArrayList<String>>();
 					modulesAnnouncementsContentsList = new ArrayList<ArrayList<String>>();
 					modulesAnnouncementsAuthorsList = new ArrayList<ArrayList<String>>();
 					modulesAnnouncementsDatesList = new ArrayList<ArrayList<String>>();
@@ -162,7 +170,7 @@ public class Announcements extends BaseActivity {
 							modulesAnnouncementsAuthorsList.add(null);
 							modulesAnnouncementsDatesList.add(null);
 						}
-					}
+					}*/
 					
 					createPageContents();
 					
@@ -190,10 +198,10 @@ public class Announcements extends BaseActivity {
 	ArrayList<JSONObject> modulesList;
 	ArrayList<String> modulesCodeList;
 	ArrayList<JSONArray> modulesAnnouncementsList;
-	ArrayList<ArrayList<String>> modulesAnnouncementsTitlesList;
+	/*ArrayList<ArrayList<String>> modulesAnnouncementsTitlesList;
 	ArrayList<ArrayList<String>> modulesAnnouncementsContentsList;
 	ArrayList<ArrayList<String>> modulesAnnouncementsAuthorsList;
-	ArrayList<ArrayList<String>> modulesAnnouncementsDatesList;
+	ArrayList<ArrayList<String>> modulesAnnouncementsDatesList;*/
 	
 	@Override
 	protected Activity getCurrentActivity() {
@@ -228,12 +236,13 @@ public class Announcements extends BaseActivity {
 			
 	}
 	
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
 	@Override
 	protected void createPageContents() {
 		LinearLayout layoutAnnouncements = (LinearLayout) findViewById(R.id.Layout_announcements);
 		
 		// for each module, add its container if it has announcements
-		for (int i = 0; i < numOfModules; i++) {
+		/*for (int i = 0; i < numOfModules; i++) {
 			
 			int numOfAnnouncements = modulesAnnouncementsList.get(i).length();
 			
@@ -257,10 +266,57 @@ public class Announcements extends BaseActivity {
 					containerForAnnouncements.addView(announcementTitle);
 				}
 			}
+		}*/
+		
+		
+		
+		
+		for (int i = 0; i < numOfModules; i++) {
+			JSONArray announcements = modulesAnnouncementsList.get(i);
+			if (announcements != null) {
+				
+				LinearLayout containerForModule = (LinearLayout) View.inflate(this, R.layout.container_announcements_module, null);
+				layoutAnnouncements.addView(containerForModule);
+				
+				TextView containerName = (TextView) findViewById(R.id.TextView_announcements_module_name);
+				containerName.setText(modulesCodeList.get(i));
+				if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1) {
+					containerName.setId(View.generateViewId());
+				} else {
+					containerName.setId(i);
+				}
+				
+				LinearLayout containerForAnnouncements = (LinearLayout) findViewById(R.id.Layout_announcements_module_announcements);
+				if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1) {
+					containerForAnnouncements.setId(View.generateViewId());
+				} else {
+					containerForAnnouncements.setId(i);
+				}
+				
+				// for each announcement, add the announcement title into the container
+				int numOfAnnouncements = announcements.length();
+				for (int j = 0; j < numOfAnnouncements; j++) {
+					try {
+						JSONObject announcement = announcements.getJSONObject(j);
+						TextView announcementTitle = (TextView) View.inflate(this, R.layout.textview_announcements_title, null);
+						containerForAnnouncements.addView(announcementTitle);
+						announcementTitle.setText(announcement.getString("Title"));
+						if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1) {
+							announcementTitle.setId(View.generateViewId());
+						} else {
+							announcementTitle.setId(j);
+						}
+						// TODO: set a clickListener so that user can open the announcement contents if she clicks on the title.
+						
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+				}
+			}
 		}
 	}
 	
-	// MAJOR TODO: set the clicklisterner to open the announcements contents. format it in xml.
-	// TODO: add a refresh button!
+	// MAJOR TODO: set the clicklisterner to open the announcements contents. format popup in xml.
+	// TODO: add a refresh button! (gradebook also)
 	
 }

@@ -3,7 +3,11 @@ package com.nick.nusbuddy;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -118,10 +122,27 @@ public class HomePage extends BaseActivity {
     
     
     public void logout(View v) {
-    	sharedPrefsEditor.clear();
-    	sharedPrefsEditor.commit();
-    	startActivity(new Intent(this, Login.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
-    	this.finish();
+    	AlertDialog.Builder builder = new AlertDialog.Builder(context)
+    									.setTitle("Log out")
+    									.setMessage("Are you sure?")
+    									.setPositiveButton("Log out", new DialogInterface.OnClickListener() {
+    											public void onClick(DialogInterface dialog, int id) {
+    												// User clicked OK button
+    												dialog.cancel();
+    										    	sharedPrefsEditor.clear();
+    										    	sharedPrefsEditor.commit();
+    												startActivity(new Intent(context, Login.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+    										    	((Activity) context).finish();
+    											}
+    									});
+    								    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+    								    		public void onClick(DialogInterface dialog, int id) {
+    								    			// User clicked cancel button
+    								    			dialog.cancel();
+    								    		}
+    								    });
+    	builder.create().show();
+    	
     }
     
 }

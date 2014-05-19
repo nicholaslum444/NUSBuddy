@@ -21,6 +21,50 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
+        
+        <LinearLayout 
+            android:id="@+id/Layout_gradebook_module_grades_toprow"
+		    android:layout_width="match_parent"
+		    android:layout_height="match_parent"
+		    android:orientation="horizontal" >
+		
+		    <TextView
+		        android:id="@+id/TextView_item_name"
+		        android:layout_weight="1"
+        		android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:maxLines="1"
+		        android:text="Item"
+		        android:textAppearance="?android:attr/textAppearanceMedium" />
+		
+		    <TextView
+		        android:id="@+id/TextView_item_marks"
+		        android:layout_weight="1"
+        		android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:maxLines="1"
+		        android:text="Marks"
+		        android:textAppearance="?android:attr/textAppearanceMedium" />
+		    
+		    <TextView
+		        android:id="@+id/TextView_item_percentile"
+		        android:layout_weight="1"
+        		android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:maxLines="1"
+		        android:text="Percentile"
+		        android:textAppearance="?android:attr/textAppearanceMedium" />
+		
+		    <TextView
+		        android:id="@+id/TextView_item_grade"
+		        android:layout_weight="1"
+        		android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:maxLines="1"
+		        android:text="Grade"
+		        android:textAppearance="?android:attr/textAppearanceMedium" />
+		
+		</LinearLayout>
 
     </LinearLayout>
 

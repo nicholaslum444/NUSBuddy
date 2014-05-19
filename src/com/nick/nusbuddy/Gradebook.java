@@ -13,7 +13,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -87,6 +89,8 @@ public class Gradebook extends BaseActivity {
 		@Override
 		protected void onPostExecute(Boolean b) {
 			
+			// TODO move the processing of data somewhere else
+			
 			pd.dismiss();
 			
 			if (responseCode == 200 && responseContent != null) {
@@ -124,7 +128,7 @@ public class Gradebook extends BaseActivity {
 					// each object has name, grade, etc.
 					
 					
-					allModules = new ArrayList<ArrayList<JSONObject>>();
+					perModuleItemsList = new ArrayList<ArrayList<JSONObject>>();
 					
 					// for each gradebook array in module gradebook list
 					for (int i = 0; i < numOfModules; i++) {
@@ -161,11 +165,11 @@ public class Gradebook extends BaseActivity {
 									}
 								}
 							}
-							allModules.add(perModuleItemList);
+							perModuleItemsList.add(perModuleItemList);
 							
 						} else { 
 							// no categories, so the module contents is null.
-							allModules.add(null);
+							perModuleItemsList.add(null);
 						}
 					}
 					
@@ -181,7 +185,7 @@ public class Gradebook extends BaseActivity {
 		}
 	}
 	
-	private ArrayList<ArrayList<JSONObject>> allModules;
+	public ArrayList<ArrayList<JSONObject>> perModuleItemsList; // 1 internal arraylist = 1 module
 	public ArrayList<JSONObject> modulesList;
 	public ArrayList<String> modulesCodeList;
 	public ArrayList<JSONArray> modulesGradebooksList;
@@ -206,12 +210,13 @@ public class Gradebook extends BaseActivity {
 		return R.layout.contents_gradebook;
 	}
 	
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
 	@Override
 	protected void createPageContents() {
-		pd.setMessage(allModules.toString());
+		/*pd.setMessage(allModules.toString());
 		pd.setCanceledOnTouchOutside(true);
-		pd.show();
-		Log.d("asd", allModules.toString());
+		pd.show();*/
+		Log.d("asd", perModuleItemsList.toString());
 		
 		
 		LinearLayout layoutGradebook = (LinearLayout) findViewById(R.id.Layout_gradebook);
@@ -221,8 +226,13 @@ public class Gradebook extends BaseActivity {
 		// each entry in allModules contains an arraylist of gradebook items.
 		
 		// for each module, add its container if there are items in the gradebook.
+		
+		// FOR TESTING PURPOSES ONLY
+		for (int h = 0; h < 4; h++) {
+		// THIS WILL DUPLICATE MODULES 4 TIMES TO SIMULATE MANY MODULES
+			
 		for (int i = 0; i < numOfModules; i++) {
-			ArrayList<JSONObject> items = allModules.get(i);
+			ArrayList<JSONObject> items = perModuleItemsList.get(i);
 			if (items != null) {
 				
 				LinearLayout containerForModule = (LinearLayout) View.inflate(this, R.layout.container_gradebook_module, null);
@@ -230,11 +240,92 @@ public class Gradebook extends BaseActivity {
 				
 				TextView containerName = (TextView) findViewById(R.id.TextView_gradebook_module_name);
 				containerName.setText(modulesCodeList.get(i));
+				if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1) {
+					containerName.setId(View.generateViewId());
+				} else {
+					containerName.setId(i);
+				}
 				
 				LinearLayout containerForGrades = (LinearLayout) findViewById(R.id.Layout_gradebook_module_grades);
+				if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1) {
+					containerForGrades.setId(View.generateViewId());
+				} else {
+					containerForGrades.setId(i);
+				}
+				
+				int numOfItems = items.size();
+				for (int j = 0; j < numOfItems; j++) {
+					JSONObject item = items.get(j);
+					try {
+						String itemName = item.getString("ItemName");
+						String averageMedianMarks = item.getString("AverageMedianMarks");
+						String grade = item.getString("Grade");
+						String percentile = item.getString("Percentile");
+						String marksObtained = item.getString("MarksObtained");
+						String maxMarks = ""+item.getInt("MaxMarks");
+						
+						LinearLayout containerForItem = (LinearLayout) View.inflate(this, R.layout.container_gradebook_item, null);
+						containerForGrades.addView(containerForItem);
+						
+						for (int k = 0; k < 4; k++) {
+							int id = 0;
+							String text = "";
+							
+							switch(k) {
+							
+							case 0:
+								id = R.id.TextView_item_name_value;
+								text = itemName;
+								break;
+							case 1:
+								id = R.id.TextView_item_marks_value;
+								if (marksObtained.length() <= 0) {
+									text = "--";
+								} else if (maxMarks.length() <= 0) {
+									text = marksObtained;
+								} else {
+									text = marksObtained + " / " + maxMarks;
+								}
+								break;
+							case 2:
+								id = R.id.TextView_item_percentile_value;
+								text = percentile;
+								break;
+							case 3:
+								id = R.id.TextView_item_grade_value;
+								text = grade;
+								break;
+							default:
+								id = R.id.TextView_item_name_value;
+								text = "--";
+								break;
+							}
+							
+							TextView t = (TextView) findViewById(id);
+							
+							if (text.length() <= 0) {
+								text = "--";
+							}
+							
+							t.setText(text);
+							
+							if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1) {
+								t.setId(View.generateViewId());
+							} else {
+								t.setId(j);
+							}
+						}
+						
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+				}
 			}
 		}
 		
+		// THE DEBUG } IS HERE
+		}
+		// THE DEBUG } IS HERE
 	}
 	
 	@Override
@@ -257,7 +348,7 @@ public class Gradebook extends BaseActivity {
 		pd.show();
 		
 		new GetModulesTask().execute((Void)null);
-		
 	}
+	
 
 }

@@ -120,6 +120,9 @@ public class Login extends Activity {
 						
 						if (loginSuccess) {
 							token = loginToken;
+							
+							prefsEdit.putString("userId", loginUserId);
+							prefsEdit.putString("password", loginPassword);
 							prefsEdit.putString("loginToken", loginToken);
 							prefsEdit.putBoolean("loggedIn", true);
 							prefsEdit.commit();
