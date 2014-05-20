@@ -72,5 +72,6 @@
     <string name="TextView_announcements_module_code_default">Module Code</string>
     <string name="TextView_announcements_title_default">Announcement Title - This is a sample announcement meant to test the length of the container. This is a sample announcement meant to test the length of the container. </string>
     <string name="title_activity_gradebook">Gradebook</string>
+    <string name="title_activity_final_exams">FinalExams</string>
 
 </resources>

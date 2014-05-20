@@ -133,7 +133,13 @@ public class Announcements extends BaseActivity {
 					for (int i = 0; i < numOfModules; i++) {
 						JSONObject obj = modulesList.get(i);
 						modulesCodeList.add(obj.getString("CourseCode"));
-						modulesAnnouncementsList.add(obj.getJSONArray("Announcements"));
+						
+						JSONArray anns = obj.getJSONArray("Announcements");
+						if (anns.length() > 0) {
+							modulesAnnouncementsList.add(anns);
+						} else {
+							modulesAnnouncementsList.add(null);
+						}
 					}
 					
 					/*modulesAnnouncementsTitlesList = new ArrayList<ArrayList<String>>();
@@ -241,36 +247,13 @@ public class Announcements extends BaseActivity {
 	protected void createPageContents() {
 		LinearLayout layoutAnnouncements = (LinearLayout) findViewById(R.id.Layout_announcements);
 		
-		// for each module, add its container if it has announcements
-		/*for (int i = 0; i < numOfModules; i++) {
+		
+		
+		// FOR TESTING PURPOSES ONLY
+		for (int h = 0; h < 10; h++) {
+		// THIS WILL DUPLICATE MODULES 4 TIMES TO SIMULATE MANY MODULES
+		
 			
-			int numOfAnnouncements = modulesAnnouncementsList.get(i).length();
-			
-			if (numOfAnnouncements > 0) {
-				
-				LinearLayout containerForModule = (LinearLayout) View.inflate(this, R.layout.container_announcements_module, null);
-				layoutAnnouncements.addView(containerForModule);
-				
-				TextView containerName = (TextView) findViewById(R.id.TextView_announcements_module_name);
-				containerName.setText(modulesCodeList.get(i));
-				
-				LinearLayout containerForAnnouncements = (LinearLayout) findViewById(R.id.Layout_announcements_module_announcements);
-				
-				// for each announcement, add the announcement title into the container
-				for (int j = 0; j < numOfAnnouncements; j++) {
-					TextView announcementTitle = (TextView) View.inflate(this, R.layout.textview_announcements_title, null);
-					announcementTitle.setText(modulesAnnouncementsTitlesList.get(i).get(j));
-					
-					// TODO: set a clickListener so that user can open the announcement contents if she clicks on the title.
-					
-					containerForAnnouncements.addView(announcementTitle);
-				}
-			}
-		}*/
-		
-		
-		
-		
 		for (int i = 0; i < numOfModules; i++) {
 			JSONArray announcements = modulesAnnouncementsList.get(i);
 			if (announcements != null) {
@@ -312,8 +295,14 @@ public class Announcements extends BaseActivity {
 						e.printStackTrace();
 					}
 				}
+			} else { // announcements == null : no annoucements
+				// TODO make a textview that says "No Announcements"
 			}
 		}
+		
+		// THE TESTING } IS HERE
+		}
+		// THE TESTING } IS HERE
 	}
 	
 	// MAJOR TODO: set the clicklisterner to open the announcements contents. format popup in xml.

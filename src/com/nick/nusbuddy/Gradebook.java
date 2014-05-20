@@ -95,12 +95,13 @@ public class Gradebook extends BaseActivity {
 			
 			if (responseCode == 200 && responseContent != null) {
 				try {
-					sharedPrefsEditor.putString("modulesInfo", responseContent);
-					sharedPrefsEditor.commit();
-					
 					JSONObject responseObject = new JSONObject(responseContent);
 					JSONArray modulesArray = responseObject.getJSONArray("Results");
 					numOfModules = modulesArray.length();
+					
+					sharedPrefsEditor.putString("modulesInfo", responseContent);
+					sharedPrefsEditor.putInt("numOfModules", numOfModules);
+					sharedPrefsEditor.commit();
 					
 					modulesList = new ArrayList<JSONObject>(); 
 					for (int i = 0; i < numOfModules; i++) {
@@ -228,7 +229,7 @@ public class Gradebook extends BaseActivity {
 		// for each module, add its container if there are items in the gradebook.
 		
 		// FOR TESTING PURPOSES ONLY
-		for (int h = 0; h < 4; h++) {
+		for (int h = 0; h < 10; h++) {
 		// THIS WILL DUPLICATE MODULES 4 TIMES TO SIMULATE MANY MODULES
 			
 		for (int i = 0; i < numOfModules; i++) {
@@ -320,6 +321,8 @@ public class Gradebook extends BaseActivity {
 						e.printStackTrace();
 					}
 				}
+			} else { // items == null : there are no items in this module's gradebook.
+				// TODO make a text view that says there are no items in the gardebook. dont even show the toprow.
 			}
 		}
 		

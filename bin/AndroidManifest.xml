@@ -45,6 +45,10 @@
             android:name="com.nick.nusbuddy.Gradebook"
             android:label="@string/title_activity_gradebook" >
         </activity>
+        <activity
+            android:name="com.nick.nusbuddy.FinalExams"
+            android:label="@string/title_activity_final_exams" >
+        </activity>
     </application>
 
 </manifest>

@@ -90,26 +90,28 @@ public final class R {
     }
     public static final class layout {
         public static final int activity_base=0x7f030000;
-        public static final int activity_home_page=0x7f030001;
-        public static final int activity_login=0x7f030002;
-        public static final int container_announcements_module=0x7f030003;
-        public static final int container_gradebook_item=0x7f030004;
-        public static final int container_gradebook_module=0x7f030005;
-        public static final int contents_announcements=0x7f030006;
-        public static final int contents_gradebook=0x7f030007;
-        public static final int contents_home_page=0x7f030008;
-        public static final int drawer_layout=0x7f030009;
-        public static final int drawer_list_item=0x7f03000a;
-        public static final int fragment_planet=0x7f03000b;
-        public static final int textview_announcements_title=0x7f03000c;
-        public static final int textview_gradebook_grade=0x7f03000d;
+        public static final int activity_final_exams=0x7f030001;
+        public static final int activity_home_page=0x7f030002;
+        public static final int activity_login=0x7f030003;
+        public static final int container_announcements_module=0x7f030004;
+        public static final int container_gradebook_item=0x7f030005;
+        public static final int container_gradebook_module=0x7f030006;
+        public static final int contents_announcements=0x7f030007;
+        public static final int contents_gradebook=0x7f030008;
+        public static final int contents_home_page=0x7f030009;
+        public static final int drawer_layout=0x7f03000a;
+        public static final int drawer_list_item=0x7f03000b;
+        public static final int fragment_planet=0x7f03000c;
+        public static final int textview_announcements_title=0x7f03000d;
+        public static final int textview_gradebook_grade=0x7f03000e;
     }
     public static final class menu {
         public static final int announcements=0x7f080000;
         public static final int base=0x7f080001;
-        public static final int gradebook=0x7f080002;
-        public static final int home_page=0x7f080003;
-        public static final int login=0x7f080004;
+        public static final int final_exams=0x7f080002;
+        public static final int gradebook=0x7f080003;
+        public static final int home_page=0x7f080004;
+        public static final int login=0x7f080005;
     }
     public static final class string {
         public static final int Button_login_text=0x7f05000b;
@@ -141,12 +143,12 @@ public final class R {
         public static final int TextView_welcome_message_evening=0x7f050018;
         public static final int TextView_welcome_message_morning=0x7f050016;
         public static final int TextView_welcome_name_default=0x7f050019;
-        public static final int action_forgot_password=0x7f05002a;
+        public static final int action_forgot_password=0x7f05002b;
         /**  Action bar 
          */
         public static final int action_settings=0x7f050001;
-        public static final int action_sign_in_register=0x7f050028;
-        public static final int action_sign_in_short=0x7f050029;
+        public static final int action_sign_in_register=0x7f050029;
+        public static final int action_sign_in_short=0x7f05002a;
         public static final int action_websearch=0x7f050010;
         public static final int api_key_mine=0x7f05000d;
         public static final int api_key_working=0x7f05000c;
@@ -157,24 +159,25 @@ public final class R {
         public static final int drawer_close=0x7f050013;
         public static final int drawer_name=0x7f050014;
         public static final int drawer_open=0x7f050012;
-        public static final int error_field_required=0x7f05002f;
-        public static final int error_incorrect_password=0x7f05002e;
-        public static final int error_invalid_email=0x7f05002c;
-        public static final int error_invalid_password=0x7f05002d;
+        public static final int error_field_required=0x7f050030;
+        public static final int error_incorrect_password=0x7f05002f;
+        public static final int error_invalid_email=0x7f05002d;
+        public static final int error_invalid_password=0x7f05002e;
         /**  Misc 
          */
         public static final int hello_world=0x7f050002;
-        public static final int login_progress_signing_in=0x7f05002b;
+        public static final int login_progress_signing_in=0x7f05002c;
         /**  Strings related to login 
          */
-        public static final int prompt_email=0x7f050026;
-        public static final int prompt_password=0x7f050027;
+        public static final int prompt_email=0x7f050027;
+        public static final int prompt_password=0x7f050028;
         /**  Announcements Page Contents 
          */
         public static final int title_activity_announcements=0x7f050021;
         /**  Nav Drawer 
          */
         public static final int title_activity_base=0x7f05000f;
+        public static final int title_activity_final_exams=0x7f050025;
         public static final int title_activity_gradebook=0x7f050024;
         public static final int title_activity_home_page=0x7f05000e;
         public static final int title_activity_login=0x7f05000a;
@@ -182,7 +185,7 @@ public final class R {
         public static final int title_activity_main=0x7f050004;
         public static final int title_activity_nusivle=0x7f050005;
         public static final int title_activity_nusivleactivity2=0x7f050006;
-        public static final int title_activity_nusivleactivity3=0x7f050025;
+        public static final int title_activity_nusivleactivity3=0x7f050026;
     }
     public static final class style {
         /** 
