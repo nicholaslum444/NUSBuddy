@@ -30,10 +30,6 @@
             android:label="@string/title_activity_home_page" >
         </activity>
         <activity
-            android:name="com.nick.nusbuddy.BaseActivity"
-            android:label="@string/title_activity_base" >
-        </activity>
-        <activity
             android:name="com.nick.nusbuddy.Announcements"
             android:label="@string/title_activity_announcements"
             android:parentActivityName="com.nick.nusbuddy.HomePage" >
@@ -48,6 +44,18 @@
         <activity
             android:name="com.nick.nusbuddy.FinalExams"
             android:label="@string/title_activity_final_exams" >
+        </activity>
+        <activity
+            android:name="com.nick.nusbuddy.Homework"
+            android:label="@string/title_activity_homework" >
+        </activity>
+        <activity
+            android:name="com.nick.nusbuddy.TestsQuizzes"
+            android:label="@string/title_activity_tests_quizzes" >
+        </activity>
+        <activity
+            android:name="com.nick.nusbuddy.CapCalculator"
+            android:label="@string/title_activity_cap_calculator" >
         </activity>
     </application>
 

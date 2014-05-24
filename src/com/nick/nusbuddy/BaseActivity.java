@@ -54,6 +54,9 @@ public abstract class BaseActivity extends Activity {
 		drawerItems.add(Announcements.class);
 		drawerItems.add(Gradebook.class);
 		drawerItems.add(FinalExams.class);
+		drawerItems.add(Homework.class);
+		drawerItems.add(TestsQuizzes.class);
+		drawerItems.add(CapCalculator.class);
 		// end of drawer list
 		
 		
@@ -100,12 +103,12 @@ public abstract class BaseActivity extends Activity {
                 ) {
             public void onDrawerClosed(View view) {
             	getActionBar().setTitle(mTitle);
-                //invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
 
             public void onDrawerOpened(View drawerView) {
             	getActionBar().setTitle(mDrawerTitle);
-                //invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
@@ -124,8 +127,10 @@ public abstract class BaseActivity extends Activity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // If the nav drawer is open, hide action items related to the content view
-        //boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-        //menu.findItem(R.id.action_websearch).setVisible(!drawerOpen);
+        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+        for (int i = 0; i < menu.size(); i++) {
+        	menu.getItem(i).setVisible(!drawerOpen);
+        }
         return super.onPrepareOptionsMenu(menu);
     }
 

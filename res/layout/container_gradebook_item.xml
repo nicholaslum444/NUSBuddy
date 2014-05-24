@@ -3,6 +3,8 @@
     android:id="@+id/Layout_gradebook_module_grades_values"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="5dp"
+    android:background="@drawable/highlight_textview"
     android:orientation="horizontal" >
 
     <TextView

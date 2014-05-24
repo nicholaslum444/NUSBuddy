@@ -1,31 +1,26 @@
 package com.nick.nusbuddy;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
-import javax.net.ssl.HttpsURLConnection;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class Gradebook extends BaseActivity implements ModulesAsyncTaskListener {
+public class Gradebook extends RefreshableActivity implements ModulesAsyncTaskListener {
 	
 	
 	public int numOfModules;
@@ -37,6 +32,7 @@ public class Gradebook extends BaseActivity implements ModulesAsyncTaskListener 
 	
 	private Context context;
 	private ProgressDialog pd;
+	private AlertDialog.Builder b;
 	private SharedPreferences sharedPrefs;
 	private Editor sharedPrefsEditor;
 	
@@ -54,6 +50,11 @@ public class Gradebook extends BaseActivity implements ModulesAsyncTaskListener 
 	protected int getCurrentActivityLayout() {
 		return R.layout.contents_gradebook;
 	}
+
+	@Override
+	protected RefreshableActivity getCurrentRefreshableActivity() {
+		return this;
+	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,13 +64,25 @@ public class Gradebook extends BaseActivity implements ModulesAsyncTaskListener 
 		sharedPrefs = this.getSharedPreferences("NUSBuddyPrefs", MODE_PRIVATE);
 		sharedPrefsEditor = sharedPrefs.edit();
 		
+		apiKey = getString(R.string.api_key_mine);
 		userId = sharedPrefs.getString("userId", null);
 		authToken = sharedPrefs.getString("authToken", null);
 		modulesInfo = sharedPrefs.getString("modulesInfo", null);
 		
 		pd = new ProgressDialog(context);
+		b = new AlertDialog.Builder(this);
+		b.setCancelable(true);
+		b.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.cancel();
+			}
+			
+		});
 		
-		pd.setMessage("Retrieving gradebooks...");
+		
+		pd.setMessage("Getting gradebooks...");
 		pd.show();
 		
 		if (modulesInfo == null) {
@@ -77,22 +90,28 @@ public class Gradebook extends BaseActivity implements ModulesAsyncTaskListener 
 		} else {
 			runParseModules();
 		}
-		
-		
+	}
+	
+	@Override
+	protected void onRefresh() {
+		pd.setMessage("Refreshing...");
+		pd.show();
+		super.onCreate(null);
+		runGetModules();
 	}
 	
 	private void runGetModules() {
-		
-		pd.setMessage("Retrieving modules");
-		
-		GetModulesAsyncTask modulesTask = new GetModulesAsyncTask(this);
-		
-		modulesTask.execute(apiKey, authToken, userId);
+		new GetModulesAsyncTask(this).execute(apiKey, authToken, userId);
 	}
 	
 	@Override
 	public void onModulesTaskComplete(String responseContent) {
 		modulesInfo = responseContent;
+		
+		if (modulesInfo == null) {
+			pd.setMessage("modulesInfo == null");
+			return;
+		}
 		sharedPrefsEditor.putString("modulesInfo", responseContent);
 		sharedPrefsEditor.commit();
 		
@@ -192,9 +211,11 @@ public class Gradebook extends BaseActivity implements ModulesAsyncTaskListener 
 		
 		// for each module, add its container if there are items in the gradebook.
 		
+		
 		// FOR TESTING PURPOSES ONLY
 		for (int h = 0; h < 10; h++) {
 		// THIS WILL DUPLICATE MODULES 4 TIMES TO SIMULATE MANY MODULES
+		
 			
 		for (int i = 0; i < numOfModules; i++) {
 			ArrayList<JSONObject> items = perModuleItemsList.get(i);
@@ -205,16 +226,14 @@ public class Gradebook extends BaseActivity implements ModulesAsyncTaskListener 
 				
 				TextView containerName = (TextView) findViewById(R.id.TextView_gradebook_module_name);
 				containerName.setText(modulesCodeList.get(i));
-				if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1) {
-					containerName.setId(View.generateViewId());
-				} else {
-					containerName.setId(i);
-				}
 				
 				LinearLayout containerForGrades = (LinearLayout) findViewById(R.id.Layout_gradebook_module_grades);
+				
 				if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1) {
+					containerName.setId(View.generateViewId());
 					containerForGrades.setId(View.generateViewId());
 				} else {
+					containerName.setId(i);
 					containerForGrades.setId(i);
 				}
 				
@@ -222,15 +241,34 @@ public class Gradebook extends BaseActivity implements ModulesAsyncTaskListener 
 				for (int j = 0; j < numOfItems; j++) {
 					JSONObject item = items.get(j);
 					try {
-						String itemName = item.getString("ItemName");
-						//String averageMedianMarks = item.getString("AverageMedianMarks");
+						final String itemName = item.getString("ItemName");
 						String grade = item.getString("Grade");
 						String percentile = item.getString("Percentile");
 						String marksObtained = item.getString("MarksObtained");
 						String maxMarks = ""+item.getInt("MaxMarks");
 						
+						final String itemDescription = item.getString("ItemDescription");
+						final String highestLowestMarks = item.getString("HighestLowestMarks");
+						final String averageMedianMarks = item.getString("AverageMedianMarks");
+						final String remark = item.getString("Remark");
+						final String dateEntered = item.getString("DateEntered");
+						
 						LinearLayout containerForItem = (LinearLayout) View.inflate(this, R.layout.container_gradebook_item, null);
 						containerForGrades.addView(containerForItem);
+						containerForItem.setOnClickListener(new OnClickListener() {
+
+							@Override
+							public void onClick(View arg0) {
+								b.setTitle(itemName);
+								b.setMessage("Description: " + itemDescription + "\n"
+										+ "Highest/Lowest Marks: " + highestLowestMarks + "\n"
+										+ "Average/Median Marks: " + averageMedianMarks + "\n"
+										+ "Remarks: " + remark + "\n"
+										+ "Date Entered: " + dateEntered);
+								b.create().show();
+							}
+							
+						});
 						
 						for (int k = 0; k < 4; k++) {
 							int id = 0;
@@ -286,7 +324,7 @@ public class Gradebook extends BaseActivity implements ModulesAsyncTaskListener 
 					}
 				}
 			} else { // items == null : there are no items in this module's gradebook.
-				// TODO make a text view that says there are no items in the gardebook. dont even show the toprow.
+				// TODO make a text view that says there are no items in the gardebook. 
 			}
 		}
 		
@@ -298,6 +336,4 @@ public class Gradebook extends BaseActivity implements ModulesAsyncTaskListener 
 		
 		pd.dismiss();
 	}
-	
-
 }

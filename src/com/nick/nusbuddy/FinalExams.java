@@ -12,22 +12,26 @@ import android.os.Build;
 import android.os.Bundle;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class FinalExams extends BaseActivity implements ModulesAsyncTaskListener, FinalExamAsyncTaskListener {
+public class FinalExams extends RefreshableActivity implements ModulesAsyncTaskListener, FinalExamAsyncTaskListener {
 
 	public SharedPreferences sharedPrefs;
 	public Editor sharedPrefsEditor;
 	public Context context;
 	public ProgressDialog pd;
+	public AlertDialog.Builder b;
 	
 	public String apiKey;
 	public String authToken;
@@ -54,6 +58,11 @@ public class FinalExams extends BaseActivity implements ModulesAsyncTaskListener
 		return R.layout.contents_final_exams;
 	}
 	
+	@Override
+	protected RefreshableActivity getCurrentRefreshableActivity() {
+		return this;
+	}
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +82,18 @@ public class FinalExams extends BaseActivity implements ModulesAsyncTaskListener
 		Log.d("authToken", authToken);
 		
 		pd = new ProgressDialog(context);
+		b = new AlertDialog.Builder(this);
+		b.setCancelable(true);
+		b.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.cancel();
+			}
+			
+		});
 		
-		pd.setMessage("Retrieving exam details...");
+		pd.setMessage("Getting exam details...");
 		pd.show();
 		
 		if (modulesInfo == null) {
@@ -88,6 +107,14 @@ public class FinalExams extends BaseActivity implements ModulesAsyncTaskListener
 		
 		
 	}
+	
+	@Override
+	protected void onRefresh() {
+		pd.setMessage("Refreshing...");
+		pd.show();
+		super.onCreate(null);
+		runGetModules();
+	}
 
 	private void runGetModules() {
 		new GetModulesAsyncTask(this).execute(apiKey, authToken, userId);
@@ -99,7 +126,7 @@ public class FinalExams extends BaseActivity implements ModulesAsyncTaskListener
 		sharedPrefsEditor.putString("modulesInfo", responseContent);
 		sharedPrefsEditor.commit();
 		
-		//runParseModules();
+		runParseModules();
 	}
 
 	private void runParseModules() {
@@ -157,7 +184,6 @@ public class FinalExams extends BaseActivity implements ModulesAsyncTaskListener
 	}
 	
 	public void check() {
-		pd.setMessage("" + modulesIdList.size());
 		if (modulesFinalsDataList.size() == modulesList.size()) {
 			
 			createPageContents();
@@ -169,11 +195,9 @@ public class FinalExams extends BaseActivity implements ModulesAsyncTaskListener
 	@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
 	@Override
 	protected void createPageContents() {
-		pd.setMessage("" + modulesList.size() + modulesFinalsDataList.size() + modulesFinalsDataList.toString());
 		
 
 		LinearLayout layoutFinalExams = (LinearLayout) findViewById(R.id.Layout_final_exams);
-		
 		
 		
 		// FOR TESTING PURPOSES ONLY
@@ -191,9 +215,10 @@ public class FinalExams extends BaseActivity implements ModulesAsyncTaskListener
 					JSONObject finalsData = obj.getJSONArray("Results").getJSONObject(0);
 					
 					String unixTimeString = finalsData.getString("ExamDate");
-					String moduleCode = finalsData.getString("ModuleCode");
+					final String moduleCode = finalsData.getString("ModuleCode");
 					String session = finalsData.getString("ExamSession");
-					
+					final String examInfo = finalsData.getString("ExamInfo");
+
 					// parsing the time
 					long unixTimeLong = Long.parseLong(unixTimeString.substring(6, 19));
 					SimpleDateFormat dateFormat = new SimpleDateFormat("d MMM yyyy", Locale.ENGLISH);
@@ -230,6 +255,16 @@ public class FinalExams extends BaseActivity implements ModulesAsyncTaskListener
 					}
 					
 					// TODO set a clicklestener to show the "exam info" popup when clicked
+					containerForModule.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							b.setTitle(moduleCode);
+							b.setMessage(examInfo);
+							b.create().show();
+						}
+						
+					});
 					
 					
 				} catch (JSONException e) {
@@ -245,13 +280,6 @@ public class FinalExams extends BaseActivity implements ModulesAsyncTaskListener
 		// THE TESTING } IS HERE
 		}
 		// THE TESTING } IS HERE
-	}
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.final_exams, menu);
-		return true;
 	}
 
 }

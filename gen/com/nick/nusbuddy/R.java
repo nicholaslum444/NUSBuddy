@@ -28,15 +28,18 @@ public final class R {
         public static final int border=0x7f020001;
         public static final int drawer_shadow=0x7f020002;
         public static final int earth=0x7f020003;
-        public static final int ic_drawer=0x7f020004;
-        public static final int ic_launcher=0x7f020005;
-        public static final int jupiter=0x7f020006;
-        public static final int mars=0x7f020007;
-        public static final int mercury=0x7f020008;
-        public static final int neptune=0x7f020009;
-        public static final int saturn=0x7f02000a;
-        public static final int uranus=0x7f02000b;
-        public static final int venus=0x7f02000c;
+        public static final int highlight_textview=0x7f020004;
+        public static final int ic_action_refresh=0x7f020005;
+        public static final int ic_drawer=0x7f020006;
+        public static final int ic_launcher=0x7f020007;
+        public static final int jupiter=0x7f020008;
+        public static final int mars=0x7f020009;
+        public static final int mercury=0x7f02000a;
+        public static final int neptune=0x7f02000b;
+        public static final int saturn=0x7f02000c;
+        public static final int textview_border=0x7f02000d;
+        public static final int uranus=0x7f02000e;
+        public static final int venus=0x7f02000f;
     }
     public static final class id {
         public static final int Button_login=0x7f090005;
@@ -95,6 +98,7 @@ public final class R {
         public static final int TextView_item_percentile=0x7f090020;
         public static final int TextView_item_percentile_value=0x7f090018;
         public static final int TextView_login=0x7f090002;
+        public static final int action_refresh=0x7f09003c;
         public static final int action_settings=0x7f09003b;
         public static final int button1=0x7f090006;
         public static final int image=0x7f090038;
@@ -102,121 +106,131 @@ public final class R {
     }
     public static final class layout {
         public static final int activity_base=0x7f030000;
-        public static final int activity_home_page=0x7f030001;
-        public static final int activity_login=0x7f030002;
-        public static final int container_announcements_module=0x7f030003;
-        public static final int container_final_exam_module=0x7f030004;
-        public static final int container_gradebook_item=0x7f030005;
-        public static final int container_gradebook_module=0x7f030006;
-        public static final int contents_announcements=0x7f030007;
-        public static final int contents_final_exams=0x7f030008;
-        public static final int contents_gradebook=0x7f030009;
-        public static final int contents_home_page=0x7f03000a;
-        public static final int drawer_layout=0x7f03000b;
-        public static final int drawer_list_item=0x7f03000c;
-        public static final int fragment_planet=0x7f03000d;
-        public static final int textview_announcements_title=0x7f03000e;
-        public static final int textview_gradebook_grade=0x7f03000f;
+        public static final int activity_cap_calculator=0x7f030001;
+        public static final int activity_home_page=0x7f030002;
+        public static final int activity_homework=0x7f030003;
+        public static final int activity_login=0x7f030004;
+        public static final int activity_refreshable_base=0x7f030005;
+        public static final int activity_tests_quizzes=0x7f030006;
+        public static final int container_announcements_module=0x7f030007;
+        public static final int container_final_exam_module=0x7f030008;
+        public static final int container_gradebook_item=0x7f030009;
+        public static final int container_gradebook_module=0x7f03000a;
+        public static final int contents_announcements=0x7f03000b;
+        public static final int contents_final_exams=0x7f03000c;
+        public static final int contents_gradebook=0x7f03000d;
+        public static final int contents_home_page=0x7f03000e;
+        public static final int drawer_layout=0x7f03000f;
+        public static final int drawer_list_item=0x7f030010;
+        public static final int fragment_planet=0x7f030011;
+        public static final int textview_announcements_title=0x7f030012;
+        public static final int textview_gradebook_grade=0x7f030013;
     }
     public static final class menu {
         public static final int announcements=0x7f080000;
         public static final int base=0x7f080001;
-        public static final int final_exams=0x7f080002;
-        public static final int gradebook=0x7f080003;
-        public static final int home_page=0x7f080004;
-        public static final int login=0x7f080005;
+        public static final int cap_calculator=0x7f080002;
+        public static final int final_exams=0x7f080003;
+        public static final int gradebook=0x7f080004;
+        public static final int home_page=0x7f080005;
+        public static final int homework=0x7f080006;
+        public static final int login=0x7f080007;
+        public static final int refresh_only=0x7f080008;
+        public static final int refreshable_base=0x7f080009;
+        public static final int tests_quizzes=0x7f08000a;
     }
     public static final class string {
-        public static final int Button_login_text=0x7f05000b;
-        public static final int EditText_password_hint=0x7f050008;
-        /**  Login Screen 
-         */
-        public static final int EditText_userid_hint=0x7f050007;
-        public static final int TextView_announcements_module_code_default=0x7f050022;
-        public static final int TextView_announcements_title_default=0x7f050023;
-        public static final int TextView_final_exams_exam_date=0x7f05002e;
-        public static final int TextView_final_exams_exam_date_value=0x7f050031;
-        public static final int TextView_final_exams_exam_session=0x7f050030;
-        public static final int TextView_final_exams_exam_session_value=0x7f050033;
-        public static final int TextView_final_exams_exam_time=0x7f05002f;
-        public static final int TextView_final_exams_exam_time_value=0x7f050032;
-        public static final int TextView_gradebook_item_grade=0x7f050028;
-        public static final int TextView_gradebook_item_grade_value=0x7f05002c;
-        public static final int TextView_gradebook_item_marks=0x7f050026;
-        public static final int TextView_gradebook_item_marks_value=0x7f05002a;
-        public static final int TextView_gradebook_item_name=0x7f050025;
-        public static final int TextView_gradebook_item_name_value=0x7f050029;
-        public static final int TextView_gradebook_item_percentile=0x7f050027;
-        public static final int TextView_gradebook_item_percentile_value=0x7f05002b;
+        public static final int Button_login_text=0x7f05000d;
+        public static final int EditText_password_hint=0x7f05000a;
+        public static final int EditText_userid_hint=0x7f050009;
+        public static final int TextView_announcements_module_code_default=0x7f050020;
+        public static final int TextView_announcements_title_default=0x7f050021;
+        public static final int TextView_final_exams_exam_date=0x7f05002c;
+        public static final int TextView_final_exams_exam_date_value=0x7f05002f;
+        public static final int TextView_final_exams_exam_session=0x7f05002e;
+        public static final int TextView_final_exams_exam_session_value=0x7f050031;
+        public static final int TextView_final_exams_exam_time=0x7f05002d;
+        public static final int TextView_final_exams_exam_time_value=0x7f050030;
+        public static final int TextView_gradebook_item_grade=0x7f050026;
+        public static final int TextView_gradebook_item_grade_value=0x7f05002a;
+        public static final int TextView_gradebook_item_marks=0x7f050024;
+        public static final int TextView_gradebook_item_marks_value=0x7f050028;
+        public static final int TextView_gradebook_item_name=0x7f050023;
+        public static final int TextView_gradebook_item_name_value=0x7f050027;
+        public static final int TextView_gradebook_item_percentile=0x7f050025;
+        public static final int TextView_gradebook_item_percentile_value=0x7f050029;
         /**  Homework Box 
          */
-        public static final int TextView_homework_message=0x7f05001f;
-        public static final int TextView_login=0x7f050009;
-        public static final int TextView_target_required_message1=0x7f05001c;
-        public static final int TextView_target_required_message2=0x7f05001e;
-        public static final int TextView_target_required_value=0x7f05001d;
+        public static final int TextView_homework_message=0x7f05001d;
+        public static final int TextView_login=0x7f05000b;
+        public static final int TextView_target_required_message1=0x7f05001a;
+        public static final int TextView_target_required_message2=0x7f05001c;
+        public static final int TextView_target_required_value=0x7f05001b;
         /**  Target Box 
          */
-        public static final int TextView_target_target_message=0x7f05001a;
-        public static final int TextView_target_target_value=0x7f05001b;
+        public static final int TextView_target_target_message=0x7f050018;
+        public static final int TextView_target_target_value=0x7f050019;
         /**  Tests Box 
          */
-        public static final int TextView_tests_message=0x7f050020;
-        public static final int TextView_welcome_message_afternoon=0x7f050017;
+        public static final int TextView_tests_message=0x7f05001e;
+        public static final int TextView_welcome_message_afternoon=0x7f050015;
         /**  Home Page Contents 
  Welcome Box 
          */
-        public static final int TextView_welcome_message_default=0x7f050015;
-        public static final int TextView_welcome_message_evening=0x7f050018;
-        public static final int TextView_welcome_message_morning=0x7f050016;
-        public static final int TextView_welcome_name_default=0x7f050019;
-        public static final int action_forgot_password=0x7f050039;
+        public static final int TextView_welcome_message_default=0x7f050013;
+        public static final int TextView_welcome_message_evening=0x7f050016;
+        public static final int TextView_welcome_message_morning=0x7f050014;
+        public static final int TextView_welcome_name_default=0x7f050017;
+        public static final int action_forgot_password=0x7f05003a;
+        public static final int action_refresh=0x7f050002;
         /**  Action bar 
          */
         public static final int action_settings=0x7f050001;
-        public static final int action_sign_in_register=0x7f050037;
-        public static final int action_sign_in_short=0x7f050038;
-        public static final int action_websearch=0x7f050010;
-        public static final int api_key_mine=0x7f05000d;
-        public static final int api_key_working=0x7f05000c;
+        public static final int action_sign_in_register=0x7f050038;
+        public static final int action_sign_in_short=0x7f050039;
+        public static final int api_key_mine=0x7f05000f;
+        public static final int api_key_working=0x7f05000e;
         /**  App 
          */
         public static final int app_name=0x7f050000;
-        public static final int app_not_available=0x7f050011;
-        public static final int drawer_close=0x7f050013;
-        public static final int drawer_name=0x7f050014;
-        public static final int drawer_open=0x7f050012;
-        public static final int error_field_required=0x7f05003e;
-        public static final int error_incorrect_password=0x7f05003d;
-        public static final int error_invalid_email=0x7f05003b;
-        public static final int error_invalid_password=0x7f05003c;
-        /**  Misc 
-         */
-        public static final int hello_world=0x7f050002;
-        public static final int login_progress_signing_in=0x7f05003a;
-        /**  Strings related to login 
-         */
-        public static final int prompt_email=0x7f050035;
-        public static final int prompt_password=0x7f050036;
-        /**  Announcements Page Contents 
-         */
-        public static final int title_activity_announcements=0x7f050021;
+        public static final int drawer_close=0x7f050011;
+        public static final int drawer_name=0x7f050012;
         /**  Nav Drawer 
          */
-        public static final int title_activity_base=0x7f05000f;
+        public static final int drawer_open=0x7f050010;
+        public static final int error_field_required=0x7f05003f;
+        public static final int error_incorrect_password=0x7f05003e;
+        public static final int error_invalid_email=0x7f05003c;
+        public static final int error_invalid_password=0x7f05003d;
+        /**  Misc 
+         */
+        public static final int hello_world=0x7f050003;
+        public static final int login_progress_signing_in=0x7f05003b;
+        /**  Strings related to login 
+         */
+        public static final int prompt_email=0x7f050036;
+        public static final int prompt_password=0x7f050037;
+        /**  Announcements Page Contents 
+         */
+        public static final int title_activity_announcements=0x7f05001f;
+        public static final int title_activity_cap_calculator=0x7f050034;
         /**  Final Exams Page Contents 
          */
-        public static final int title_activity_final_exams=0x7f05002d;
+        public static final int title_activity_final_exams=0x7f05002b;
         /**  Gradebook Page Contents 
          */
-        public static final int title_activity_gradebook=0x7f050024;
-        public static final int title_activity_home_page=0x7f05000e;
-        public static final int title_activity_login=0x7f05000a;
-        public static final int title_activity_login_test=0x7f050003;
-        public static final int title_activity_main=0x7f050004;
-        public static final int title_activity_nusivle=0x7f050005;
-        public static final int title_activity_nusivleactivity2=0x7f050006;
-        public static final int title_activity_nusivleactivity3=0x7f050034;
+        public static final int title_activity_gradebook=0x7f050022;
+        /**  Login Screen 
+         */
+        public static final int title_activity_home_page=0x7f050008;
+        public static final int title_activity_homework=0x7f050032;
+        public static final int title_activity_login=0x7f05000c;
+        public static final int title_activity_login_test=0x7f050004;
+        public static final int title_activity_main=0x7f050005;
+        public static final int title_activity_nusivle=0x7f050006;
+        public static final int title_activity_nusivleactivity2=0x7f050007;
+        public static final int title_activity_nusivleactivity3=0x7f050035;
+        public static final int title_activity_tests_quizzes=0x7f050033;
     }
     public static final class style {
         /** 

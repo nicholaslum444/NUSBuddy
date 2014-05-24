@@ -5,8 +5,11 @@
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
     android:linksClickable="false"
-    android:maxLines="1"
+    android:maxLines="2"
+    android:padding="10dp"
+    android:background="@drawable/highlight_textview"
     android:text="@string/TextView_announcements_title_default"
-    android:textAppearance="?android:attr/textAppearanceMedium" >
+    android:textAppearance="?android:attr/textAppearanceMedium"
+    android:layout_margin="2dp" >
 
 </TextView>
