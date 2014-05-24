@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/Layout_final_exams_module"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/border"
+    android:orientation="vertical"
+    android:layout_gravity="center_horizontal"
+    android:padding="5dp" >
+
+    <TextView
+        android:id="@+id/TextView_final_exams_module_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/TextView_announcements_module_code_default"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <LinearLayout
+        android:id="@+id/Layout_final_exam_module_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/Layout_final_exam_module_details_toprow"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/TextView_final_exams_exam_date"
+		        android:layout_weight="1"
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:maxLines="1"
+                android:text="@string/TextView_final_exams_exam_date"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+            
+            <TextView
+                android:id="@+id/TextView_final_exams_exam_time"
+		        android:layout_weight="1"
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:maxLines="1"
+                android:text="@string/TextView_final_exams_exam_time"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/TextView_final_exams_exam_session"
+		        android:layout_weight="1"
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:maxLines="1"
+                android:text="@string/TextView_final_exams_exam_session"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        </LinearLayout>
+        
+        <LinearLayout
+		    android:id="@+id/Layout_final_exams_module_details_values"
+		    android:layout_width="match_parent"
+		    android:layout_height="match_parent"
+		    android:orientation="horizontal" >
+		
+		    <TextView
+		        android:id="@+id/TextView_final_exams_exam_date_value"
+		        android:layout_weight="1"
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:maxLines="1"
+		        android:text="@string/TextView_final_exams_exam_date_value"
+		        android:textAppearance="?android:attr/textAppearanceMedium" />
+		    
+		    <TextView
+		        android:id="@+id/TextView_final_exams_exam_time_value"
+		        android:layout_weight="1"
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:maxLines="1"
+		        android:text="@string/TextView_final_exams_exam_time_value"
+		        android:textAppearance="?android:attr/textAppearanceMedium" />
+		    
+		    <TextView
+		        android:id="@+id/TextView_final_exams_exam_session_value"
+		        android:layout_weight="1"
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:maxLines="1"
+		        android:text="@string/TextView_final_exams_exam_session_value"
+		        android:textAppearance="?android:attr/textAppearanceMedium" />
+		
+		</LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

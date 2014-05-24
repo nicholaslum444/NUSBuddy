@@ -23,7 +23,6 @@
             android:layout_gravity="center"
             android:text="@string/TextView_welcome_message_default"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="#002F2F"
             android:textSize="28sp" />
 
         <TextView
@@ -52,8 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/TextView_target_target_message"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="#002F2F" />
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <TextView
             android:id="@+id/TextView_home_page_target_target_value"
@@ -72,8 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/TextView_target_required_message1"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="#002F2F" />
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <TextView
             android:id="@+id/TextView_home_page_target_required_value"
@@ -92,8 +89,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/TextView_target_required_message2"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="#002F2F" />
+            android:textAppearance="?android:attr/textAppearanceLarge" />
     </LinearLayout>
 
     <LinearLayout
@@ -110,8 +106,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/TextView_homework_message"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="#002F2F" />
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <LinearLayout
             android:id="@+id/Layout_home_page_homework_list"
@@ -137,8 +132,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/TextView_tests_message"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="#002F2F" />
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <LinearLayout
             android:id="@+id/Layout_home_page_tests_list"

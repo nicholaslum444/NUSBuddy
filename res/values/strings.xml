@@ -28,14 +28,16 @@
     <string name="title_activity_base">Base Activity</string>
     <string name="action_websearch">Web search</string>
     <string name="app_not_available">Sorry, there\'s no web browser available</string>
-
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="drawer_name">Navigation</string>
     <string-array name="drawer_item_names">
         <item>Home</item>
         <item>Announcements</item>
         <item>Gradebook</item>
+        <item>Final Exams</item>
         <item>Homework Planner</item>
         <item>Tests and Quizzes</item>
-        <item>Final Exams</item>
         <item>CAP Calculator</item>
         <item>Profile</item>
         <item>Friends</item>
@@ -45,33 +47,48 @@
         <item>Logout</item>
     </string-array>
 
-    <string name="drawer_open">Open navigation drawer</string>
-    <string name="drawer_close">Close navigation drawer</string>
-    <string name="drawer_name">Navigation</string>
-
     <!-- Home Page Contents -->
-    <!-- Welcome Box -->
-    <string name="TextView_welcome_message_default">Hello</string>
-    <string name="TextView_welcome_message_morning">Good morning</string>
-    <string name="TextView_welcome_message_afternoon">Good afternoon</string>
-    <string name="TextView_welcome_message_evening">Good evening</string>
-    <string name="TextView_welcome_name_default">NUS student</string>
-    <!-- Target Box -->
-    <string name="TextView_target_target_message">Target CAP</string>
-    <string name="TextView_target_target_value">5.00</string>
-    <string name="TextView_target_required_message1">You need to achieve</string>
-    <string name="TextView_target_required_value">5.00</string>
-    <string name="TextView_target_required_message2">this semester.</string>
-    <!-- Homework Box -->
-    <string name="TextView_homework_message">Approaching deadlines:</string>
-    <!-- Tests Box -->
-    <string name="TextView_tests_message">Upcoming tests:</string>
+	    <!-- Welcome Box -->
+	    <string name="TextView_welcome_message_default">Hello</string>
+	    <string name="TextView_welcome_message_morning">Good morning</string>
+	    <string name="TextView_welcome_message_afternoon">Good afternoon</string>
+	    <string name="TextView_welcome_message_evening">Good evening</string>
+	    <string name="TextView_welcome_name_default">NUS student</string>
+	    <!-- Target Box -->
+	    <string name="TextView_target_target_message">Target CAP</string>
+	    <string name="TextView_target_target_value">5.00</string>
+	    <string name="TextView_target_required_message1">You need to achieve</string>
+	    <string name="TextView_target_required_value">5.00</string>
+	    <string name="TextView_target_required_message2">this semester.</string>
+	    <!-- Homework Box -->
+	    <string name="TextView_homework_message">Approaching deadlines:</string>
+	    <!-- Tests Box -->
+	    <string name="TextView_tests_message">Upcoming tests:</string>
 
     <!-- Announcements Page Contents -->
     <string name="title_activity_announcements">Announcements</string>
     <string name="TextView_announcements_module_code_default">Module Code</string>
-    <string name="TextView_announcements_title_default">Announcement Title - This is a sample announcement meant to test the length of the container. This is a sample announcement meant to test the length of the container. </string>
+    <string name="TextView_announcements_title_default">Announcement Title - This is a sample announcement meant to test the length of the container. </string>
+    
+    <!-- Gradebook Page Contents -->
     <string name="title_activity_gradebook">Gradebook</string>
+    <string name="TextView_gradebook_item_name">Item</string>
+    <string name="TextView_gradebook_item_marks">Marks</string>
+    <string name="TextView_gradebook_item_percentile">Percentile</string>
+    <string name="TextView_gradebook_item_grade">Grade</string>
+    <string name="TextView_gradebook_item_name_value">Item Name</string>
+    <string name="TextView_gradebook_item_marks_value">Marks Value</string>
+    <string name="TextView_gradebook_item_percentile_value">Percentile Value</string>
+    <string name="TextView_gradebook_item_grade_value">Grade Value</string>
+    
+    <!-- Final Exams Page Contents -->
     <string name="title_activity_final_exams">FinalExams</string>
+    <string name="TextView_final_exams_exam_date">Date</string>
+    <string name="TextView_final_exams_exam_time">Time (24 hrs)</string>
+    <string name="TextView_final_exams_exam_session">Session</string>
+    <string name="TextView_final_exams_exam_date_value">Date Value</string>
+    <string name="TextView_final_exams_exam_time_value">Time Value</string>
+    <string name="TextView_final_exams_exam_session_value">Session Value</string>
+    
 
 </resources>

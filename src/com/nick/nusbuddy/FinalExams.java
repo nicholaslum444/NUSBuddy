@@ -1,158 +1,252 @@
 package com.nick.nusbuddy;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import javax.net.ssl.HttpsURLConnection;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Locale;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.nick.nusbuddy.Gradebook.GetModulesTask;
-
-import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-public class FinalExams extends Activity {
+public class FinalExams extends BaseActivity implements ModulesAsyncTaskListener, FinalExamAsyncTaskListener {
 
-	public class GetExamsTask extends AsyncTask<String, Void, Boolean> {
-		
-		HttpsURLConnection connection;
-		String responseContent;
-		int responseCode;
-		private String moduleId;
-		
-		@Override
-		protected void onPreExecute() {
-			
-		}
-		
-		@Override
-		// only take in the module Id. login token should be gotten from the sharedPrefs.
-		protected Boolean doInBackground(String... params) {
-			
-			
-			moduleId = params[0];
-			
-			if (loginToken == null) {
-				return false;
-			}
-			
-			try {
-				URL url = new URL("https://ivle.nus.edu.sg/api/Lapi.svc/Timetable_ModuleExam?APIKey=" + getString(R.string.api_key_mine)
-							+ "&AuthToken=" + loginToken + "&CourseID=" + moduleId + "&output=json");
-				connection = (HttpsURLConnection) url.openConnection();
-				connection.setConnectTimeout(60000);
-				connection.setReadTimeout(60000);
-				
-				responseCode = connection.getResponseCode();
-				
-				if (responseCode == 200) {
-					BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-					StringBuilder sb = new StringBuilder();
-					String line = br.readLine();
-					while (line != null) {
-						sb.append(line);
-						line = br.readLine();
-					}
-					br.close();
-					responseContent = sb.toString();
-				}
-				
-				
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} finally {
-				connection.disconnect();
-			}
-			
-			return true;
-		}
-		
-		@Override
-		protected void onPostExecute(Boolean b) {
-			pd.dismiss();
-			if (responseCode == 200 && responseContent != null) {
-				
-				
-				
-			} else {
-				pd.setMessage(responseCode+"");
-				pd.show();
-			}
-		}
-	}
-	
-	
 	public SharedPreferences sharedPrefs;
 	public Editor sharedPrefsEditor;
 	public Context context;
 	public ProgressDialog pd;
-	public String loginToken;
+	
+	public String apiKey;
+	public String authToken;
 	public String userId;
 	public String modulesInfo;
 	private int numOfModules;
+	private ArrayList<JSONObject> modulesList;
+	private ArrayList<String> modulesCodeList;
+	private ArrayList<String> modulesIdList;
+	private ArrayList<String> modulesFinalsDataList;
+	
+	int count;
+	
 	
 
+
+	@Override
+	protected Activity getCurrentActivity() {
+		return this;
+	}
+
+	@Override
+	protected int getCurrentActivityLayout() {
+		return R.layout.contents_final_exams;
+	}
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_final_exams);
 		
 		context = this;
 		sharedPrefs = this.getSharedPreferences("NUSBuddyPrefs", MODE_PRIVATE);
 		sharedPrefsEditor = sharedPrefs.edit();
 		sharedPrefsEditor.commit();
 		
+		apiKey = getString(R.string.api_key_mine);
 		userId = sharedPrefs.getString("userId", null);
-		loginToken = sharedPrefs.getString("loginToken", null);
+		authToken = sharedPrefs.getString("authToken", null);
 		modulesInfo = sharedPrefs.getString("modulesInfo", null);
-		numOfModules = sharedPrefs.getInt("numOfModules", -1);
 		
-		if (numOfModules == -1) {
-			try {
-				JSONObject modulesInfoObject = new JSONObject(modulesInfo);
-				JSONArray modulesArray = modulesInfoObject.getJSONArray("Results");
-				numOfModules = modulesArray.length();
-				
-				sharedPrefsEditor.putInt("numOfModules", numOfModules);
-				sharedPrefsEditor.commit();
-				
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		Log.d("token", loginToken);
+		Log.d("apiKey", apiKey);
+		Log.d("authToken", authToken);
 		
 		pd = new ProgressDialog(context);
 		
-		pd.setMessage(userId);
+		pd.setMessage("Retrieving exam details...");
 		pd.show();
 		
-		for (int i = 0; i < numOfModules; i++) {
-			String moduleId = "";
-			new GetExamsTask().execute(moduleId);
+		if (modulesInfo == null) {
 			
+			runGetModules();
+			
+		} else {
+			
+			runParseModules();
 		}
 		
 		
 	}
 
+	private void runGetModules() {
+		new GetModulesAsyncTask(this).execute(apiKey, authToken, userId);
+	}
+
+	@Override
+	public void onModulesTaskComplete(String responseContent) {
+		modulesInfo = responseContent;
+		sharedPrefsEditor.putString("modulesInfo", responseContent);
+		sharedPrefsEditor.commit();
+		
+		//runParseModules();
+	}
+
+	private void runParseModules() {
+		
+		// get an arraylist of module IDs
+		// then for each ID, we run the getFinals. 
+		
+		try {
+			JSONObject responseObject = new JSONObject(modulesInfo);
+			JSONArray modulesArray = responseObject.getJSONArray("Results");
+			numOfModules = modulesArray.length();
+			
+			
+			
+			modulesList = new ArrayList<JSONObject>(); 
+			for (int i = 0; i < numOfModules; i++) {
+				//for (int j = 0; j < 10; j++) {
+				modulesList.add(modulesArray.getJSONObject(i));
+				//}
+			}
+			
+			modulesCodeList = new ArrayList<String>();
+			modulesIdList = new ArrayList<String>();
+			
+			for (int i = 0; i < modulesList.size(); i++) {
+				JSONObject obj = modulesList.get(i);
+				modulesCodeList.add(obj.getString("CourseCode"));
+				modulesIdList.add(obj.getString("ID"));
+			}
+			//pd.setMessage(modulesCodeList.toString() + " " + modulesIdList.toString());
+			
+			modulesFinalsDataList = new ArrayList<String>();
+			
+			runGetFinals();
+			
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void runGetFinals() {
+		if (modulesIdList.size() > 0) {
+			String id = modulesIdList.remove(0);
+			new GetFinalExamAsyncTask(this).execute(apiKey, authToken, id);
+		} else {
+			check();
+		}
+		
+	}
+	
+	@Override
+	public void onFinalExamTaskComplete(String responseContent) {
+		modulesFinalsDataList.add(responseContent);
+		check();
+	}
+	
+	public void check() {
+		pd.setMessage("" + modulesIdList.size());
+		if (modulesFinalsDataList.size() == modulesList.size()) {
+			
+			createPageContents();
+		} else {
+			runGetFinals();
+		}
+	}
+
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+	@Override
+	protected void createPageContents() {
+		pd.setMessage("" + modulesList.size() + modulesFinalsDataList.size() + modulesFinalsDataList.toString());
+		
+
+		LinearLayout layoutFinalExams = (LinearLayout) findViewById(R.id.Layout_final_exams);
+		
+		
+		
+		// FOR TESTING PURPOSES ONLY
+		for (int h = 0; h < 15; h++) {
+		// THIS WILL DUPLICATE MODULES 4 TIMES TO SIMULATE MANY MODULES
+		
+			
+		for (int i = 0; i < numOfModules; i++) {
+			
+			String finalsJSONString = modulesFinalsDataList.get(i);
+			
+			if (finalsJSONString != null) {
+				try {
+					JSONObject obj = new JSONObject(finalsJSONString);
+					JSONObject finalsData = obj.getJSONArray("Results").getJSONObject(0);
+					
+					String unixTimeString = finalsData.getString("ExamDate");
+					String moduleCode = finalsData.getString("ModuleCode");
+					String session = finalsData.getString("ExamSession");
+					
+					// parsing the time
+					long unixTimeLong = Long.parseLong(unixTimeString.substring(6, 19));
+					SimpleDateFormat dateFormat = new SimpleDateFormat("d MMM yyyy", Locale.ENGLISH);
+					SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.ENGLISH);
+					String examDate = dateFormat.format(unixTimeLong);
+					String examTime = timeFormat.format(unixTimeLong);
+					
+					LinearLayout containerForModule = (LinearLayout) View.inflate(this, R.layout.container_final_exam_module, null);
+					layoutFinalExams.addView(containerForModule);
+					
+					TextView containerName = (TextView) findViewById(R.id.TextView_final_exams_module_name);
+					containerName.setText(moduleCode);
+					
+					TextView examDateValue = (TextView) findViewById(R.id.TextView_final_exams_exam_date_value);
+					examDateValue.setText(examDate);
+					
+					TextView examTimeValue = (TextView) findViewById(R.id.TextView_final_exams_exam_time_value);
+					examTimeValue.setText(examTime);
+					
+					TextView examSessionValue = (TextView) findViewById(R.id.TextView_final_exams_exam_session_value);
+					examSessionValue.setText(session);
+					
+					// uniquely set all the IDs so that they don't conflict when i add more of this layout.
+					if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1) {
+						containerName.setId(View.generateViewId());
+						examDateValue.setId(View.generateViewId());
+						examTimeValue.setId(View.generateViewId());
+						examSessionValue.setId(View.generateViewId());
+					} else {
+						containerName.setId(i);
+						examDateValue.setId(i);
+						examTimeValue.setId(i);
+						examSessionValue.setId(i);
+					}
+					
+					// TODO set a clicklestener to show the "exam info" popup when clicked
+					
+					
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+			} else { 
+				
+			}
+		}
+		
+		pd.dismiss();
+		
+		// THE TESTING } IS HERE
+		}
+		// THE TESTING } IS HERE
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

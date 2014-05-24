@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -81,8 +79,9 @@ public class HomePage extends BaseActivity {
     protected void createPageContents() {
     	// TODO set welcome message morning evening etc and name
     	TextView welcomeNameView = (TextView) findViewById(R.id.TextView_home_page_welcome_name);
-    	String userName = sharedPrefs.getString("userName", getResources().getString(R.string.TextView_welcome_name_default));
-    	welcomeNameView.setText(userName);
+    	String defaultName = getString(R.string.TextView_welcome_name_default);
+    	String studentName = sharedPrefs.getString("studentName", defaultName);
+    	welcomeNameView.setText(studentName);
     	
     	
     	// set target cap and required cap
@@ -104,7 +103,7 @@ public class HomePage extends BaseActivity {
     	}
     	
     	
-    	// TODO set test list
+    	// TODO set quizzes list
     	LinearLayout testsListLayout = (LinearLayout) findViewById(R.id.Layout_home_page_tests_list);
     	ArrayList<String> testsList = new ArrayList<String>();
     	testsList.add("cs1231 tutorial 3");
@@ -121,6 +120,7 @@ public class HomePage extends BaseActivity {
     }
     
     
+    // pressing the logout button on the screen.
     public void logout(View v) {
     	AlertDialog.Builder builder = new AlertDialog.Builder(context)
     									.setTitle("Log out")

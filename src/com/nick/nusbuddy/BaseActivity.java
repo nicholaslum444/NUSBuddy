@@ -53,6 +53,8 @@ public abstract class BaseActivity extends Activity {
 		drawerItems.add(HomePage.class);
 		drawerItems.add(Announcements.class);
 		drawerItems.add(Gradebook.class);
+		drawerItems.add(FinalExams.class);
+		// end of drawer list
 		
 		
 		// the rest of the onCreate

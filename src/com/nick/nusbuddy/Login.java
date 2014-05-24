@@ -1,12 +1,6 @@
 package com.nick.nusbuddy;
 
-import java.io.*;
-import java.net.*;
 import java.util.Locale;
-import java.util.concurrent.ExecutionException;
-
-import javax.net.ssl.*;
-
 import org.json.*;
 
 import android.os.*;
@@ -16,14 +10,21 @@ import android.content.SharedPreferences.*;
 import android.view.*;
 import android.widget.*;
 
-public class Login extends Activity {
+public class Login extends Activity implements 
+StudentNameAsyncTaskListener,
+ModulesAsyncTaskListener,
+TokenValidateAsyncTaskListener,
+LoginAsyncTaskListener {
 	
 	// this view and layout
 	Context context;
 	ProgressDialog pd;
 	EditText editTextUserId;
 	EditText editTextPassword;
+	
+	// persisting values
 	String apiKey;
+	String authToken;
 	
 	
 	// login values
@@ -70,6 +71,7 @@ public class Login extends Activity {
     	startActivity(i); 
     }
 	
+	
 	// when sign in button is pressed
 	// runs the async task
 	public void onClickButtonLogin(View v) {
@@ -87,94 +89,92 @@ public class Login extends Activity {
 	}
 	
 	public void runLogin(String userId, String password) {
-		LoginAsyncTask loginTask = new LoginAsyncTask();
+		LoginAsyncTask loginTask = new LoginAsyncTask(this);
+		loginTask.execute(apiKey, userId, password);
 		
+	}
+	
+	@Override
+	public void onLoginTaskComplete(String responseContent, String userId, String password) {
 		try {
-			String responseContent = loginTask.execute(apiKey, userId, password).get();
 			
 			JSONObject loginResponse = new JSONObject(responseContent);
 			JSONObject loginJSONResult = loginResponse.getJSONObject("Login_JSONResult");
 			boolean loginSuccess = loginJSONResult.getBoolean("Success");
 			
 			if (loginSuccess) {
-				String authToken = loginJSONResult.getString("Token");
+				authToken = loginJSONResult.getString("Token");
 				
 				sharedPrefsEditor.putString("authToken", authToken);
 				sharedPrefsEditor.putString("userId", userId.toLowerCase(Locale.US));
 				sharedPrefsEditor.putString("password", password);
 				sharedPrefsEditor.commit();
 				
-				
 				runGetStudentName(authToken);
 				
 				
 			} else {
-				pd.setMessage("Login Failed: Invalid userID or password.");
+				pd.setMessage("Login Failed: Invalid userID or password. Please sign in again.");
 			}
 			
 			
 		} catch (JSONException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
 			e.printStackTrace();
 		}
 	}
 	
 	
 	public void runValidate(String oldToken) {
-		TokenValidateAsyncTask validateTask = new TokenValidateAsyncTask();
+		TokenValidateAsyncTask validateTask = new TokenValidateAsyncTask(this);
+		validateTask.execute(apiKey, oldToken);
 		
+	}
+	
+	@Override
+	public void onTokenValidateTaskComplete(String responseContent) {
 		try {
-			String validateContent = validateTask.execute(apiKey, oldToken).get();
 			
-			JSONObject result = new JSONObject(validateContent);
+			JSONObject result = new JSONObject(responseContent);
 			boolean receivedSuccess = result.getBoolean("Success");
 			
 			if (receivedSuccess) {
-				String receivedToken = result.getString("Token");
-				sharedPrefsEditor.putString("authToken", receivedToken);
+				authToken = result.getString("Token");
+				sharedPrefsEditor.putString("authToken", authToken);
 				sharedPrefsEditor.commit();
 				
-				runGetStudentName(receivedToken);
+				runGetStudentName(authToken);
 				
 			} else {
-				pd.setMessage("Stored token invalid, please sign in again");
-				
+				String savedUserId = sharedPrefs.getString("userId", null);
+				String savedPassword = sharedPrefs.getString("password", null);
+				if (savedUserId == null || savedPassword == null) {
+					pd.setMessage("Please sign in with your NUS UserID and Password");
+				} else {
+					runLogin(savedUserId, savedPassword);
+				}
 			}
 			
 		} catch (JSONException e) {
 			e.printStackTrace();
 			pd.setMessage(e.toString());
 			pd.show();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			e.printStackTrace();
 		}
-		
 		
 	}
 	
 	public void runGetStudentName(String authToken) {
 		
-		GetStudentNameAsyncTask t = new GetStudentNameAsyncTask();
+		GetStudentNameAsyncTask t = new GetStudentNameAsyncTask(this);
 		
-		try {
-			String nameResponse = t.execute(apiKey, authToken).get();
-			
-			sharedPrefsEditor.putString("studentName", nameResponse.substring(1, nameResponse.length()-1));
-			sharedPrefsEditor.commit();
-			
-			runGetModules(authToken, sharedPrefs.getString("userId", null));
-			
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-		}
+		t.execute(apiKey, authToken);
+	}
+	
+	@Override
+	public void onStudentNameTaskComplete(String nameResponse) {
+		sharedPrefsEditor.putString("studentName", nameResponse.substring(1, nameResponse.length()-1));
+		sharedPrefsEditor.commit();
 		
+		runGetModules(authToken, sharedPrefs.getString("userId", null));
 	}
 	
 	
@@ -182,24 +182,20 @@ public class Login extends Activity {
 		
 		pd.setMessage("Retrieving modules");
 		
-		GetModulesAsyncTask modulesTask = new GetModulesAsyncTask();
+		GetModulesAsyncTask modulesTask = new GetModulesAsyncTask(this);
 		
-		try {
-			String modulesResponse = modulesTask.execute(apiKey, authToken, userId).get();
-			
-			sharedPrefsEditor.putString("modulesInfo", modulesResponse);
-			sharedPrefsEditor.commit();
-			
-			// go to home page
-			Intent intent = new Intent(context, HomePage.class);
-			startActivity(intent);
-			finish();
-			
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-		}
+		modulesTask.execute(apiKey, authToken, userId);
+	} 
+	
+	@Override
+	public void onModulesTaskComplete(String modulesResponse) {
+		sharedPrefsEditor.putString("modulesInfo", modulesResponse);
+		sharedPrefsEditor.commit();
+		pd.dismiss();
+		
+		// go to home page
+		Intent intent = new Intent(this, HomePage.class); 
+		startActivity(intent);
+		finish(); 
 	}
-
 }

@@ -11,8 +11,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:maxLines="1"
-        android:text="Item Name"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:text="@string/TextView_gradebook_item_name_value"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/TextView_item_marks_value"
@@ -20,8 +20,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:maxLines="1"
-        android:text="Marks Value"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:text="@string/TextView_gradebook_item_marks_value"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/TextView_item_percentile_value"
@@ -29,8 +29,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:maxLines="1"
-        android:text="Percentile Value"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:text="@string/TextView_gradebook_item_percentile_value"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
     
     <TextView
         android:id="@+id/TextView_item_grade_value"
@@ -38,7 +38,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:maxLines="1"
-        android:text="Grade Value"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:text="@string/TextView_gradebook_item_grade_value"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </LinearLayout>

@@ -7,6 +7,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 
 
@@ -15,6 +16,11 @@ public class GetUserIdAsyncTask extends AsyncTask<String, Void, String> {
 	HttpsURLConnection connection;
 	String responseContent;
 	int responseCode;
+	Activity caller;
+	
+	public GetUserIdAsyncTask(Activity c) {
+		caller = c;
+	}
 	
 	@Override
 	protected String doInBackground(String... params) {
@@ -61,4 +67,12 @@ public class GetUserIdAsyncTask extends AsyncTask<String, Void, String> {
 		
 		return responseContent;
 	}
+	
+	@Override
+	protected void onPostExecute(String s) {
+		UserIdAsyncTaskListener callerListener = (UserIdAsyncTaskListener) caller;
+		callerListener.onUserIdTaskComplete(responseContent);
+	}
+	
+	
 }

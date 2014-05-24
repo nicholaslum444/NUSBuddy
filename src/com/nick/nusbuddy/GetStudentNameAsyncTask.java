@@ -8,14 +8,19 @@ import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import android.app.Activity;
 import android.os.AsyncTask;
-import android.util.Log;
 
 public class GetStudentNameAsyncTask extends AsyncTask<String, Void, String> {
 	
+	Activity caller;
 	HttpsURLConnection connection;
 	String responseContent;
 	int responseCode;
+	
+	public GetStudentNameAsyncTask(Activity c) {
+		caller = c;
+	}
 	
 	@Override
 	protected String doInBackground(String... params) {
@@ -28,8 +33,6 @@ public class GetStudentNameAsyncTask extends AsyncTask<String, Void, String> {
 		}
 		
 		try {
-			Log.d("api", apiKey);
-			Log.d("auth", authToken);
 			URL url = new URL("https://ivle.nus.edu.sg/api/Lapi.svc/UserName_Get?APIKey=" + apiKey + "&Token=" + authToken + "&output=json");
 			connection = (HttpsURLConnection) url.openConnection();
 			connection.setConnectTimeout(60000);
@@ -53,11 +56,9 @@ public class GetStudentNameAsyncTask extends AsyncTask<String, Void, String> {
 			
 			
 		} catch (MalformedURLException e) {
-			Log.e("error", e.toString());
 			e.printStackTrace();
 			return null;
 		} catch (IOException e) {
-			Log.e("error", e.toString());
 			e.printStackTrace();
 			return null;
 		} finally {
@@ -65,5 +66,11 @@ public class GetStudentNameAsyncTask extends AsyncTask<String, Void, String> {
 		}
 		
 		return responseContent;
+	}
+	
+	@Override
+	protected void onPostExecute(String s) {
+		StudentNameAsyncTaskListener callerListener = (StudentNameAsyncTaskListener) caller;
+		callerListener.onStudentNameTaskComplete(responseContent);
 	}
 }
