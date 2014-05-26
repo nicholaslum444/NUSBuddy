@@ -97,7 +97,7 @@ public abstract class BaseActivity extends Activity {
         mDrawerToggle = new ActionBarDrawerToggle(
         		currentActivity,                  /* host Activity */
                 mDrawerLayout,         /* DrawerLayout object */
-                R.drawable.ic_drawer,  /* nav drawer image to replace 'Up' caret */
+                R.drawable.ic_drawer_blue,  /* nav drawer image to replace 'Up' caret */
                 R.string.drawer_open,  /* "open drawer" description for accessibility */
                 R.string.drawer_close  /* "close drawer" description for accessibility */
                 ) {
@@ -154,8 +154,11 @@ public abstract class BaseActivity extends Activity {
     }
 
     private void selectItem(int position) {
-    	// switching activities when item is selected.
-    	startActivity(new Intent(currentActivity, drawerItems.get(position)));
+    	if (!currentActivity.getClass().equals(drawerItems.get(position))) {
+        	// switching activities when item is selected.
+        	startActivity(new Intent(currentActivity, drawerItems.get(position)));
+    	}
+    	mDrawerList.setItemChecked(position, false);
         mDrawerLayout.closeDrawer(mDrawerList);
     }
 

@@ -31,25 +31,29 @@ public final class R {
         public static final int highlight_textview=0x7f020004;
         public static final int ic_action_refresh=0x7f020005;
         public static final int ic_drawer=0x7f020006;
-        public static final int ic_launcher=0x7f020007;
-        public static final int jupiter=0x7f020008;
-        public static final int mars=0x7f020009;
-        public static final int mercury=0x7f02000a;
-        public static final int neptune=0x7f02000b;
-        public static final int saturn=0x7f02000c;
-        public static final int textview_border=0x7f02000d;
-        public static final int uranus=0x7f02000e;
-        public static final int venus=0x7f02000f;
+        public static final int ic_drawer_blue=0x7f020007;
+        public static final int ic_launcher=0x7f020008;
+        public static final int jupiter=0x7f020009;
+        public static final int login_button_border=0x7f02000a;
+        public static final int login_edittext_background=0x7f02000b;
+        public static final int mars=0x7f02000c;
+        public static final int mercury=0x7f02000d;
+        public static final int neptune=0x7f02000e;
+        public static final int saturn=0x7f02000f;
+        public static final int textview_border=0x7f020010;
+        public static final int uranus=0x7f020011;
+        public static final int venus=0x7f020012;
     }
     public static final class id {
         public static final int Button_login=0x7f090005;
+        public static final int Button_loginscreen=0x7f090035;
         public static final int Button_logout=0x7f090034;
         public static final int EditText_password=0x7f090004;
         public static final int EditText_userid=0x7f090003;
         public static final int Layout_announcements=0x7f090022;
         public static final int Layout_announcements_module=0x7f090007;
         public static final int Layout_announcements_module_announcements=0x7f090009;
-        public static final int Layout_drawer=0x7f090035;
+        public static final int Layout_drawer=0x7f090037;
         public static final int Layout_final_exam_module_details=0x7f09000c;
         public static final int Layout_final_exam_module_details_toprow=0x7f09000d;
         public static final int Layout_final_exams=0x7f090023;
@@ -68,9 +72,9 @@ public final class R {
         public static final int Layout_home_page_tests_list=0x7f090033;
         public static final int Layout_home_page_welcome=0x7f090025;
         public static final int Layout_login=0x7f090001;
-        public static final int Layout_page_content=0x7f090036;
+        public static final int Layout_page_content=0x7f090038;
         public static final int TextView_announcements_module_name=0x7f090008;
-        public static final int TextView_announcements_title=0x7f090039;
+        public static final int TextView_announcements_title=0x7f09003b;
         public static final int TextView_final_exams_exam_date=0x7f09000e;
         public static final int TextView_final_exams_exam_date_value=0x7f090012;
         public static final int TextView_final_exams_exam_session=0x7f090010;
@@ -78,7 +82,7 @@ public final class R {
         public static final int TextView_final_exams_exam_time=0x7f09000f;
         public static final int TextView_final_exams_exam_time_value=0x7f090013;
         public static final int TextView_final_exams_module_name=0x7f09000b;
-        public static final int TextView_gradebook_grade=0x7f09003a;
+        public static final int TextView_gradebook_grade=0x7f09003c;
         public static final int TextView_gradebook_module_name=0x7f09001b;
         public static final int TextView_home_page_homework_message=0x7f09002f;
         public static final int TextView_home_page_target_required_message1=0x7f09002b;
@@ -98,11 +102,12 @@ public final class R {
         public static final int TextView_item_percentile=0x7f090020;
         public static final int TextView_item_percentile_value=0x7f090018;
         public static final int TextView_login=0x7f090002;
-        public static final int action_refresh=0x7f09003c;
-        public static final int action_settings=0x7f09003b;
+        public static final int action_refresh=0x7f09003e;
+        public static final int action_settings=0x7f09003d;
         public static final int button1=0x7f090006;
-        public static final int image=0x7f090038;
-        public static final int left_drawer=0x7f090037;
+        public static final int image=0x7f09003a;
+        public static final int left_drawer=0x7f090039;
+        public static final int list_item_section_text=0x7f090036;
     }
     public static final class layout {
         public static final int activity_base=0x7f030000;
@@ -120,11 +125,12 @@ public final class R {
         public static final int contents_final_exams=0x7f03000c;
         public static final int contents_gradebook=0x7f03000d;
         public static final int contents_home_page=0x7f03000e;
-        public static final int drawer_layout=0x7f03000f;
-        public static final int drawer_list_item=0x7f030010;
-        public static final int fragment_planet=0x7f030011;
-        public static final int textview_announcements_title=0x7f030012;
-        public static final int textview_gradebook_grade=0x7f030013;
+        public static final int drawer_header_item=0x7f03000f;
+        public static final int drawer_layout=0x7f030010;
+        public static final int drawer_list_item=0x7f030011;
+        public static final int fragment_planet=0x7f030012;
+        public static final int textview_announcements_title=0x7f030013;
+        public static final int textview_gradebook_grade=0x7f030014;
     }
     public static final class menu {
         public static final int announcements=0x7f080000;
@@ -261,6 +267,7 @@ public final class R {
  <item name="android:background">#EBEFF2</item> 
          */
         public static final int AppTheme=0x7f070001;
-        public static final int LoginFormContainer=0x7f070002;
+        public static final int LoginFormContainer=0x7f070003;
+        public static final int MyActionBar=0x7f070002;
     }
 }

@@ -7,8 +7,13 @@ import android.os.*;
 import android.app.*;
 import android.content.*;
 import android.content.SharedPreferences.*;
+import android.graphics.Typeface;
+import android.util.Log;
 import android.view.*;
+import android.view.View.OnKeyListener;
+import android.view.inputmethod.EditorInfo;
 import android.widget.*;
+import android.widget.TextView.OnEditorActionListener;
 
 public class Login extends Activity implements 
 StudentNameAsyncTaskListener,
@@ -39,12 +44,27 @@ LoginAsyncTaskListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-		
-		context = this;
-		pd = new ProgressDialog(context);
+		getActionBar().hide();
 		
 		editTextUserId = (EditText) findViewById(R.id.EditText_userid);
 		editTextPassword = (EditText) findViewById(R.id.EditText_password);
+		
+		TextView t = (TextView) findViewById(R.id.TextView_login);
+		t.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Bauhaus 93.ttf"));
+		
+		editTextPassword.setOnEditorActionListener(new OnEditorActionListener() {
+	        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+	            if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+	            	onClickButtonLogin(v);
+	            }    
+	            return false;
+	        }
+	    });
+		
+		
+		
+		context = this;
+		pd = new ProgressDialog(context);
 		
 		apiKey = getString(R.string.api_key_working);
 		
@@ -65,33 +85,24 @@ LoginAsyncTaskListener {
 		
 	}
 	
-	// for the testing button there. goes into app without login.
-	public void next(View v) {
-    	Intent i = new Intent(this, HomePage.class);
-    	startActivity(i); 
-    }
-	
-	
 	// when sign in button is pressed
 	// runs the async task
 	public void onClickButtonLogin(View v) {
 		pd.setMessage("Logging in... Please Wait... ");
 		pd.show();
-		
+		runLogin();
+	}
+	
+	public void runLogin() {
 		inputUserId = editTextUserId.getText().toString();
 		inputPassword = editTextPassword.getText().toString();
 		
 		if (inputUserId.length() <= 0 || inputPassword.length() <= 0) {
 			pd.setMessage("Alert: please key in valid user id and password");
-		} else { 
-			runLogin(inputUserId, inputPassword);
+		} else {
+			LoginAsyncTask loginTask = new LoginAsyncTask(this);
+			loginTask.execute(apiKey, inputUserId, inputPassword);
 		}
-	}
-	
-	public void runLogin(String userId, String password) {
-		LoginAsyncTask loginTask = new LoginAsyncTask(this);
-		loginTask.execute(apiKey, userId, password);
-		
 	}
 	
 	@Override
@@ -109,6 +120,9 @@ LoginAsyncTaskListener {
 				sharedPrefsEditor.putString("userId", userId.toLowerCase(Locale.US));
 				sharedPrefsEditor.putString("password", password);
 				sharedPrefsEditor.commit();
+				
+				Log.w("api", apiKey);
+				Log.w("token", authToken);
 				
 				runGetStudentName(authToken);
 				
@@ -150,7 +164,9 @@ LoginAsyncTaskListener {
 				if (savedUserId == null || savedPassword == null) {
 					pd.setMessage("Please sign in with your NUS UserID and Password");
 				} else {
-					runLogin(savedUserId, savedPassword);
+					editTextUserId.setText(savedUserId);
+					editTextPassword.setText(savedPassword);
+					runLogin();
 				}
 			}
 			
@@ -198,4 +214,12 @@ LoginAsyncTaskListener {
 		startActivity(intent);
 		finish(); 
 	}
+	
+
+	
+	// for the testing button there. goes into app without login.
+	public void next(View v) {
+    	Intent i = new Intent(this, HomePage.class);
+    	startActivity(i); 
+    }
 }
