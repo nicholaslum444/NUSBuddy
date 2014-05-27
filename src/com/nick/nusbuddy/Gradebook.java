@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.TableLayout.LayoutParams;
 
 public class Gradebook extends RefreshableActivity implements ModulesAsyncTaskListener {
 	
@@ -221,8 +222,8 @@ public class Gradebook extends RefreshableActivity implements ModulesAsyncTaskLi
 			ArrayList<JSONObject> items = perModuleItemsList.get(i);
 			if (items != null) {
 				
-				LinearLayout containerForModule = (LinearLayout) View.inflate(this, R.layout.container_gradebook_module, null);
-				layoutGradebook.addView(containerForModule);
+				View.inflate(this, R.layout.container_gradebook_module, layoutGradebook);
+				
 				
 				TextView containerName = (TextView) findViewById(R.id.TextView_gradebook_module_name);
 				containerName.setText(modulesCodeList.get(i));
@@ -255,8 +256,9 @@ public class Gradebook extends RefreshableActivity implements ModulesAsyncTaskLi
 						
 						LinearLayout containerForItem = (LinearLayout) View.inflate(this, R.layout.container_gradebook_item, null);
 						containerForGrades.addView(containerForItem);
+						containerForItem.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+						
 						containerForItem.setOnClickListener(new OnClickListener() {
-
 							@Override
 							public void onClick(View arg0) {
 								b.setTitle(itemName);
@@ -267,8 +269,12 @@ public class Gradebook extends RefreshableActivity implements ModulesAsyncTaskLi
 										+ "Date Entered: " + dateEntered);
 								b.create().show();
 							}
-							
 						});
+						if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1) {
+							containerForItem.setId(View.generateViewId());
+						} else {
+							containerForItem.setId(j);
+						}
 						
 						for (int k = 0; k < 4; k++) {
 							int id = 0;

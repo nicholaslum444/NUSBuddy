@@ -6,14 +6,16 @@
     android:background="@drawable/border"
     android:orientation="vertical"
     android:layout_gravity="center_horizontal"
-    android:padding="5dp"
-    android:clickable="true" >
+    android:clickable="true"
+    android:layout_marginBottom="10dp" >
 
     <TextView
         android:id="@+id/TextView_final_exams_module_name"
-        android:layout_width="wrap_content"
+        android:background="@drawable/textview_border"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:gravity="center"
         android:text="@string/TextView_announcements_module_code_default"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -28,7 +30,9 @@
             android:id="@+id/Layout_final_exam_module_details_toprow"
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+		    android:paddingTop="0dp" >
 
             <TextView
                 android:id="@+id/TextView_final_exams_exam_date"
@@ -60,10 +64,14 @@
         </LinearLayout>
         
         <LinearLayout
-		    android:id="@+id/Layout_final_exams_module_details_values"
-		    android:layout_width="match_parent"
-		    android:layout_height="match_parent"
-		    android:orientation="horizontal" >
+            android:id="@+id/Layout_final_exams_module_details_values"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:paddingBottom="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="0dp" >
 		
 		    <TextView
 		        android:id="@+id/TextView_final_exams_exam_date_value"

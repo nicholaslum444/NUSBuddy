@@ -14,7 +14,11 @@ import android.text.Spanned;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -92,12 +96,10 @@ public class Announcements extends RefreshableActivity implements ModulesAsyncTa
 		b = new AlertDialog.Builder(this);
 		b.setCancelable(true);
 		b.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.cancel();
 			}
-			
 		});
 		
 		pd.setMessage("Getting announcements...");
@@ -185,8 +187,7 @@ public class Announcements extends RefreshableActivity implements ModulesAsyncTa
 			JSONArray announcements = modulesAnnouncementsList.get(i);
 			if (announcements != null) {
 				
-				LinearLayout containerForModule = (LinearLayout) View.inflate(this, R.layout.container_announcements_module, null);
-				layoutAnnouncements.addView(containerForModule);
+				View.inflate(this, R.layout.container_announcements_module, layoutAnnouncements);
 				
 				TextView containerName = (TextView) findViewById(R.id.TextView_announcements_module_name);
 				containerName.setText(modulesCodeList.get(i));
@@ -210,7 +211,7 @@ public class Announcements extends RefreshableActivity implements ModulesAsyncTa
 						TextView announcementTitle = (TextView) View.inflate(this, R.layout.textview_announcements_title, null);
 						containerForAnnouncements.addView(announcementTitle);
 						
-						final String title = announcement.getString("Title");
+						final String title = announcement.getString("Title"); 
 						String content = announcement.getString("Description");
 						String unixTimeString = announcement.getString("CreatedDate");
 						
@@ -230,20 +231,19 @@ public class Announcements extends RefreshableActivity implements ModulesAsyncTa
 						}
 						//  set a clickListener so that user can open the announcement contents if she clicks on the title.
 						announcementTitle.setOnClickListener(new OnClickListener() {
-
 							@Override
 							public void onClick(View v) {
 								b.setTitle(title);
 								b.setMessage(contentFormatted + "\n\nPosted on: " + createdDate);
 								b.create().show();
 							}
-							
 						});
 						
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}
 				}
+				
 			} else { // announcements == null : no annoucements
 				// TODO make a textview that says "No Announcements"
 			}
