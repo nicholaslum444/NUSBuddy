@@ -15,6 +15,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class HomePage extends BaseActivity {
@@ -46,7 +47,9 @@ public class HomePage extends BaseActivity {
         sharedPrefs = getSharedPreferences("NUSBuddyPrefs", MODE_PRIVATE);
         sharedPrefsEditor = sharedPrefs.edit();
         
+        createqa();
         createPageContents();
+        
     }
     
     @Override
@@ -124,5 +127,50 @@ public class HomePage extends BaseActivity {
      	Intent i = new Intent(this, Login.class);
      	startActivity(i); 
      }
+ 	
+ 	
+ 	QuickAction mQuickAction;
+ 	
+ 	void createqa() {
+	 	ActionItem addItem      = new ActionItem(0, "Add", getResources().getDrawable(R.drawable.ic_add));
+	    ActionItem acceptItem   = new ActionItem(1, "Accept", getResources().getDrawable(R.drawable.ic_accept));
+	    ActionItem uploadItem   = new ActionItem(2, "Upload", getResources().getDrawable(R.drawable.ic_up));
+	
+	    //use setSticky(true) to disable QuickAction dialog being dismissed after an item is clicked
+	    uploadItem.setSticky(true);
+	
+	     mQuickAction  = new QuickAction(this);
+	
+	    mQuickAction.addActionItem(addItem);
+	    mQuickAction.addActionItem(acceptItem);
+	    mQuickAction.addActionItem(uploadItem);
+	
+	    //setup the action item click listener
+	    mQuickAction.setOnActionItemClickListener(new QuickAction.OnActionItemClickListener() {
+	        @Override
+	        public void onItemClick(QuickAction quickAction, int pos, int actionId) {
+	            ActionItem actionItem = quickAction.getActionItem(pos);
+	
+	            if (actionId == 0) {
+	                Toast.makeText(getApplicationContext(), "Add item selected", Toast.LENGTH_SHORT).show();
+	            } else {
+	                Toast.makeText(getApplicationContext(), actionItem.getTitle() + " selected", Toast.LENGTH_SHORT).show();
+	            }
+	        }
+	    });
+	
+	    mQuickAction.setOnDismissListener(new QuickAction.OnDismissListener() {
+	        @Override
+	        public void onDismiss() {
+	            Toast.makeText(getApplicationContext(), "Ups..dismissed", Toast.LENGTH_SHORT).show();
+	        }
+	    });
+ 	}
+ 	
+ 	public void openqa(View v) {
+ 		mQuickAction.show(v);
+ 	}
+ 	
+ 	
     
 }

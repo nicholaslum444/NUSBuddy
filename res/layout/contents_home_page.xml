@@ -157,5 +157,12 @@
         android:layout_height="wrap_content"
         android:text="Show login screen"
         android:onClick="next" />
+    
+    <Button
+        android:id="@+id/Button_quickaction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="quick action"
+        android:onClick="openqa" />
 
 </LinearLayout>
