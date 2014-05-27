@@ -88,8 +88,23 @@
     <string name="TextView_final_exams_exam_date_value">Date Value</string>
     <string name="TextView_final_exams_exam_time_value">Time Value</string>
     <string name="TextView_final_exams_exam_session_value">Session Value</string>
+    
+    <!-- Homework Planner Page Contents -->
     <string name="title_activity_homework">Homework Planner</string>
+    	
+    <!-- Add Homework Page Contents -->
+    <string name="title_activity_add_homework">Add Homework</string>
+    <string name="TextView_add_homework_description">Description: </string>
+    <string name="CheckBox_recurring_event">Recurring Event</string>
+    <string name="Button_add_event">Add Event</string>
+    <string name="Button_cancel_event">Cancel</string>
+    
+    <!-- Test and Quizzes Page Contents -->
     <string name="title_activity_tests_quizzes">Tests and Quizzes</string>
+    
+    <!-- CAP Calculator Page Contents -->
     <string name="title_activity_cap_calculator">CAP Calculator</string>
+    
+    
 
 </resources>
