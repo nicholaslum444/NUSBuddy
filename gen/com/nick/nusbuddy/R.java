@@ -154,9 +154,9 @@ public final class R {
         public static final int container=0x7f0a0044;
         public static final int contents_homework_module1=0x7f0a0045;
         public static final int contexts_homework_module2=0x7f0a0047;
+        public static final int descriptionEditText=0x7f0a002b;
         public static final int discriptionTextView=0x7f0a002a;
         public static final int dueDateEditText=0x7f0a0028;
-        public static final int editText4=0x7f0a002b;
         public static final int eventLocationEditText=0x7f0a0026;
         public static final int eventTitleEditText=0x7f0a0025;
         public static final int footer=0x7f0a0053;
