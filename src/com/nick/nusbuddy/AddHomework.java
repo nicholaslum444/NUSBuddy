@@ -55,41 +55,6 @@ public class AddHomework extends Activity {
 	}
 	
 	
-
-	/*public OnClickListener dueDateTextViewListener = new OnClickListener() {
-
-		@Override
-		public void onClick(View v) {
-			if (v == dueDateTextView) {
-				
-				// Process to get Current Date
-	            final Calendar c = Calendar.getInstance();
-	            mYear = c.get(Calendar.YEAR);
-	            mMonth = c.get(Calendar.MONTH);
-	            mDay = c.get(Calendar.DAY_OF_MONTH);
-	            
-	            //DatePicker dp = 
-			
-	            // Launch Date Picker Dialog
-	            DatePickerDialog.OnDateSetListener dpdl = new DatePickerDialog.OnDateSetListener() {
-	           	 
-                    @Override
-                    public void onDateSet(DatePicker view, int year,
-                            int monthOfYear, int dayOfMonth) {
-                        // Display Selected date in textbox
-                    	dueDateTextView.setText(dayOfMonth + "-"
-                                + (monthOfYear + 1) + "-" + year);
-
-                    }
-                };
-	         
-	            DatePickerDialog dpd = new DatePickerDialog(AddHomework.this, dpdl, mYear, mMonth, mDay);
-	            dpd.show();
-			}
-		}
-		
-	};*/
-	
 	public void showDatePickerDialog(View v) {
 		
 		// Process to get Current Date
@@ -136,36 +101,6 @@ public class AddHomework extends Activity {
         TimePickerDialog tpd = new TimePickerDialog(AddHomework.this, tpdl, mHour, mMinute, false);
         tpd.show();
 	}
-	
-	/*public OnClickListener dueTimeTextViewListener = new OnClickListener() {
-
-		@Override
-		public void onClick(View v) {
-			if (v == dueTimeTextView) {
-				
-				// Process to get Current Time
-	            final Calendar c = Calendar.getInstance();
-	            mHour = c.get(Calendar.HOUR_OF_DAY);
-	            mMinute = c.get(Calendar.MINUTE);
-	 
-	            // Launch Time Picker Dialog
-	            TimePickerDialog.OnTimeSetListener tpdl =  new TimePickerDialog.OnTimeSetListener() {
-	           	 
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay,
-                            int minute) {
-                        // Display Selected time in textbox
-                    	dueTimeTextView.setText(hourOfDay + ":" + minute);
-                    }
-                };
-	            
-	            TimePickerDialog tpd = new TimePickerDialog(AddHomework.this, tpdl, mHour, mMinute, false);
-	            tpd.show();
-			}
-			
-		}
-		
-	};*/
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
