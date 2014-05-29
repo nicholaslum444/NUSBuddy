@@ -10,8 +10,8 @@ import android.content.SharedPreferences.*;
 import android.graphics.Typeface;
 import android.util.Log;
 import android.view.*;
-import android.view.View.OnKeyListener;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import android.widget.TextView.OnEditorActionListener;
 
@@ -37,22 +37,22 @@ LoginAsyncTaskListener {
 	String inputPassword;
 	
 	// shared preferences
-	SharedPreferences sharedPrefs;
+	SharedPreferences sharedPrefs;  
 	Editor sharedPrefsEditor;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_login);
+		setContentView(R.layout.contents_login);
 		getActionBar().hide();
-		
-		editTextUserId = (EditText) findViewById(R.id.EditText_userid);
-		editTextPassword = (EditText) findViewById(R.id.EditText_password);
 		
 		TextView t = (TextView) findViewById(R.id.TextView_login);
 		t.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Bauhaus 93.ttf"));
 		
+		editTextUserId = (EditText) findViewById(R.id.EditText_userid);
+		editTextPassword = (EditText) findViewById(R.id.EditText_password);
 		editTextPassword.setOnEditorActionListener(new OnEditorActionListener() {
+			@Override
 	        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 	            if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
 	            	onClickButtonLogin(v);
@@ -60,8 +60,6 @@ LoginAsyncTaskListener {
 	            return false;
 	        }
 	    });
-		
-		
 		
 		context = this;
 		pd = new ProgressDialog(context);
@@ -72,12 +70,12 @@ LoginAsyncTaskListener {
 		sharedPrefsEditor = sharedPrefs.edit();
 		
 		String oldToken = sharedPrefs.getString("authToken", null);
-		//Toast.makeText(context, oldToken, Toast.LENGTH_SHORT).show();
 		
 		if (oldToken != null) {
 			pd.setMessage("Verifying stored token");
-			pd.show();
+			//pd.show();
 			
+			showSplashScreen(true);
 			runValidate(oldToken);
 			
 		}
@@ -85,11 +83,28 @@ LoginAsyncTaskListener {
 		
 	}
 	
+	public void showSplashScreen(boolean show) {
+		LinearLayout fields = (LinearLayout) findViewById(R.id.Layout_login_fields);
+		ProgressBar pb = (ProgressBar) findViewById(R.id.Progress_login);
+		if (show) {
+			InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+			imm.hideSoftInputFromWindow(editTextPassword.getWindowToken(), 0);
+			
+			fields.setVisibility(View.GONE);
+			pb.setVisibility(View.VISIBLE);
+		} else {
+			fields.setVisibility(View.VISIBLE);
+			pb.setVisibility(View.GONE);
+		}
+	}
+	
 	// when sign in button is pressed
 	// runs the async task
 	public void onClickButtonLogin(View v) {
 		pd.setMessage("Logging in... Please Wait... ");
-		pd.show();
+		//pd.show();
+		
+		showSplashScreen(true);
 		runLogin();
 	}
 	
@@ -98,7 +113,8 @@ LoginAsyncTaskListener {
 		inputPassword = editTextPassword.getText().toString();
 		
 		if (inputUserId.length() <= 0 || inputPassword.length() <= 0) {
-			pd.setMessage("Alert: please key in valid user id and password");
+			Toast.makeText(this, "Please enter UserID and password.\nOmit \"NUSSTU\\\" from UserID.", Toast.LENGTH_LONG).show();
+			showSplashScreen(false);
 		} else {
 			LoginAsyncTask loginTask = new LoginAsyncTask(this);
 			loginTask.execute(apiKey, inputUserId, inputPassword);
@@ -128,7 +144,8 @@ LoginAsyncTaskListener {
 				
 				
 			} else {
-				pd.setMessage("Login Failed: Invalid userID or password. Please sign in again.");
+				Toast.makeText(this, "Invalid UserID or password.\nOmit \"NUSSTU\\\" from UserID.", Toast.LENGTH_LONG).show();
+				showSplashScreen(false);
 			}
 			
 			
@@ -162,10 +179,12 @@ LoginAsyncTaskListener {
 				String savedUserId = sharedPrefs.getString("userId", null);
 				String savedPassword = sharedPrefs.getString("password", null);
 				if (savedUserId == null || savedPassword == null) {
-					pd.setMessage("Please sign in with your NUS UserID and Password");
+					Toast.makeText(this, "Please sign in with your IVLE UserID and password.\nOmit \"NUSSTU\\\" from UserID.", Toast.LENGTH_LONG).show();
+					showSplashScreen(false);
 				} else {
 					editTextUserId.setText(savedUserId);
 					editTextPassword.setText(savedPassword);
+					showSplashScreen(true);
 					runLogin();
 				}
 			}
@@ -173,7 +192,7 @@ LoginAsyncTaskListener {
 		} catch (JSONException e) {
 			e.printStackTrace();
 			pd.setMessage(e.toString());
-			pd.show();
+			//pd.show();
 		}
 		
 	}

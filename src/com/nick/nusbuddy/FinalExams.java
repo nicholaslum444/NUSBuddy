@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.TableLayout.LayoutParams;
 
 public class FinalExams extends RefreshableActivity implements ModulesAsyncTaskListener, FinalExamAsyncTaskListener {
 
@@ -226,8 +227,9 @@ public class FinalExams extends RefreshableActivity implements ModulesAsyncTaskL
 					String examDate = dateFormat.format(unixTimeLong);
 					String examTime = timeFormat.format(unixTimeLong);
 					
-					LinearLayout containerForModule = (LinearLayout) View.inflate(this, R.layout.container_final_exam_module, null);
-					layoutFinalExams.addView(containerForModule);
+					LinearLayout containerForModule = (LinearLayout) View.inflate(this, R.layout.container_final_exam_module, layoutFinalExams);
+					//layoutFinalExams.addView(containerForModule);
+					//containerForModule.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 					
 					TextView containerName = (TextView) findViewById(R.id.TextView_final_exams_module_name);
 					containerName.setText(moduleCode);

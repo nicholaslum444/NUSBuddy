@@ -25,13 +25,24 @@
         android:textColor="#FFFFFF"
         android:textSize="48sp"
         android:textStyle="bold"
-        android:typeface="normal" />
-
-    <LinearLayout
+        android:typeface="normal"
+        android:gravity="center" />
+    
+	<ProgressBar
+	    android:id="@+id/Progress_login"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:indeterminate="true"
+	    android:visibility="gone" />
+    
+	<LinearLayout
+        android:id="@+id/Layout_login_fields"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:orientation="vertical" >
+        
+       
 
         <EditText
             android:id="@+id/EditText_userid"
@@ -77,15 +88,17 @@
             android:text="@string/Button_login_text"
             android:textColor="#FFFFFF"
             android:padding="4dp" />
-
+        
+        <Button
+	        android:id="@+id/addEventButton"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center"
+	        android:onClick="next"
+	        android:text="Bypass" />
+        
     </LinearLayout>
 
-    <Button
-        android:id="@+id/addEventButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:onClick="next"
-        android:text="Bypass" />
+    
 
 </LinearLayout>

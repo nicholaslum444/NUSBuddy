@@ -6,7 +6,7 @@
     android:gravity="center_horizontal"
     android:linksClickable="false"
     android:maxLines="2"
-    android:padding="10dp"
+    android:padding="5dp"
     android:background="@drawable/highlight_textview"
     android:text="@string/TextView_announcements_title_default"
     android:textAppearance="?android:attr/textAppearanceMedium"
