@@ -6,7 +6,8 @@ import org.json.JSONObject;
 /**
  * Event class that holds information about events.
  * 
- * This is to help hold the information and has a toString method for storage in the database.
+ * This is to help hold the information and has a toString method for storage in 
+ * the database.
  * @author Nicholas
  *
  */
@@ -31,7 +32,8 @@ public class Event {
 	 * Constructor that takes in a JSONObject.
 	 * The event info is set from the appropriate key-value mappings in the object.
 	 * @param obj The JSONObject that holds the event information
-	 * @throws JSONException Throws exception when a key-value mapping is not found, i.e. the JSONObject is invalid
+	 * @throws JSONException Throws exception when a key-value mapping is not 
+	 * found, i.e. the JSONObject is invalid
 	 */
 	public Event(JSONObject obj) throws JSONException {
 		setTitle(obj.getString("title"));
@@ -107,8 +109,10 @@ public class Event {
 	}
 	
 	/**
-	 * This method makes a JSON representation of the object from the information it holds.
-	 * @return the JSONObject that holds all the information, or null if there's a JSONException while putting information.
+	 * This method makes a JSON representation of the object from the information 
+	 * it holds.
+	 * @return the JSONObject that holds all the information, or null if there's 
+	 * a JSONException while putting information.
 	 */
 	public JSONObject makeJsonRepresentation() {
 		JSONObject obj = new JSONObject();
@@ -130,7 +134,8 @@ public class Event {
 	
 	/**
 	 * Runs makeJsonRepresentation() and applies toString() on the result.
-	 * @return string representation of the event object. The string is in JSON format.
+	 * @return The string representation of the event object. The string is in JSON 
+	 * format. 
 	 * Returns null if makeJsonRepresentation() fails.
 	 */
 	@Override
