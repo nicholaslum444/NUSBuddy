@@ -95,8 +95,8 @@
     <!-- Add Homework Page Contents -->
     <string name="title_activity_add_homework">Add Homework</string>
     <string name="TextView_add_homework_description">Description: </string>
-    <string name="CheckBox_recur_weekly">Recur weekly</string>
-    <string name="CheckBox_recur_biweekly">Althernate week</string>
+    <string name="RadioButton_recur_weekly">Recur weekly</string>
+    <string name="RadioButton_recur_biweekly">Althernate week</string>
     <string name="Button_add_event">Add Event</string>
     <string name="Button_cancel_event">Cancel</string>
     

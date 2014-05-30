@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -28,8 +30,9 @@ public class AddHomework extends Activity {
 	
 	TextView descriptionTextView;
 	
-	CheckBox recurWeeklyCheckBox;
-	CheckBox recurBiWeeklyCheckBox;
+	RadioGroup recurRadioGroup;
+	RadioButton recurWeeklyRadioButton;
+	RadioButton recurBiWeeklyRadioButton;
 	
 	Button addEventButton;
 	Button cancelButton;
@@ -47,13 +50,24 @@ public class AddHomework extends Activity {
 		dueDateTextView = (TextView) findViewById(R.id.dueDateTextView);
 		dueTimeTextView = (TextView) findViewById(R.id.dueTimeTextView);
 		
-		recurWeeklyCheckBox = (CheckBox) findViewById(R.id.recurWeeklyCheckBox);
-		recurBiWeeklyCheckBox = (CheckBox) findViewById(R.id.recurBiWeeklyCheckBox);
+		recurRadioGroup = (RadioGroup) findViewById(R.id.RadioGroupReccur);
+		
+		recurWeeklyRadioButton = (RadioButton) findViewById(R.id.RadioButtonRecurWeekly);
+		recurBiWeeklyRadioButton = (RadioButton) findViewById(R.id.RadioButtonRecurBiweekly);
 		
 		addEventButton = (Button) findViewById(R.id.addEventButton);
 		cancelButton = (Button) findViewById(R.id.cancelButton);
 	}
 	
+	//how to alert for every odd week/ even week?
+	
+	public void addEvent(View v) {
+		
+	}
+	
+	public void cancelEvent(View v) {
+		finish();
+	}
 	
 	public void showDatePickerDialog(View v) {
 		
@@ -93,8 +107,33 @@ public class AddHomework extends Activity {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay,
                     int minute) {
-                // Display Selected time in textbox
-            	dueTimeTextView.setText(hourOfDay + ":" + minute);
+            	
+            	//Calculate AM or PM
+                String amOrPm = "";
+                	if (hourOfDay == 0 || hourOfDay < 12) {
+            		    amOrPm = " AM";  
+
+            		} else {
+            			hourOfDay = hourOfDay - 12;
+            		    amOrPm = " PM";
+            		}
+                	
+                //Displaying noon and midnight
+                	if (hourOfDay == 0 || hourOfDay == 12) {
+                		hourOfDay = 12;
+                	}
+                	
+                //Display minute
+                	String minuteString = "";
+                	if (minute < 10) {
+                		minuteString = "0" + minute;
+                	
+                	} else {
+                		minuteString = Integer.valueOf(minute).toString();
+                	}
+                
+            	// Display Selected time in textbox
+            	dueTimeTextView.setText(hourOfDay + ":" + minuteString + amOrPm);
             }
         };
         

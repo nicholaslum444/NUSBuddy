@@ -27,38 +27,37 @@
         android:id="@+id/tableRow1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
-		 
-		 <TextView
-		     android:id="@+id/dueDateTextView"
-		     style="android:editTextStyle"
-		     android:layout_width="0dp"
-		     android:layout_height="wrap_content"
-		     android:layout_weight="1"
-		     android:background="?android:attr/editTextBackground"
-		     android:clickable="true"
-		     android:hint="Date: dd/mm"
-		     android:onClick="showDatePickerDialog"
-		     android:textAppearance="?android:attr/textAppearanceMedium" />
 
-       	<TextView
-       	    android:id="@+id/dueTimeTextView"
-       	    android:layout_width="0dp"
-       	    android:layout_height="wrap_content"
-       	    android:layout_weight="1"
-       	    android:background="?android:attr/editTextBackground"
-       	    android:clickable="true"
-       	    android:hint="Time: hh/mm"
-       	    android:onClick="showTimePickerDialog"
-       	    android:textAppearance="?android:attr/textAppearanceMedium" />
-		 
+        <TextView
+            android:id="@+id/dueDateTextView"
+            style="android:editTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="?android:attr/editTextBackground"
+            android:clickable="true"
+            android:hint="Date: dd/mm"
+            android:onClick="showDatePickerDialog"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/dueTimeTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="?android:attr/editTextBackground"
+            android:clickable="true"
+            android:hint="Time: hh/mm"
+            android:onClick="showTimePickerDialog"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
     </TableRow>
 
     <TextView
         android:id="@+id/descriptionTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/TextView_add_homework_description"
         android:layout_marginLeft="10dp"
+        android:text="@string/TextView_add_homework_description"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <EditText
@@ -67,38 +66,51 @@
         android:layout_height="wrap_content"
         android:ems="10" />
 
-    <CheckBox
-        android:id="@+id/recurWeeklyCheckBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Recur weekly" />
-    
-     <CheckBox
-        android:id="@+id/recurBiWeeklyCheckBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/CheckBox_recur_biweekly" />
-
     <TableRow
         android:id="@+id/tableRow2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-	    <Button
-	        android:id="@+id/addEventButton"
-	        android:layout_width="150dp"
-	        android:layout_height="wrap_content"
-	        android:layout_marginLeft="10dp"
-	        android:onClick="addEvent"
-	        android:text="@string/Button_add_event" />
-	     
-	     <Button
-		     android:id="@+id/cancelButton"
-		     android:layout_width="150dp"
-		     android:layout_height="wrap_content"
-		     android:onClick="cancelEvent"
-		     android:text="@string/Button_cancel_event" />
+        <RadioGroup
+            android:id="@+id/RadioGroupReccur"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
 
+            <RadioButton
+                android:id="@+id/RadioButtonRecurWeekly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/RadioButton_recur_weekly" />
+            
+            <RadioButton
+	            android:id="@+id/RadioButtonRecurBiweekly"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/RadioButton_recur_biweekly" />
+            
+        </RadioGroup>
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/tableRow3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/addEventButton"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:onClick="addEvent"
+            android:text="@string/Button_add_event" />
+
+        <Button
+            android:id="@+id/cancelButton"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:onClick="cancelEvent"
+            android:text="@string/Button_cancel_event" />
     </TableRow>
 
 </LinearLayout>
