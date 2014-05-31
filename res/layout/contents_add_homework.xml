@@ -2,7 +2,11 @@
     android:id="@+id/activity_main_layout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin" >
 
     <EditText
         android:id="@+id/eventTitleEditText"
@@ -23,10 +27,11 @@
         <requestFocus />
     </EditText>
 
-    <TableRow
-        android:id="@+id/tableRow1"
+    <LinearLayout
+        android:id="@+id/Layout_date_time"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
 
         <TextView
             android:id="@+id/dueDateTextView"
@@ -50,7 +55,7 @@
             android:hint="Time: hh/mm"
             android:onClick="showTimePickerDialog"
             android:textAppearance="?android:attr/textAppearanceMedium" />
-    </TableRow>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/descriptionTextView"
@@ -64,7 +69,8 @@
         android:id="@+id/descriptionEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10" />
+        android:ems="10"
+        android:inputType="text" />
 
     <LinearLayout
         android:id="@+id/Layout_recur"
@@ -102,10 +108,11 @@
 
     </LinearLayout>
 
-    <TableRow
-        android:id="@+id/tableRow3"
+    <LinearLayout
+        android:id="@+id/Layout_add_cancel"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
 
         <Button
             android:id="@+id/addEventButton"
@@ -124,6 +131,6 @@
             android:onClick="cancelEvent"
             android:text="@string/Button_cancel_event" />
 
-    </TableRow>
+    </LinearLayout>
 
 </LinearLayout>
