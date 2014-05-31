@@ -11,6 +11,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -30,12 +32,14 @@ public class AddHomework extends Activity {
 	
 	TextView descriptionTextView;
 	
+	CheckBox recurCheckBox;
 	RadioGroup recurRadioGroup;
 	RadioButton recurWeeklyRadioButton;
 	RadioButton recurBiWeeklyRadioButton;
 	
 	Button addEventButton;
 	Button cancelButton;
+	
 	
 	public final static String EXTRA_MESSAGE = "com.nick.nusbuddy.addhomework.MESSAGE";
 	
@@ -50,13 +54,25 @@ public class AddHomework extends Activity {
 		dueDateTextView = (TextView) findViewById(R.id.dueDateTextView);
 		dueTimeTextView = (TextView) findViewById(R.id.dueTimeTextView);
 		
+		recurCheckBox = (CheckBox) findViewById(R.id.checkBoxRecur);
 		recurRadioGroup = (RadioGroup) findViewById(R.id.RadioGroupReccur);
-		
 		recurWeeklyRadioButton = (RadioButton) findViewById(R.id.RadioButtonRecurWeekly);
 		recurBiWeeklyRadioButton = (RadioButton) findViewById(R.id.RadioButtonRecurBiweekly);
 		
 		addEventButton = (Button) findViewById(R.id.addEventButton);
 		cancelButton = (Button) findViewById(R.id.cancelButton);
+		
+		
+		recurCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if (isChecked) {
+					recurRadioGroup.setVisibility(View.VISIBLE);
+				} else {
+					recurRadioGroup.setVisibility(View.GONE);
+				}
+			}
+		});
 	}
 	
 	//how to alert for every odd week/ even week?

@@ -16,7 +16,6 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        
         <activity
             android:name="com.nick.nusbuddy.Login"
             android:label="@string/app_name"
@@ -58,6 +57,10 @@
         <activity
             android:name="com.nick.nusbuddy.AddHomework"
             android:label="@string/title_activity_add_homework" >
+        </activity>
+        <activity
+            android:name="com.nick.nusbuddy.ViewHomework"
+            android:label="@string/title_activity_view_homework" >
         </activity>
     </application>
 

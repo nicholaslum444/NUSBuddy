@@ -66,21 +66,31 @@
         android:layout_height="wrap_content"
         android:ems="10" />
 
-    <TableRow
-        android:id="@+id/tableRow2"
+    <LinearLayout
+        android:id="@+id/Layout_recur"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+        
+        <CheckBox
+        android:id="@+id/checkBoxRecur"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Recurring event"
+        android:checked="false" />
 
         <RadioGroup
             android:id="@+id/RadioGroupReccur"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" >
 
             <RadioButton
                 android:id="@+id/RadioButtonRecurWeekly"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/RadioButton_recur_weekly" />
+                android:text="@string/RadioButton_recur_weekly"
+                android:checked="true" />
             
             <RadioButton
 	            android:id="@+id/RadioButtonRecurBiweekly"
@@ -90,7 +100,7 @@
             
         </RadioGroup>
 
-    </TableRow>
+    </LinearLayout>
 
     <TableRow
         android:id="@+id/tableRow3"
@@ -99,6 +109,7 @@
 
         <Button
             android:id="@+id/addEventButton"
+            style="android:buttonBarButtonStyle"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -107,10 +118,12 @@
 
         <Button
             android:id="@+id/cancelButton"
+            style="android:buttonBarButtonStyle"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:onClick="cancelEvent"
             android:text="@string/Button_cancel_event" />
+
     </TableRow>
 
 </LinearLayout>
