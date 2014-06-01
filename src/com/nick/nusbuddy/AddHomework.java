@@ -5,6 +5,7 @@ import java.util.Calendar;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,6 +34,7 @@ public class AddHomework extends Activity {
 	TextView descriptionTextView;
 	
 	CheckBox recurCheckBox;
+	
 	RadioGroup recurRadioGroup;
 	RadioButton recurWeeklyRadioButton;
 	RadioButton recurBiWeeklyRadioButton;
@@ -78,7 +80,27 @@ public class AddHomework extends Activity {
 	//how to alert for every odd week/ even week?
 	
 	public void addEvent(View v) {
+		Intent output = this.getIntent();
 		
+		String eventTitle = eventTitleEditText.toString();
+		output.putExtra("eventTitle", eventTitle);
+		
+		String eventLocation = eventLocationEditText.toString();
+		output.putExtra("eventLocation", eventLocation);
+
+		output.putExtra("mDay", mDay);
+		output.putExtra("mMonth", mMonth);
+
+		output.putExtra("mHour", mHour);
+		output.putExtra("mMinute", mMinute);
+		//Check which radio button is check
+		
+		
+		//output.putExtra(name, value)
+		
+		//output.putExtra("taskThenDate", taskThenDate);
+		setResult(RESULT_OK, output);
+		finish();
 	}
 	
 	public void cancelEvent(View v) {
