@@ -5,6 +5,7 @@
     </issue>
     <issue id="DefaultLocale" severity="ignore" />
     <issue id="JavascriptInterface" severity="ignore" />
+    <issue id="NewApi" severity="ignore" />
     <issue id="SetJavaScriptEnabled">
         <ignore path="src/com/nick/nusbuddy/Home.java" />
     </issue>

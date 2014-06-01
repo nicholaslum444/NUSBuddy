@@ -6,15 +6,17 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 
 
+import android.os.Build;
 import android.os.Bundle;
+import android.text.Spanned;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,24 +29,20 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
-public class Homework extends BaseActivity {
+public class Homework extends BaseActivity implements ModulesAsyncTaskListener{
 	
 	
 	private static final int REQUEST_CODE = 1;
 	
-	QuickAction mQuickAction;
-	SharedPreferences sharedPrefs;
-
+	private QuickAction mQuickAction;
+	
+	private SharedPreferences sharedPrefs;
 	private Editor sharedPrefsEditor;
-
+	
 	private String apiKey;
-
 	private String userId;
-
 	private String authToken;
-
 	private String modulesInfo;
-
 	private int numOfModules;
 
 	private ArrayList<String> modulesCodeList;
@@ -62,7 +60,7 @@ public class Homework extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		createqa();
+		createQuickActionBar();
 		
 		sharedPrefs = getSharedPreferences("NUSBuddyPrefs", MODE_PRIVATE);
 		sharedPrefsEditor = sharedPrefs.edit();
@@ -78,10 +76,25 @@ public class Homework extends BaseActivity {
 			//Log.d("modules", modulesInfo);
 			runParseModules();
 		}
-		
-		
 	}
-
+	
+	public void runGetModules() {
+		new GetModulesAsyncTask(this).execute(apiKey, authToken, userId);
+	}
+	
+	@Override
+	public void onModulesTaskComplete(String responseContent) {
+		modulesInfo = responseContent;
+		sharedPrefsEditor.putString("modulesInfo", responseContent);
+		sharedPrefsEditor.commit();
+		
+		runParseModules();
+	}
+	
+	/**
+	 * Just wanna get the module codes only.
+	 *  
+	 */
 	public void runParseModules() {
 		
 		modulesCodeList = new ArrayList<String>();
@@ -99,6 +112,7 @@ public class Homework extends BaseActivity {
 			
 		} catch (JSONException e) {
 			e.printStackTrace();
+			
 		}
 		
 	}
@@ -106,6 +120,41 @@ public class Homework extends BaseActivity {
 	@Override
 	protected void createPageContents() {
 		
+		LinearLayout layoutHomework = (LinearLayout) findViewById(R.id.Layout_homework);
+		
+		
+		// FOR TESTING PURPOSES ONLY
+		for (int h = 0; h < 3; h++) {
+		// THIS WILL DUPLICATE MODULES X TIMES TO SIMULATE MANY MODULES
+		
+		for (int i = 0; i < numOfModules; i++) {
+			String moduleCode = modulesCodeList.get(i);
+			if (moduleCode != null) {
+				
+				View.inflate(this, R.layout.container_homework_module, layoutHomework);
+				
+				TextView containerName = (TextView) findViewById(R.id.TextView_homework_module_name);
+				containerName.setText(moduleCode);
+				
+				LinearLayout containerForItems = (LinearLayout) findViewById(R.id.Layout_homework_module_items);
+				
+				if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1) {
+					containerName.setId(View.generateViewId());
+					containerForItems.setId(View.generateViewId());
+				} else {
+					containerName.setId(i);
+					containerForItems.setId(i);
+				}
+				
+				
+			} else { 
+				
+			}
+		}
+		
+		// testing
+		}
+		// testing
 	}
 	
 	@Override
@@ -119,22 +168,24 @@ public class Homework extends BaseActivity {
 	    	int day = data.getExtras().getInt("mDay");
 	    	int month = data.getExtras().getInt("mMonth");
 	    	int year = data.getExtras().getInt("mYear");
-	    	
-	    	SimpleDateFormat sdfDay = new SimpleDateFormat("EEE");
-	    	String date = sdfDay.format(new Date(year, month, day));
-	    	
-	    	String description = data.getExtras().getString("description");
-	    	String location = data.getExtras().getString("eventLocation"); 
 	    	int hour = data.getExtras().getInt("mHour"); 
 	    	int minute = data.getExtras().getInt("mMinute"); 
 	    	
+	    	
+	    	// changed to calendar object.
+	    	SimpleDateFormat sdfDay = new SimpleDateFormat("EEE", Locale.US);
 	    	SimpleDateFormat sdfTime = new SimpleDateFormat("h:mma", Locale.US);
-	    	String time = sdfTime.format(new Date(year, month, day, hour, minute));
+	    	Calendar cal = Calendar.getInstance();
+	    	cal.set(year, month, day, hour, minute);
+	    	String date = sdfDay.format(cal.getTime());
+	    	String time = sdfTime.format(cal.getTime());
+	    	
+	    	String description = data.getExtras().getString("description");
+	    	String location = data.getExtras().getString("eventLocation"); 
 	    	
 	    	//show title and date, time if applicable
 	    	String result = title + " by " + date + ", " + time;
 	    	
-	    	Toast.makeText(Homework.this, result, Toast.LENGTH_LONG).show();
 	    	TextView t = new TextView(this);
 	    	t.setText(result);	            	
 	    	int layoutId = data.getExtras().getInt("viewId");
@@ -142,23 +193,10 @@ public class Homework extends BaseActivity {
 	    	layout.addView(t, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 	    	
 	    	
-	    	/*
-	    	if (data.hasExtra("taskThenDate")) { 
-	            String result = data.getExtras().getString("taskThenDate");
-	            if (result != null && result.length() > 0) {
-	            	TextView t = new TextView(this);
-	            	t.setText(result);
-	            	t.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));	            	
-	            	int layoutId = data.getExtras().getInt("layoutId");
-	            	LinearLayout layout = (LinearLayout) findViewById(layoutId);
-	            	layout.addView(t);
-	            }
-	        }
-	        */
 	    }
 	}
 	
- 	void createqa() {
+ 	void createQuickActionBar() {
 	 	ActionItem addItem      = new ActionItem(0, "Add", getResources().getDrawable(R.drawable.ic_add));
 	    ActionItem acceptItem   = new ActionItem(1, "View", getResources().getDrawable(R.drawable.ic_accept));
 	    //ActionItem uploadItem   = new ActionItem(2, "Upload", getResources().getDrawable(R.drawable.ic_up));
@@ -206,7 +244,7 @@ public class Homework extends BaseActivity {
 	    });
  	}
  	
- 	public void call_quick_action_bar(View view) {
+ 	public void showQuickActionBar(View view) {
  		mQuickAction.show(view);
  	}
  	
