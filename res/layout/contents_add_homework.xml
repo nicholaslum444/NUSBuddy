@@ -14,6 +14,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Event title" >
+        <requestFocus />
     </EditText>
 
     <EditText
@@ -24,7 +25,6 @@
         android:hint="Event Location"
         android:textAppearance="?android:attr/textAppearanceMediumInverse" >
 
-        <requestFocus />
     </EditText>
 
     <LinearLayout

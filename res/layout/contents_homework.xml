@@ -1,48 +1,46 @@
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     tools:context="com.example.moduledatelines.MainActivity"
-    tools:ignore="MergeRootFrame" >
+    android:gravity="center_horizontal" >
 
-    <TableRow
-        android:id="@+id/contents_homework_module1"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/contents_homework_module_1"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
-        android:gravity="center"
         android:onClick="call_quick_action_bar"
-        android:padding="10dp" >
+        android:padding="10dp"
+        android:orientation="vertical" >
 
         <TextView
             android:id="@+id/moduleCode1"
-            android:layout_width="wrap_content"
+            android:gravity="center"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="CS1020" />
-    </TableRow>
+        
+    </LinearLayout>
 
-    <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
-    </TableRow>
-
-    <TableRow
-        android:id="@+id/contexts_homework_module2"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/contexts_homework_module_2"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
         android:gravity="center"
         android:onClick="call_quick_action_bar"
-        android:padding="10dp" >
+        android:padding="10dp"
+        android:orientation="vertical" >
 
         <TextView
-            android:id="@+id/moduleCode1"
-            android:layout_width="wrap_content"
+            android:id="@+id/moduleCode2"
+            android:gravity="center"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="CS2020" />
-    </TableRow>
+    </LinearLayout>
 
-</TableLayout>
+</LinearLayout>

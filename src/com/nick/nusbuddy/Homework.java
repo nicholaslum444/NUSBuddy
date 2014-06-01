@@ -37,9 +37,35 @@ public class Homework extends BaseActivity {
 	}
 	
 	@Override
-	  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 	    if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
-	    	if (data.hasExtra("taskThenDate")) {
+	    	
+	    	//check whether they fill in time
+	    	//get the must input fields out
+	    	String title = data.getExtras().getString("eventTitle"); 
+	    	int day = data.getExtras().getInt("mDay");
+	    	int month = data.getExtras().getInt("mMonth");
+	    	
+	    	String location = data.getExtras().getString("eventLocation"); 
+	    	int hour = data.getExtras().getInt("mHour"); 
+	    	int minute = data.getExtras().getInt("mMinute"); 
+	    	
+	    	String result = "Title: " + title + "location: " + location 
+	    				+ "day: " + day + "month: " + month + "hour: " + hour 
+	    				+ "minute" + minute;
+	    	Toast.makeText(Homework.this, result, Toast.LENGTH_LONG).show();
+	    	TextView t = new TextView(this);
+	    	t.setText(result);
+	    	//t.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));	            	
+	    	int layoutId = data.getExtras().getInt("viewId");
+	    	LinearLayout layout = (LinearLayout) findViewById(layoutId);
+	    	//layout.addView(t);
+	    	layout.addView(t, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+	    	layout.setVisibility(View.VISIBLE);
+	    	
+	    	
+	    	/*
+	    	if (data.hasExtra("taskThenDate")) { 
 	            String result = data.getExtras().getString("taskThenDate");
 	            if (result != null && result.length() > 0) {
 	            	TextView t = new TextView(this);
@@ -50,6 +76,7 @@ public class Homework extends BaseActivity {
 	            	layout.addView(t);
 	            }
 	        }
+	        */
 	    }
 	}
 	

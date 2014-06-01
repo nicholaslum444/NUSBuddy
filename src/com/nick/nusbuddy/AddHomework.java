@@ -57,6 +57,7 @@ public class AddHomework extends Activity {
 		dueTimeTextView = (TextView) findViewById(R.id.dueTimeTextView);
 		
 		recurCheckBox = (CheckBox) findViewById(R.id.checkBoxRecur);
+		
 		recurRadioGroup = (RadioGroup) findViewById(R.id.RadioGroupReccur);
 		recurWeeklyRadioButton = (RadioButton) findViewById(R.id.RadioButtonRecurWeekly);
 		recurBiWeeklyRadioButton = (RadioButton) findViewById(R.id.RadioButtonRecurBiweekly);
@@ -77,30 +78,48 @@ public class AddHomework extends Activity {
 		});
 	}
 	
+	private void showError() {
+		eventTitleEditText.setError("Invalid input");
+		dueDateTextView.setError("Invalid input");
+		
+	}
+	
 	//how to alert for every odd week/ even week?
 	
 	public void addEvent(View v) {
-		Intent output = this.getIntent();
 		
-		String eventTitle = eventTitleEditText.toString();
-		output.putExtra("eventTitle", eventTitle);
+		String eventTitle = eventTitleEditText.getText().toString(); 
+		String eventLocation = eventLocationEditText.getText().toString(); 
+		String date = dueDateTextView.getText().toString();
 		
-		String eventLocation = eventLocationEditText.toString();
-		output.putExtra("eventLocation", eventLocation);
-
-		output.putExtra("mDay", mDay);
-		output.putExtra("mMonth", mMonth);
-
-		output.putExtra("mHour", mHour);
-		output.putExtra("mMinute", mMinute);
-		//Check which radio button is check
+		if (eventTitle == "" ||
+			date == "") {
+			
+			showError();
 		
-		
-		//output.putExtra(name, value)
-		
-		//output.putExtra("taskThenDate", taskThenDate);
-		setResult(RESULT_OK, output);
-		finish();
+		} else {
+			
+			Intent output = this.getIntent();
+			output.putExtra("eventTitle", eventTitle);
+			output.putExtra("eventLocation", eventLocation);
+			
+			output.putExtra("mDay", mDay);
+			output.putExtra("mMonth", mMonth);
+	
+			output.putExtra("mHour", mHour);
+			output.putExtra("mMinute", mMinute);
+			
+			output.putExtra("recurCheckBox", recurCheckBox.isChecked());
+			
+			if (recurCheckBox.isChecked()) {
+				String selectedRadioValue =((RadioButton)findViewById(recurRadioGroup.getCheckedRadioButtonId())).getText().toString();
+				output.putExtra("selectedRadioValue", selectedRadioValue);
+				
+			}
+			
+			setResult(RESULT_OK, output);
+			finish();
+		}
 	}
 	
 	public void cancelEvent(View v) {
