@@ -173,6 +173,9 @@ LoginAsyncTaskListener {
 				sharedPrefsEditor.putString("authToken", authToken);
 				sharedPrefsEditor.commit();
 				
+				Log.w("usr", sharedPrefs.getString("userId", "no usr"));
+				Log.w("pwd", sharedPrefs.getString("password", "no pwd"));
+				
 				runGetStudentName(authToken);
 				
 			} else {

@@ -12,7 +12,8 @@ import org.json.JSONObject;
  *
  */
 public class Event {
-
+	
+	private String module;
 	private String title;
 	private String location;
 	private String date;
@@ -21,7 +22,7 @@ public class Event {
 	private boolean recurWeekly;
 	private boolean recurFortnightly;
 	private JSONObject jsonRepresentation;
-	
+
 	/**
 	 * Empty constructor
 	 */
@@ -44,6 +45,14 @@ public class Event {
 		setRecurWeekly(obj.getBoolean("recurWeekly"));
 		setRecurFortnightly(obj.getBoolean("recurFortnightly"));
 		jsonRepresentation = obj;
+	}
+	
+	public String getModule() {
+		return module;
+	}
+
+	public void setModule(String module) {
+		this.module = module;
 	}
 
 	public String getTitle() {
