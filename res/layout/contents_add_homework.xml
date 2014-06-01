@@ -115,21 +115,24 @@
         android:orientation="horizontal" >
 
         <Button
-            android:id="@+id/addEventButton"
-            style="android:buttonBarButtonStyle"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:onClick="addEvent"
-            android:text="@string/Button_add_event" />
-
-        <Button
             android:id="@+id/cancelButton"
             style="android:buttonBarButtonStyle"
-            android:layout_width="150dp"
+            android:layout_weight="1"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:padding="5dp"
             android:onClick="cancelEvent"
             android:text="@string/Button_cancel_event" />
+
+        <Button
+            android:id="@+id/addEventButton"
+            style="android:buttonBarButtonStyle"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:onClick="addEvent"
+            android:text="@string/Button_add_event" />
 
     </LinearLayout>
 

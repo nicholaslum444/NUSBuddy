@@ -3,6 +3,7 @@ package com.nick.nusbuddy;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Random;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -188,12 +189,12 @@ public class Announcements extends RefreshableActivity implements ModulesAsyncTa
 				
 				LinearLayout containerForAnnouncements = (LinearLayout) findViewById(R.id.Layout_announcements_module_announcements);
 				
-				if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1) {
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
 					containerName.setId(View.generateViewId());
 					containerForAnnouncements.setId(View.generateViewId());
 				} else {
-					containerName.setId(i);
-					containerForAnnouncements.setId(i);
+					containerName.setId(new Random().nextInt(Integer.MAX_VALUE));
+					containerForAnnouncements.setId(new Random().nextInt(Integer.MAX_VALUE));
 				}
 				
 				// for each announcement, add the announcement title into the container
@@ -218,10 +219,10 @@ public class Announcements extends RefreshableActivity implements ModulesAsyncTa
 						
 						announcementTitle.setText(title);
 						
-						if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1) {
+						if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
 							announcementTitle.setId(View.generateViewId());
 						} else {
-							announcementTitle.setId(j);
+							announcementTitle.setId(new Random().nextInt(Integer.MAX_VALUE));
 						}
 						//  set a clickListener so that user can open the announcement contents if she clicks on the title.
 						announcementTitle.setOnClickListener(new OnClickListener() {

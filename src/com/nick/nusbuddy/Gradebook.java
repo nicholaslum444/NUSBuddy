@@ -1,6 +1,8 @@
 package com.nick.nusbuddy;
 
 import java.util.ArrayList;
+import java.util.Random;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -230,12 +232,12 @@ public class Gradebook extends RefreshableActivity implements ModulesAsyncTaskLi
 				
 				LinearLayout containerForGrades = (LinearLayout) findViewById(R.id.Layout_gradebook_module_grades);
 				
-				if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1) {
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
 					containerName.setId(View.generateViewId());
 					containerForGrades.setId(View.generateViewId());
 				} else {
-					containerName.setId(i);
-					containerForGrades.setId(i);
+					containerName.setId(new Random().nextInt(Integer.MAX_VALUE));
+					containerForGrades.setId(new Random().nextInt(Integer.MAX_VALUE));
 				}
 				
 				int numOfItems = items.size();
@@ -270,10 +272,10 @@ public class Gradebook extends RefreshableActivity implements ModulesAsyncTaskLi
 								b.create().show();
 							}
 						});
-						if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1) {
+						if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
 							containerForItem.setId(View.generateViewId());
 						} else {
-							containerForItem.setId(j);
+							containerForItem.setId(new Random().nextInt(Integer.MAX_VALUE));
 						}
 						
 						for (int k = 0; k < 4; k++) {
@@ -318,10 +320,10 @@ public class Gradebook extends RefreshableActivity implements ModulesAsyncTaskLi
 							
 							t.setText(text);
 							
-							if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1) {
+							if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
 								t.setId(View.generateViewId());
 							} else {
-								t.setId(j);
+								t.setId(new Random().nextInt(Integer.MAX_VALUE));
 							}
 						}
 						

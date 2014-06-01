@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Random;
 
 
 import android.os.Build;
@@ -61,6 +62,8 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		createQuickActionBar();
+		
+		Toast.makeText(this, ""+Build.VERSION.SDK_INT +" "+ Build.VERSION_CODES.JELLY_BEAN_MR1, Toast.LENGTH_LONG).show();
 		
 		sharedPrefs = getSharedPreferences("NUSBuddyPrefs", MODE_PRIVATE);
 		sharedPrefsEditor = sharedPrefs.edit();
@@ -136,15 +139,19 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener{
 				TextView containerName = (TextView) findViewById(R.id.TextView_homework_module_name);
 				containerName.setText(moduleCode);
 				
+				LinearLayout containerForModule = (LinearLayout) findViewById(R.id.Layout_homework_module);
 				LinearLayout containerForItems = (LinearLayout) findViewById(R.id.Layout_homework_module_items);
 				
-				if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1) {
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
 					containerName.setId(View.generateViewId());
+					containerForModule.setId(View.generateViewId());
 					containerForItems.setId(View.generateViewId());
 				} else {
-					containerName.setId(i);
-					containerForItems.setId(i);
+					containerName.setId(new Random().nextInt(Integer.MAX_VALUE));
+					containerForModule.setId(new Random().nextInt(Integer.MAX_VALUE));
+					containerForItems.setId(new Random().nextInt(Integer.MAX_VALUE));
 				}
+				containerName.setText(""+containerForModule.getId());
 				
 				
 			} else { 
@@ -189,9 +196,13 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener{
 	    	TextView t = new TextView(this);
 	    	t.setText(result);	            	
 	    	int layoutId = data.getExtras().getInt("viewId");
+	    	Toast.makeText(this, ""+layoutId, Toast.LENGTH_LONG).show();
 	    	LinearLayout layout = (LinearLayout) findViewById(layoutId);
-	    	layout.addView(t, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-	    	
+	    	if (layout == null) {
+	    		Toast.makeText(this, ""+"layoutnull", Toast.LENGTH_LONG).show();
+	    	} else {
+	    		layout.addView(t, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+	    	}
 	    	
 	    }
 	}
@@ -221,6 +232,7 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener{
 	            	Toast.makeText(getApplicationContext(), "Add item selected", Toast.LENGTH_SHORT).show();
 	                
 	            	int viewId = mQuickAction.mAnchor.getId();
+	            	Toast.makeText(Homework.this, ""+viewId, Toast.LENGTH_LONG).show();
 	                Intent intent = new Intent(Homework.this, AddHomework.class);
 	        	    intent.putExtra("viewId", viewId);
 	        	    startActivityForResult(intent, REQUEST_CODE);
@@ -245,6 +257,7 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener{
  	}
  	
  	public void showQuickActionBar(View view) {
+ 		Toast.makeText(this, ""+view.getId(), Toast.LENGTH_LONG).show();
  		mQuickAction.show(view);
  	}
  	

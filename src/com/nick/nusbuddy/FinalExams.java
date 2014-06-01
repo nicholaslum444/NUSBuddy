@@ -3,6 +3,7 @@ package com.nick.nusbuddy;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Random;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -244,16 +245,16 @@ public class FinalExams extends RefreshableActivity implements ModulesAsyncTaskL
 					examSessionValue.setText(session);
 					
 					// uniquely set all the IDs so that they don't conflict when i add more of this layout.
-					if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1) {
+					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
 						containerName.setId(View.generateViewId());
 						examDateValue.setId(View.generateViewId());
 						examTimeValue.setId(View.generateViewId());
 						examSessionValue.setId(View.generateViewId());
 					} else {
-						containerName.setId(i);
-						examDateValue.setId(i);
-						examTimeValue.setId(i);
-						examSessionValue.setId(i);
+						containerName.setId(new Random().nextInt(Integer.MAX_VALUE));
+						examDateValue.setId(new Random().nextInt(Integer.MAX_VALUE));
+						examTimeValue.setId(new Random().nextInt(Integer.MAX_VALUE));
+						examSessionValue.setId(new Random().nextInt(Integer.MAX_VALUE));
 					}
 					
 					// TODO set a clicklestener to show the "exam info" popup when clicked
