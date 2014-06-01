@@ -137,7 +137,6 @@ public class Announcements extends RefreshableActivity implements ModulesAsyncTa
 			numOfModules = modulesArray.length();
 			
 			
-			
 			modulesList = new ArrayList<JSONObject>(); 
 			for (int i = 0; i < numOfModules; i++) {
 				modulesList.add(modulesArray.getJSONObject(i));

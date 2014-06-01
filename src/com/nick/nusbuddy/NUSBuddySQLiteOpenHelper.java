@@ -1,5 +1,7 @@
 package com.nick.nusbuddy;
 
+import java.util.ArrayList;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -20,37 +22,44 @@ public class NUSBuddySQLiteOpenHelper extends SQLiteOpenHelper {
 	
 	// homework table name
     private static final String TABLE_HOMEWORK = "homework";
+    
+	// tests table name
+    private static final String TABLE_TESTS = "tests";
 
     // homework Table Columns names
+    private static final String KEY_ID = "id";
     private static final String KEY_MODULE = "module";
     private static final String KEY_DATA = "data";
 
-    private static final String[] COLUMNS = {KEY_MODULE, KEY_DATA};
+    private static final String[] COLUMNS = {KEY_DATA};
 	
 
 	public NUSBuddySQLiteOpenHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);  
+        super(context, 
+        		context.getSharedPreferences("NUSBuddyPrefs", Context.MODE_PRIVATE).getString("userId", DATABASE_NAME), 
+        		null, 
+        		DATABASE_VERSION);  
     }
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		// SQL statement to create book table
         String CREATE_HOMEWORK_TABLE = "CREATE TABLE homework ( " +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " + 
-                "title TEXT, "+
-                "author TEXT )";
+                KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
+                KEY_MODULE + " TEXT, "+
+                KEY_DATA + " TEXT )";
  
-        // create books table
+        // create homework table
         db.execSQL(CREATE_HOMEWORK_TABLE);
         
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVer, int newVer) {
-		// Drop older books table if existed
-        db.execSQL("DROP TABLE IF EXISTS books");
+		// Drop older table if existed
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_HOMEWORK);
  
-        // create fresh books table
+        // create fresh table
         this.onCreate(db);
 	}
 	
@@ -117,6 +126,41 @@ public class NUSBuddySQLiteOpenHelper extends SQLiteOpenHelper {
         
         // 5. return book
         return event;
+    }
+	
+	public ArrayList<Event> getAllEvents() {
+        ArrayList<Event> events = new ArrayList<Event>();
+  
+        // 1. build the query
+        String query = "SELECT  * FROM " + TABLE_HOMEWORK;
+  
+        // 2. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+  
+        // 3. go over each row, build event and add it to list
+        Event event = null;
+        if (cursor.moveToFirst()) {
+            do {
+            	try {
+					event = new Event(cursor.getString(2));
+					event.setId(Integer.parseInt(cursor.getString(0)));
+	            	event.setModule(cursor.getString(1));
+				} catch (JSONException e) {
+					e.printStackTrace();
+					Log.w("event creating fail", "event creating fail");
+				}
+            	
+                // Add event to events
+            	events.add(event);
+            	
+            } while (cursor.moveToNext());
+        }
+  
+        Log.w("getAllEvents()", events.toString());
+  
+        // return events
+        return events;
     }
 
 }

@@ -1,5 +1,11 @@
 package com.nick.nusbuddy;
 
+import java.util.ArrayList;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
@@ -7,12 +13,34 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 
 public class Homework extends BaseActivity {
 	
-	QuickAction mQuickAction;
+	
 	private static final int REQUEST_CODE = 1;
+	
+	QuickAction mQuickAction;
+	SharedPreferences sharedPrefs;
+
+	private Editor sharedPrefsEditor;
+
+	private String apiKey;
+
+	private String userId;
+
+	private String authToken;
+
+	private String modulesInfo;
+
+	private int numOfModules;
+
+	private ArrayList<String> modulesCodeList;
 
 	@Override
 	protected Activity getCurrentActivity() {
@@ -28,7 +56,44 @@ public class Homework extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		createqa();
-		createPageContents();
+		
+		sharedPrefs = getSharedPreferences("NUSBuddyPrefs", MODE_PRIVATE);
+		sharedPrefsEditor = sharedPrefs.edit();
+		
+		apiKey = getString(R.string.api_key_mine);
+		userId = sharedPrefs.getString("userId", null);
+		authToken = sharedPrefs.getString("authToken", null);
+		modulesInfo = sharedPrefs.getString("modulesInfo", null);
+		
+		if (modulesInfo == null) {
+			//runGetModules();
+		} else {
+			//Log.d("modules", modulesInfo);
+			runParseModules();
+		}
+		
+		
+	}
+
+	public void runParseModules() {
+		
+		modulesCodeList = new ArrayList<String>();
+		
+		try {
+			JSONObject responseObject = new JSONObject(modulesInfo);
+			JSONArray modulesArray = responseObject.getJSONArray("Results");
+			numOfModules = modulesArray.length();
+			
+			for (int i = 0; i < numOfModules; i++) {
+				modulesCodeList.add(modulesArray.getJSONObject(i).getString("CourseCode"));
+			}
+			
+			createPageContents();
+			
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	@Override

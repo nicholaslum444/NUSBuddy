@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/Layout_homework_module"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/border"
+    android:orientation="vertical"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginBottom="10dp" >
+
+    <TextView
+        android:id="@+id/TextView_homework_module_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/textview_border"
+        android:gravity="center"
+        android:text="@string/TextView_announcements_module_code_default"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <LinearLayout
+        android:id="@+id/Layout_homework_module_items"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+        
+        <LinearLayout 
+            android:id="@+id/Layout_homework_module_items_header"
+		    android:layout_width="match_parent"
+		    android:layout_height="match_parent"
+		    android:orientation="horizontal"
+    		android:padding="5dp" >
+		
+		    <TextView
+		        android:id="@+id/TextView_item_name"
+		        android:layout_weight="1"
+        		android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:maxLines="1"
+		        android:text="@string/TextView_gradebook_item_name"
+		        android:textAppearance="?android:attr/textAppearanceSmall" />
+		
+		    <TextView
+		        android:id="@+id/TextView_item_date"
+		        android:layout_weight="1"
+        		android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:maxLines="1"
+		        android:text="@string/TextView_gradebook_item_marks"
+		        android:textAppearance="?android:attr/textAppearanceSmall" />
+		    
+		    <TextView
+		        android:id="@+id/TextView_item_time"
+		        android:layout_weight="1"
+        		android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:maxLines="1"
+		        android:text="@string/TextView_gradebook_item_percentile"
+		        android:textAppearance="?android:attr/textAppearanceSmall" />
+		
+		    <TextView
+		        android:id="@+id/TextView_item_repeat"
+		        android:layout_weight="1"
+        		android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:maxLines="1"
+		        android:text="@string/TextView_gradebook_item_grade"
+		        android:textAppearance="?android:attr/textAppearanceSmall" />
+		
+		</LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

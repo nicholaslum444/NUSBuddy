@@ -13,6 +13,7 @@ import org.json.JSONObject;
  */
 public class Event {
 	
+	private int id;
 	private String module;
 	private String title;
 	private String location;
@@ -37,6 +38,7 @@ public class Event {
 	 * found, i.e. the JSONObject is invalid
 	 */
 	public Event(JSONObject obj) throws JSONException {
+		setModule(obj.getString("module"));
 		setTitle(obj.getString("title"));
 		setLocation(obj.getString("location"));
 		setDate(obj.getString("date"));
@@ -47,6 +49,27 @@ public class Event {
 		jsonRepresentation = obj;
 	}
 	
+	public Event(String string) throws JSONException {
+		JSONObject obj = new JSONObject(string);
+		setModule(obj.getString("module"));
+		setTitle(obj.getString("title"));
+		setLocation(obj.getString("location"));
+		setDate(obj.getString("date"));
+		setTime(obj.getString("time"));
+		setDescription(obj.getString("description"));
+		setRecurWeekly(obj.getBoolean("recurWeekly"));
+		setRecurFortnightly(obj.getBoolean("recurFortnightly"));
+		jsonRepresentation = obj;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public String getModule() {
 		return module;
 	}
@@ -126,6 +149,7 @@ public class Event {
 	public JSONObject makeJsonRepresentation() {
 		JSONObject obj = new JSONObject();
 		try {
+			obj.put("module", module);
 			obj.put("title", title);
 			obj.put("lcoation", location);
 			obj.put("date", date);
