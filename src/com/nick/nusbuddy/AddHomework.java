@@ -1,7 +1,6 @@
 package com.nick.nusbuddy;
 
 import java.util.Calendar;
-
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -25,13 +24,12 @@ public class AddHomework extends Activity {
 	
 	EditText eventTitleEditText;
 	EditText eventLocationEditText;
+	EditText descriptionEditText;
 	
 	TextView dueDateTextView;
 	TextView dueTimeTextView;
 	
 	private int mYear, mMonth, mDay, mHour, mMinute;
-	
-	TextView descriptionTextView;
 	
 	CheckBox recurCheckBox;
 	
@@ -52,6 +50,7 @@ public class AddHomework extends Activity {
 		
 		eventTitleEditText = (EditText) findViewById(R.id.eventTitleEditText);
 		eventLocationEditText = (EditText) findViewById(R.id.eventLocationEditText);
+		descriptionEditText = (EditText) findViewById(R.id.descriptionEditText);
 		
 		dueDateTextView = (TextView) findViewById(R.id.dueDateTextView);
 		dueTimeTextView = (TextView) findViewById(R.id.dueTimeTextView);
@@ -87,10 +86,11 @@ public class AddHomework extends Activity {
 	//how to alert for every odd week/ even week?
 	
 	public void addEvent(View v) {
-		
+		Event event = new Event();
 		String eventTitle = eventTitleEditText.getText().toString(); 
 		String eventLocation = eventLocationEditText.getText().toString(); 
 		String date = dueDateTextView.getText().toString();
+		String description = descriptionEditText.getText().toString();
 		
 		if (eventTitle == "" ||
 			date == "") {
@@ -101,10 +101,18 @@ public class AddHomework extends Activity {
 			
 			Intent output = this.getIntent();
 			output.putExtra("eventTitle", eventTitle);
-			output.putExtra("eventLocation", eventLocation);
+			event.setTitle(eventTitle);
 			
+			output.putExtra("eventLocation", eventLocation);
+			event.setLocation(eventLocation);
+			
+			output.putExtra("description", description);
+			event.setDescription(description);
+			
+			//month need to plus 1
 			output.putExtra("mDay", mDay);
 			output.putExtra("mMonth", mMonth);
+			output.putExtra("mYear", mYear);
 	
 			output.putExtra("mHour", mHour);
 			output.putExtra("mMinute", mMinute);
@@ -133,6 +141,8 @@ public class AddHomework extends Activity {
         mYear = c.get(Calendar.YEAR);
         mMonth = c.get(Calendar.MONTH);
         mDay = c.get(Calendar.DAY_OF_MONTH);
+        
+        //Day, date, month, year format
 	
         // Launch Date Picker Dialog
         DatePickerDialog.OnDateSetListener dpdl = new DatePickerDialog.OnDateSetListener() {

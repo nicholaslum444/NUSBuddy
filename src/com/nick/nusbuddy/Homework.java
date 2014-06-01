@@ -1,10 +1,17 @@
 package com.nick.nusbuddy;
 
+
 import java.util.ArrayList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
+
 
 import android.os.Bundle;
 import android.view.View;
@@ -108,25 +115,31 @@ public class Homework extends BaseActivity {
 	    	//check whether they fill in time
 	    	//get the must input fields out
 	    	String title = data.getExtras().getString("eventTitle"); 
+	    	
 	    	int day = data.getExtras().getInt("mDay");
 	    	int month = data.getExtras().getInt("mMonth");
+	    	int year = data.getExtras().getInt("mYear");
 	    	
+	    	SimpleDateFormat sdfDay = new SimpleDateFormat("EEE");
+	    	String date = sdfDay.format(new Date(year, month, day));
+	    	
+	    	String description = data.getExtras().getString("description");
 	    	String location = data.getExtras().getString("eventLocation"); 
 	    	int hour = data.getExtras().getInt("mHour"); 
 	    	int minute = data.getExtras().getInt("mMinute"); 
 	    	
-	    	String result = "Title: " + title + "location: " + location 
-	    				+ "day: " + day + "month: " + month + "hour: " + hour 
-	    				+ "minute" + minute;
+	    	SimpleDateFormat sdfTime = new SimpleDateFormat("h:mma", Locale.US);
+	    	String time = sdfTime.format(new Date(year, month, day, hour, minute));
+	    	
+	    	//show title and date, time if applicable
+	    	String result = title + " by " + date + ", " + time;
+	    	
 	    	Toast.makeText(Homework.this, result, Toast.LENGTH_LONG).show();
 	    	TextView t = new TextView(this);
-	    	t.setText(result);
-	    	//t.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));	            	
+	    	t.setText(result);	            	
 	    	int layoutId = data.getExtras().getInt("viewId");
 	    	LinearLayout layout = (LinearLayout) findViewById(layoutId);
-	    	//layout.addView(t);
 	    	layout.addView(t, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-	    	layout.setVisibility(View.VISIBLE);
 	    	
 	    	
 	    	/*
