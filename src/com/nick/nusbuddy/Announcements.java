@@ -174,7 +174,7 @@ public class Announcements extends RefreshableActivity implements ModulesAsyncTa
 		
 		
 		// FOR TESTING PURPOSES ONLY
-		for (int h = 0; h < 10; h++) {
+		//for (int h = 0; h < 10; h++) {
 		// THIS WILL DUPLICATE MODULES X TIMES TO SIMULATE MANY MODULES
 		
 			
@@ -203,8 +203,8 @@ public class Announcements extends RefreshableActivity implements ModulesAsyncTa
 					try {
 						JSONObject announcement = announcements.getJSONObject(j);
 						
-						TextView announcementTitle = (TextView) View.inflate(this, R.layout.textview_announcements_title, null);
-						containerForAnnouncements.addView(announcementTitle);
+						View.inflate(this, R.layout.textview_announcements_title, containerForAnnouncements);
+						TextView announcementTitle = (TextView) findViewById(R.id.TextView_announcements_title);
 						
 						final String title = announcement.getString("Title"); 
 						String content = announcement.getString("Description");
@@ -247,7 +247,7 @@ public class Announcements extends RefreshableActivity implements ModulesAsyncTa
 		pd.dismiss();
 		
 		// THE TESTING } IS HERE
-		}
+		//}
 		// THE TESTING } IS HERE
 	}
 

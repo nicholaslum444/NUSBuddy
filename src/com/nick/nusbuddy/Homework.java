@@ -127,7 +127,7 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener{
 		
 		
 		// FOR TESTING PURPOSES ONLY
-		for (int h = 0; h < 3; h++) {
+		//for (int h = 0; h < 3; h++) {
 		// THIS WILL DUPLICATE MODULES X TIMES TO SIMULATE MANY MODULES
 		
 		for (int i = 0; i < numOfModules; i++) {
@@ -142,6 +142,7 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener{
 				LinearLayout containerForModule = (LinearLayout) findViewById(R.id.Layout_homework_module);
 				LinearLayout containerForItems = (LinearLayout) findViewById(R.id.Layout_homework_module_items);
 				
+				// changing the IDs so that we can uniquely identify each module
 				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
 					containerName.setId(View.generateViewId());
 					containerForModule.setId(View.generateViewId());
@@ -151,7 +152,6 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener{
 					containerForModule.setId(new Random().nextInt(Integer.MAX_VALUE));
 					containerForItems.setId(new Random().nextInt(Integer.MAX_VALUE));
 				}
-				containerName.setText(""+containerForModule.getId());
 				
 				
 			} else { 
@@ -160,7 +160,7 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener{
 		}
 		
 		// testing
-		}
+		//}
 		// testing
 	}
 	
@@ -193,23 +193,29 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener{
 	    	//show title and date, time if applicable
 	    	String result = title + " by " + date + ", " + time;
 	    	
-	    	TextView t = new TextView(this);
-	    	t.setText(result);	            	
 	    	int layoutId = data.getExtras().getInt("viewId");
-	    	Toast.makeText(this, ""+layoutId, Toast.LENGTH_LONG).show();
 	    	LinearLayout layout = (LinearLayout) findViewById(layoutId);
-	    	if (layout == null) {
-	    		Toast.makeText(this, ""+"layoutnull", Toast.LENGTH_LONG).show();
-	    	} else {
-	    		layout.addView(t, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-	    	}
+	    	View.inflate(this, R.layout.textview_homework_item_small, layout);
+	    	TextView t = (TextView) findViewById(R.id.TextView_homework_item_small);
+	    	
+	    	//TextView t = new TextView(this);
+	    	t.setText(result);
+	    	
+	    	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+	    		t.setId(View.generateViewId());
+			} else {
+				t.setId(new Random().nextInt(Integer.MAX_VALUE));
+			}
+	    	
+	    	Toast.makeText(this, ""+layoutId, Toast.LENGTH_LONG).show();
+	    	
 	    	
 	    }
 	}
 	
  	void createQuickActionBar() {
 	 	ActionItem addItem      = new ActionItem(0, "Add", getResources().getDrawable(R.drawable.ic_add));
-	    ActionItem acceptItem   = new ActionItem(1, "View", getResources().getDrawable(R.drawable.ic_accept));
+	    ActionItem acceptItem   = new ActionItem(1, "View All", getResources().getDrawable(R.drawable.ic_up));
 	    //ActionItem uploadItem   = new ActionItem(2, "Upload", getResources().getDrawable(R.drawable.ic_up));
 	
 	    //use setSticky(true) to disable QuickAction dialog being dismissed after an item is clicked
@@ -257,7 +263,7 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener{
  	}
  	
  	public void showQuickActionBar(View view) {
- 		Toast.makeText(this, ""+view.getId(), Toast.LENGTH_LONG).show();
+ 		
  		mQuickAction.show(view);
  	}
  	

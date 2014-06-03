@@ -91,6 +91,7 @@
 
     <!-- Homework Planner Page Contents -->
     <string name="title_activity_homework">Homework Planner</string>
+    <string name="TextView_homework_item_small_value">Homework item</string>
 
     <!-- Add Homework Page Contents -->
     <string name="title_activity_add_homework">Add Homework</string>
