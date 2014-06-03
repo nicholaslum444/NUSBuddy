@@ -29,16 +29,18 @@ public class AddHomework extends Activity {
 	TextView dueDateTextView;
 	TextView dueTimeTextView;
 	
-	private int mYear, mMonth, mDay, mHour, mMinute;
+	int mYear, mMonth, mDay, mHour, mMinute;
 	
 	CheckBox recurCheckBox;
 	
 	RadioGroup recurRadioGroup;
 	RadioButton recurWeeklyRadioButton;
-	RadioButton recurBiWeeklyRadioButton;
+	RadioButton recurFortnightlyRadioButton;
 	
 	Button addEventButton;
 	Button cancelButton;
+	
+	NUSBuddySQLiteOpenHelper db;
 	
 	
 	public final static String EXTRA_MESSAGE = "com.nick.nusbuddy.addhomework.MESSAGE";
@@ -47,6 +49,8 @@ public class AddHomework extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.contents_add_homework);
+		
+		db = new NUSBuddySQLiteOpenHelper(this);
 		
 		eventTitleEditText = (EditText) findViewById(R.id.eventTitleEditText);
 		eventLocationEditText = (EditText) findViewById(R.id.eventLocationEditText);
@@ -59,7 +63,7 @@ public class AddHomework extends Activity {
 		
 		recurRadioGroup = (RadioGroup) findViewById(R.id.RadioGroupReccur);
 		recurWeeklyRadioButton = (RadioButton) findViewById(R.id.RadioButtonRecurWeekly);
-		recurBiWeeklyRadioButton = (RadioButton) findViewById(R.id.RadioButtonRecurBiweekly);
+		recurFortnightlyRadioButton = (RadioButton) findViewById(R.id.RadioButtonRecurFortnightly);
 		
 		addEventButton = (Button) findViewById(R.id.addEventButton);
 		cancelButton = (Button) findViewById(R.id.cancelButton);
@@ -92,14 +96,17 @@ public class AddHomework extends Activity {
 		String date = dueDateTextView.getText().toString();
 		String description = descriptionEditText.getText().toString();
 		
-		if (eventTitle == "" ||
-			date == "") {
+		if (eventTitle == "" || date == "") {
 			
 			showError();
 		
 		} else {
 			
 			Intent output = this.getIntent();
+			
+			output.putExtra("moduleCode", getIntent().getExtras().getString("moduleCode"));
+			event.setModule(getIntent().getExtras().getString("moduleCode"));
+			
 			output.putExtra("eventTitle", eventTitle);
 			event.setTitle(eventTitle);
 			
@@ -113,17 +120,36 @@ public class AddHomework extends Activity {
 			output.putExtra("mDay", mDay);
 			output.putExtra("mMonth", mMonth);
 			output.putExtra("mYear", mYear);
-	
 			output.putExtra("mHour", mHour);
 			output.putExtra("mMinute", mMinute);
 			
-			output.putExtra("recurCheckBox", recurCheckBox.isChecked());
+			Calendar c = Calendar.getInstance();
+			c.set(mYear, mMonth, mDay, mHour, mMinute);
+			long unixTimeValue = c.getTimeInMillis();
+			output.putExtra("unixTime", unixTimeValue);
+			event.setUnixTime(unixTimeValue);
+			
+			event.setOnlyDateSet(dueTimeTextView.getText().length() == 0);
 			
 			if (recurCheckBox.isChecked()) {
-				String selectedRadioValue =((RadioButton)findViewById(recurRadioGroup.getCheckedRadioButtonId())).getText().toString();
-				output.putExtra("selectedRadioValue", selectedRadioValue);
-				
+				RadioButton rb = (RadioButton)findViewById(recurRadioGroup.getCheckedRadioButtonId());
+				switch (rb.getId()) {
+				case R.id.RadioButtonRecurWeekly:
+					output.putExtra("recurWeekly", true);
+					event.setRecurWeekly(true);
+					break;
+				case R.id.RadioButtonRecurFortnightly:
+					output.putExtra("recurFortnightly", true);
+					event.setRecurFortnightly(true);
+					break;
+				}
+			} else {
+				output.putExtra("recurFortnightly", false);
+				output.putExtra("recurWeekly", false);
 			}
+			
+			output.putExtra("eventString", event.toString());
+			db.addEvent(event);
 			
 			setResult(RESULT_OK, output);
 			finish();

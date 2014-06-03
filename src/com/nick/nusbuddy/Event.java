@@ -3,6 +3,8 @@ package com.nick.nusbuddy;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 /**
  * Event class that holds information about events.
  * 
@@ -17,8 +19,8 @@ public class Event {
 	private String module;
 	private String title;
 	private String location;
-	private String date;
-	private String time;
+	private long unixTime;
+	private boolean onlyDateSet;
 	private String description;
 	private boolean recurWeekly;
 	private boolean recurFortnightly;
@@ -41,8 +43,8 @@ public class Event {
 		setModule(obj.getString("module"));
 		setTitle(obj.getString("title"));
 		setLocation(obj.getString("location"));
-		setDate(obj.getString("date"));
-		setTime(obj.getString("time"));
+		setUnixTime(obj.getLong("unixTime"));
+		setOnlyDateSet(obj.getBoolean("onlyDateSet"));
 		setDescription(obj.getString("description"));
 		setRecurWeekly(obj.getBoolean("recurWeekly"));
 		setRecurFortnightly(obj.getBoolean("recurFortnightly"));
@@ -54,8 +56,8 @@ public class Event {
 		setModule(obj.getString("module"));
 		setTitle(obj.getString("title"));
 		setLocation(obj.getString("location"));
-		setDate(obj.getString("date"));
-		setTime(obj.getString("time"));
+		setUnixTime(obj.getLong("unixTime"));
+		setOnlyDateSet(obj.getBoolean("onlyDateSet"));
 		setDescription(obj.getString("description"));
 		setRecurWeekly(obj.getBoolean("recurWeekly"));
 		setRecurFortnightly(obj.getBoolean("recurFortnightly"));
@@ -94,20 +96,20 @@ public class Event {
 		this.location = location;
 	}
 
-	public String getDate() {
-		return date;
+	public long getUnixTime() {
+		return unixTime;
 	}
 
-	public void setDate(String date) {
-		this.date = date;
+	public void setUnixTime(long unixTimeValue) {
+		this.unixTime = unixTimeValue;
+	}
+	
+	public boolean isOnlyDateSet() {
+		return onlyDateSet;
 	}
 
-	public String getTime() {
-		return time;
-	}
-
-	public void setTime(String time) {
-		this.time = time;
+	public void setOnlyDateSet(boolean onlyDateSet) {
+		this.onlyDateSet = onlyDateSet;
 	}
 
 	public String getDescription() {
@@ -116,6 +118,10 @@ public class Event {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public boolean isRecur() {
+		return recurWeekly || recurFortnightly;
 	}
 
 	public boolean isRecurWeekly() {
@@ -151,9 +157,9 @@ public class Event {
 		try {
 			obj.put("module", module);
 			obj.put("title", title);
-			obj.put("lcoation", location);
-			obj.put("date", date);
-			obj.put("time", time);
+			obj.put("location", location);
+			obj.put("unixTime", unixTime);
+			obj.put("onlyDateSet", onlyDateSet);
 			obj.put("description", description);
 			obj.put("recurWeekly", recurWeekly);
 			obj.put("recurFortnightly", recurFortnightly);
@@ -175,8 +181,10 @@ public class Event {
 	public String toString() {
 		JSONObject obj = makeJsonRepresentation();
 		if (obj == null) {
+			Log.w("fail", "you fail");
 			return null;
 		} else {
+			Log.w("fail", obj.toString());
 			return obj.toString();
 		}
 	}

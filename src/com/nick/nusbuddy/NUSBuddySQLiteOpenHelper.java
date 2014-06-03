@@ -22,7 +22,6 @@ public class NUSBuddySQLiteOpenHelper extends SQLiteOpenHelper {
 	
 	// homework table name
     private static final String TABLE_HOMEWORK = "homework";
-    
 	// tests table name
     private static final String TABLE_TESTS = "tests";
 
@@ -35,10 +34,7 @@ public class NUSBuddySQLiteOpenHelper extends SQLiteOpenHelper {
 	
 
 	public NUSBuddySQLiteOpenHelper(Context context) {
-        super(context, 
-        		context.getSharedPreferences("NUSBuddyPrefs", Context.MODE_PRIVATE).getString("userId", DATABASE_NAME), 
-        		null, 
-        		DATABASE_VERSION);  
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);  
     }
 
 	@Override
