@@ -3,6 +3,7 @@ package com.nick.nusbuddy;
 import java.util.Locale;
 import org.json.*;
 
+import android.net.ConnectivityManager;
 import android.os.*;
 import android.app.*;
 import android.content.*;
@@ -70,6 +71,12 @@ LoginAsyncTaskListener {
 		sharedPrefsEditor = sharedPrefs.edit();
 		
 		String oldToken = sharedPrefs.getString("authToken", null);
+		String oldUserId = sharedPrefs.getString("userId", null);
+		String oldPassword = sharedPrefs.getString("password", null);
+		if (oldUserId != null && oldPassword != null) {
+			editTextUserId.setText(oldUserId);
+			editTextPassword.setText(oldPassword);
+		}
 		
 		if (oldToken != null) {
 			pd.setMessage("Verifying stored token");
@@ -101,6 +108,11 @@ LoginAsyncTaskListener {
 	// when sign in button is pressed
 	// runs the async task
 	public void onClickButtonLogin(View v) {
+		if (!hasInternetConnection()) {
+			showSplashScreen(false);
+			Toast.makeText(this, "Please check your Wifi or 3G connection", Toast.LENGTH_LONG).show();
+			return;
+		}
 		pd.setMessage("Logging in... Please Wait... ");
 		//pd.show();
 		
@@ -108,7 +120,20 @@ LoginAsyncTaskListener {
 		runLogin();
 	}
 	
+	public boolean hasInternetConnection() {
+	    ConnectivityManager localConnectivityManager = (ConnectivityManager)getSystemService("connectivity");
+	    return (localConnectivityManager.getActiveNetworkInfo() != null) && 
+	    		(localConnectivityManager.getActiveNetworkInfo().isAvailable()) && 
+	    		(localConnectivityManager.getActiveNetworkInfo().isConnected());
+	}
+	
 	public void runLogin() {
+		if (!hasInternetConnection()) {
+			showSplashScreen(false);
+			Toast.makeText(this, "Please check your Wifi or 3G connection", Toast.LENGTH_LONG).show();
+			return;
+		}
+		
 		inputUserId = editTextUserId.getText().toString();
 		inputPassword = editTextPassword.getText().toString();
 		
@@ -156,6 +181,12 @@ LoginAsyncTaskListener {
 	
 	
 	public void runValidate(String oldToken) {
+		if (!hasInternetConnection()) {
+			showSplashScreen(false);
+			Toast.makeText(this, "Please check your Wifi or 3G connection", Toast.LENGTH_LONG).show();
+			return;
+		}
+		
 		TokenValidateAsyncTask validateTask = new TokenValidateAsyncTask(this);
 		validateTask.execute(apiKey, oldToken);
 		
@@ -201,6 +232,11 @@ LoginAsyncTaskListener {
 	}
 	
 	public void runGetStudentName(String authToken) {
+		if (!hasInternetConnection()) {
+			showSplashScreen(false);
+			Toast.makeText(this, "Please check your Wifi or 3G connection", Toast.LENGTH_LONG).show();
+			return;
+		}
 		
 		GetStudentNameAsyncTask t = new GetStudentNameAsyncTask(this);
 		
@@ -217,6 +253,11 @@ LoginAsyncTaskListener {
 	
 	
 	public void runGetModules(String authToken, String userId) {
+		if (!hasInternetConnection()) {
+			showSplashScreen(false);
+			Toast.makeText(this, "Please check your Wifi or 3G connection", Toast.LENGTH_LONG).show();
+			return;
+		}
 		
 		pd.setMessage("Retrieving modules");
 		

@@ -9,6 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.annotation.TargetApi;
@@ -25,6 +26,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.TableLayout.LayoutParams;
 
 public class FinalExams extends RefreshableActivity implements ModulesAsyncTaskListener, FinalExamAsyncTaskListener {
@@ -110,8 +112,19 @@ public class FinalExams extends RefreshableActivity implements ModulesAsyncTaskL
 		
 	}
 	
+	public boolean hasInternetConnection() {
+	    ConnectivityManager localConnectivityManager = (ConnectivityManager)getSystemService("connectivity");
+	    return (localConnectivityManager.getActiveNetworkInfo() != null) && 
+	    		(localConnectivityManager.getActiveNetworkInfo().isAvailable()) && 
+	    		(localConnectivityManager.getActiveNetworkInfo().isConnected());
+	}
+	
 	@Override
 	protected void onRefresh() {
+		if (!hasInternetConnection()) {
+			Toast.makeText(this, "Please check your Wifi or 3G connection", Toast.LENGTH_LONG).show();
+			return;
+		}
 		pd.setMessage("Refreshing...");
 		pd.show();
 		super.onCreate(null);
@@ -119,6 +132,10 @@ public class FinalExams extends RefreshableActivity implements ModulesAsyncTaskL
 	}
 
 	private void runGetModules() {
+		if (!hasInternetConnection()) {
+			Toast.makeText(this, "Please check your Wifi or 3G connection", Toast.LENGTH_LONG).show();
+			return;
+		}
 		new GetModulesAsyncTask(this).execute(apiKey, authToken, userId);
 	}
 
@@ -170,6 +187,10 @@ public class FinalExams extends RefreshableActivity implements ModulesAsyncTaskL
 	}
 	
 	private void runGetFinals() {
+		if (!hasInternetConnection()) {
+			Toast.makeText(this, "Please check your Wifi or 3G connection", Toast.LENGTH_LONG).show();
+			return;
+		}
 		if (modulesIdList.size() > 0) {
 			String id = modulesIdList.remove(0);
 			new GetFinalExamAsyncTask(this).execute(apiKey, authToken, id);
@@ -198,12 +219,10 @@ public class FinalExams extends RefreshableActivity implements ModulesAsyncTaskL
 	@Override
 	protected void createPageContents() {
 		
-
 		LinearLayout layoutFinalExams = (LinearLayout) findViewById(R.id.Layout_final_exams);
 		
-		
 		// FOR TESTING PURPOSES ONLY
-		for (int h = 0; h < 15; h++) {
+		// for (int h = 0; h < 15; h++) {
 		// THIS WILL DUPLICATE MODULES 4 TIMES TO SIMULATE MANY MODULES
 		
 			
@@ -281,7 +300,7 @@ public class FinalExams extends RefreshableActivity implements ModulesAsyncTaskL
 		pd.dismiss();
 		
 		// THE TESTING } IS HERE
-		}
+		//}
 		// THE TESTING } IS HERE
 	}
 

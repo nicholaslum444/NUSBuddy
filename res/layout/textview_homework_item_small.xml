@@ -8,7 +8,7 @@
     android:padding="5dp"
     android:background="@drawable/highlight_textview"
     android:text="@string/TextView_homework_item_small_value"
-    android:textAppearance="?android:attr/textAppearanceSmall"
+    android:textAppearance="?android:attr/textAppearanceMedium"
     android:layout_margin="2dp" >
 
 </TextView>

@@ -15,6 +15,8 @@ import android.util.Log;
  */
 public class Event {
 	
+	// event id is set by the database as the row primary key. 
+	
 	private int id;
 	private String module;
 	private String title;

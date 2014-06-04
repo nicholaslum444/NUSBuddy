@@ -41,7 +41,7 @@ public class AddHomework extends Activity {
 	Button addEventButton;
 	Button cancelButton;
 	
-	NUSBuddySQLiteOpenHelper db;
+	NUSBuddyDatabaseHelper database;
 	
 	
 	public final static String EXTRA_MESSAGE = "com.nick.nusbuddy.addhomework.MESSAGE";
@@ -51,7 +51,7 @@ public class AddHomework extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.contents_add_homework);
 		
-		db = new NUSBuddySQLiteOpenHelper(this);
+		database = new NUSBuddyDatabaseHelper(this);
 		
 		eventTitleEditText = (EditText) findViewById(R.id.eventTitleEditText);
 		eventLocationEditText = (EditText) findViewById(R.id.eventLocationEditText);
@@ -155,7 +155,7 @@ public class AddHomework extends Activity {
 			}
 			
 			output.putExtra("eventString", event.toString());
-			db.addEvent(event);
+			database.addEvent(event);
 			
 			setResult(RESULT_OK, output);
 			finish();

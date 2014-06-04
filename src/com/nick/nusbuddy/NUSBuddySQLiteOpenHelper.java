@@ -154,32 +154,27 @@ public class NUSBuddySQLiteOpenHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
   
-        Log.w("getAllEvents()", events.toString());
-  
         // return events
         return events;
     }
 	
-	/*public void deleteBook(Book book) {
+	public void deleteEvent(Event event) {
    	 
         // 1. get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
  
         // 2. delete
-        db.delete(TABLE_BOOKS, //table name
+        db.delete(TABLE_HOMEWORK, //table name
                 KEY_ID+" = ?",  // selections
-                new String[] { String.valueOf(book.getId()) }); //selections args
+                new String[] { String.valueOf(event.getId()) }); //selections args
  
         // 3. close
         db.close();
  
-        //log
-    Log.w("deleteBook", book.toString());
- 
-    }*/
+    }
 	
 	public void deleteAllEvents() {
 		onUpgrade(this.getWritableDatabase(), DATABASE_VERSION, DATABASE_VERSION);
 	}
-
+	
 }

@@ -13,6 +13,7 @@ import java.util.Locale;
 import java.util.Random;
 
 
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Spanned;
@@ -51,7 +52,8 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener {
 
 	private ArrayList<String> modulesCodeList;
 	
-	NUSBuddySQLiteOpenHelper db;
+	//NUSBuddySQLiteOpenHelper db;
+	NUSBuddyDatabaseHelper database;
 
 	@Override
 	protected Activity getCurrentActivity() {
@@ -68,7 +70,8 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener {
 		super.onCreate(savedInstanceState);
 		createQuickActionBar();
 		
-		db = new NUSBuddySQLiteOpenHelper(this);
+		//db = new NUSBuddySQLiteOpenHelper(this);
+		database = new NUSBuddyDatabaseHelper(this);
 		
 		Toast.makeText(this, ""+Build.VERSION.SDK_INT +" "+ Build.VERSION_CODES.JELLY_BEAN_MR1, Toast.LENGTH_LONG).show();
 		
@@ -83,12 +86,22 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener {
 		if (modulesInfo == null) {
 			runGetModules();
 		} else {
-			//Log.d("modules", modulesInfo);
 			runParseModules();
 		}
 	}
 	
+	public boolean hasInternetConnection() {
+	    ConnectivityManager localConnectivityManager = (ConnectivityManager)getSystemService("connectivity");
+	    return (localConnectivityManager.getActiveNetworkInfo() != null) && 
+	    		(localConnectivityManager.getActiveNetworkInfo().isAvailable()) && 
+	    		(localConnectivityManager.getActiveNetworkInfo().isConnected());
+	}
+	
 	public void runGetModules() {
+		if (!hasInternetConnection()) {
+			Toast.makeText(this, "Please check your Wifi or 3G connection", Toast.LENGTH_LONG).show();
+			return;
+		}
 		new GetModulesAsyncTask(this).execute(apiKey, authToken, userId);
 	}
 	
@@ -132,7 +145,7 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener {
 	protected void createPageContents() {
 		
 		// get a list of all events in the database
-		ArrayList<Event> allEvents = db.getAllEvents();
+		ArrayList<Event> allEvents = database.getAllEvents();
 		Log.w("events", allEvents.toString());
 		
 		LinearLayout layoutHomework = (LinearLayout) findViewById(R.id.Layout_homework);
@@ -161,15 +174,19 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener {
 				LinearLayout containerForItems = (LinearLayout) findViewById(R.id.Layout_homework_module_items);
 				
 				// get a list of events under this module
-				ArrayList<Event> thisModuleEvents = new ArrayList<Event>();
+				//ArrayList<Event> thisModuleEvents = new ArrayList<Event>();
 				// for each event in the database
-				for (int j = 0; j < allEvents.size(); j++) {
+				/*for (int j = 0; j < allEvents.size(); j++) {
 					Event event = allEvents.get(j);
 					//check if event is under this module
-					if (event.getModule().equals(moduleCode)) {
+					if (event != null && event.getModule().equals(moduleCode)) {
 						thisModuleEvents.add(event);
 					}
-				}
+				}*/
+				ArrayList<Event> thisModuleEvents = database.getAllEvents(moduleCode);
+				Log.w("mcode", moduleCode);
+				Log.w("mods", thisModuleEvents.toString());
+				
 				
 				// for each event under this module
 				for (int j = 0; j < thisModuleEvents.size(); j++) {
@@ -292,8 +309,6 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener {
 	    	
 	    	// trying with the db
 	    	refreshContents();
-	    	
-	    	
 	    }
 	}
 	
@@ -367,7 +382,7 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener {
  	}
  	
  	public void clear(View v) {
- 		db.deleteAllEvents();
+ 		database.deleteAllEvents();
  		refreshContents();
  	}
 	
