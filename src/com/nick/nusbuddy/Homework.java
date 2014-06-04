@@ -193,8 +193,10 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener {
 			    	// check recur
 			    	if (event.isRecurWeekly()) {
 			    		dateTimeString = "every " + dateTimeString;
-			    	} else if (event.isRecurFortnightly()) {
-			    		dateTimeString = "every other " + dateTimeString;
+			    	} else if (event.isRecurEvenWeek()) {
+			    		dateTimeString = "every even " + dateTimeString;
+			    	} else if (event.isRecurOddWeek()) {
+			    		dateTimeString = "every odd " + dateTimeString;
 			    	}
 			    	
 			    	// display the item text

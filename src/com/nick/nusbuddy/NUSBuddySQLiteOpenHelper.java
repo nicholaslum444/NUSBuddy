@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -158,6 +159,24 @@ public class NUSBuddySQLiteOpenHelper extends SQLiteOpenHelper {
         // return events
         return events;
     }
+	
+	/*public void deleteBook(Book book) {
+   	 
+        // 1. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+ 
+        // 2. delete
+        db.delete(TABLE_BOOKS, //table name
+                KEY_ID+" = ?",  // selections
+                new String[] { String.valueOf(book.getId()) }); //selections args
+ 
+        // 3. close
+        db.close();
+ 
+        //log
+    Log.w("deleteBook", book.toString());
+ 
+    }*/
 	
 	public void deleteAllEvents() {
 		onUpgrade(this.getWritableDatabase(), DATABASE_VERSION, DATABASE_VERSION);
