@@ -158,5 +158,9 @@ public class NUSBuddySQLiteOpenHelper extends SQLiteOpenHelper {
         // return events
         return events;
     }
+	
+	public void deleteAllEvents() {
+		onUpgrade(this.getWritableDatabase(), DATABASE_VERSION, DATABASE_VERSION);
+	}
 
 }

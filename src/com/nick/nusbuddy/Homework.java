@@ -289,11 +289,15 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener {
 	    	//Toast.makeText(this, ""+layoutId, Toast.LENGTH_LONG).show();
 	    	
 	    	// trying with the db
-	    	super.onCreate(null);
-			createPageContents();
+	    	refreshContents();
 	    	
 	    	
 	    }
+	}
+	
+	public void refreshContents() {
+		super.onCreate(null);
+		createPageContents();
 	}
 	
  	void createQuickActionBar() {
@@ -359,7 +363,11 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener {
  		
  		mQuickAction.show(view);
  	}
-
+ 	
+ 	public void clear(View v) {
+ 		db.deleteAllEvents();
+ 		refreshContents();
+ 	}
 	
  	
 }
