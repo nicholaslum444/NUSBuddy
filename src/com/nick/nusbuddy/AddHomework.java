@@ -35,7 +35,8 @@ public class AddHomework extends Activity {
 	
 	RadioGroup recurRadioGroup;
 	RadioButton recurWeeklyRadioButton;
-	RadioButton recurFortnightlyRadioButton;
+	RadioButton recurOddWeekButton;
+	RadioButton recurEvenWeekButton;
 	
 	Button addEventButton;
 	Button cancelButton;
@@ -63,7 +64,8 @@ public class AddHomework extends Activity {
 		
 		recurRadioGroup = (RadioGroup) findViewById(R.id.RadioGroupReccur);
 		recurWeeklyRadioButton = (RadioButton) findViewById(R.id.RadioButtonRecurWeekly);
-		recurFortnightlyRadioButton = (RadioButton) findViewById(R.id.RadioButtonRecurFortnightly);
+		recurOddWeekButton = (RadioButton) findViewById(R.id.RadioButtonEvenWeek);
+		recurEvenWeekButton = (RadioButton) findViewById(R.id.RadioButtonEvenWeek);
 		
 		addEventButton = (Button) findViewById(R.id.addEventButton);
 		cancelButton = (Button) findViewById(R.id.cancelButton);
@@ -138,9 +140,13 @@ public class AddHomework extends Activity {
 					output.putExtra("recurWeekly", true);
 					event.setRecurWeekly(true);
 					break;
-				case R.id.RadioButtonRecurFortnightly:
-					output.putExtra("recurFortnightly", true);
-					event.setRecurFortnightly(true);
+				case R.id.RadioButtonEvenWeek:
+					output.putExtra("recurEvenWeek", true);
+					event.setRecurEvenWeek(true);
+					break;
+				case R.id.RadioButtonOddWeek:
+					output.putExtra("recurOddWeek", true);
+					event.setRecurOddWeek(true);
 					break;
 				}
 			} else {
