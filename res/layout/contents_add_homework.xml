@@ -99,10 +99,16 @@
                 android:checked="true" />
             
             <RadioButton
-	            android:id="@+id/RadioButtonRecurFortnightly"
+	            android:id="@+id/RadioButtonEvenWeek"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:text="@string/RadioButton_recur_biweekly" />
+	            android:text="@string/RadioButton_odd_week" />
+            
+            <RadioButton
+	            android:id="@+id/RadioButtonOddWeek"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/RadioButton_even_week" />
             
         </RadioGroup>
 

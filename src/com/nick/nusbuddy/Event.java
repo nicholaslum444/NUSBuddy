@@ -23,7 +23,8 @@ public class Event {
 	private boolean onlyDateSet;
 	private String description;
 	private boolean recurWeekly;
-	private boolean recurFortnightly;
+	private boolean recurEvenWeek;
+	private boolean recurOddWeek;
 	private JSONObject jsonRepresentation;
 
 	/**
@@ -47,7 +48,8 @@ public class Event {
 		setOnlyDateSet(obj.getBoolean("onlyDateSet"));
 		setDescription(obj.getString("description"));
 		setRecurWeekly(obj.getBoolean("recurWeekly"));
-		setRecurFortnightly(obj.getBoolean("recurFortnightly"));
+		setRecurEvenWeek(obj.getBoolean("recurEvenWeek"));
+		setRecurOddWeek(obj.getBoolean("recurOddWeek"));
 		jsonRepresentation = obj;
 	}
 	
@@ -60,7 +62,8 @@ public class Event {
 		setOnlyDateSet(obj.getBoolean("onlyDateSet"));
 		setDescription(obj.getString("description"));
 		setRecurWeekly(obj.getBoolean("recurWeekly"));
-		setRecurFortnightly(obj.getBoolean("recurFortnightly"));
+		setRecurEvenWeek(obj.getBoolean("recurEvenWeek"));
+		setRecurOddWeek(obj.getBoolean("recurOddWeek"));
 		jsonRepresentation = obj;
 	}
 
@@ -121,7 +124,7 @@ public class Event {
 	}
 
 	public boolean isRecur() {
-		return recurWeekly || recurFortnightly;
+		return recurWeekly || recurEvenWeek || recurOddWeek;
 	}
 
 	public boolean isRecurWeekly() {
@@ -130,22 +133,35 @@ public class Event {
 
 	public void setRecurWeekly(boolean recurWeekly) {
 		if (recurWeekly) {
-			setRecurFortnightly(false);
+			setRecurEvenWeek(false);
+			setRecurOddWeek(false);
 		}
 		this.recurWeekly = recurWeekly;
 	}
 
-	public boolean isRecurFortnightly() {
-		return recurFortnightly;
-	}
-
-	public void setRecurFortnightly(boolean recurFortnightly) {
-		if (recurFortnightly) {
-			setRecurWeekly(false);
-		}
-		this.recurFortnightly = recurFortnightly;
+	public boolean isRecurEvenWeek() {
+		return recurEvenWeek;
 	}
 	
+	public boolean isRecurOddWeek() {
+		return recurOddWeek;
+	}
+	
+	
+
+	public void setRecurEvenWeek(boolean recurEvenWeek) {
+		if (recurEvenWeek) {
+			setRecurWeekly(false);
+		}
+		this.recurEvenWeek = recurEvenWeek;
+	}
+	
+	public void setRecurOddWeek(boolean recurOddWeek) {
+		if (recurOddWeek) {
+			setRecurWeekly(false);
+		}
+		this.recurOddWeek = recurOddWeek;
+	}
 	/**
 	 * This method makes a JSON representation of the object from the information 
 	 * it holds.
@@ -162,7 +178,8 @@ public class Event {
 			obj.put("onlyDateSet", onlyDateSet);
 			obj.put("description", description);
 			obj.put("recurWeekly", recurWeekly);
-			obj.put("recurFortnightly", recurFortnightly);
+			obj.put("recurEvenWeek", recurEvenWeek);
+			obj.put("recurOddWeek", recurOddWeek);
 			jsonRepresentation = obj;
 		} catch (JSONException e) {
 			e.printStackTrace();
