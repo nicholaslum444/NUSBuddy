@@ -35,6 +35,7 @@ public class NUSBuddyDatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_RECUR_WEEKLY = "recurWeekly";
     private static final String KEY_RECUR_ODD_WEEK = "recurOddWeek";
     private static final String KEY_RECUR_EVEN_WEEK = "recurEvenWeek";
+    private static final String KEY_IS_ONLY_DATE_SET = "onlyDateSet";
     
     private static final String[] COLUMNS = {
     	KEY_ID,
@@ -45,13 +46,13 @@ public class NUSBuddyDatabaseHelper extends SQLiteOpenHelper {
     	KEY_DESCRIPTION,
     	KEY_RECUR_WEEKLY,
     	KEY_RECUR_ODD_WEEK,
-    	KEY_RECUR_EVEN_WEEK
+    	KEY_RECUR_EVEN_WEEK,
+    	KEY_IS_ONLY_DATE_SET
     };
 	
 
 	public NUSBuddyDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        
     }
 
 	@Override
@@ -66,7 +67,8 @@ public class NUSBuddyDatabaseHelper extends SQLiteOpenHelper {
             	KEY_DESCRIPTION + " TEXT, " +
             	KEY_RECUR_WEEKLY + " BOOLEAN, " +
             	KEY_RECUR_ODD_WEEK + " BOOLEAN, " +
-            	KEY_RECUR_EVEN_WEEK + " BOOLEAN)"; 
+            	KEY_RECUR_EVEN_WEEK + " BOOLEAN, " +
+            	KEY_IS_ONLY_DATE_SET + " BOOLEAN)"; 
  
         // create homework table
         db.execSQL(CREATE_HOMEWORK_TABLE);
@@ -99,6 +101,7 @@ public class NUSBuddyDatabaseHelper extends SQLiteOpenHelper {
 		values.put(KEY_RECUR_WEEKLY, event.isRecurWeekly());
 		values.put(KEY_RECUR_ODD_WEEK, event.isRecurOddWeek());
 		values.put(KEY_RECUR_EVEN_WEEK, event.isRecurEvenWeek());
+		values.put(KEY_IS_ONLY_DATE_SET, event.isOnlyDateSet());
 		
 		// 3. insert
 		db.insert(TABLE_HOMEWORK, // table
@@ -128,6 +131,7 @@ public class NUSBuddyDatabaseHelper extends SQLiteOpenHelper {
  		values.put(KEY_RECUR_WEEKLY, event.isRecurWeekly());
  		values.put(KEY_RECUR_ODD_WEEK, event.isRecurOddWeek());
  		values.put(KEY_RECUR_EVEN_WEEK, event.isRecurEvenWeek());
+ 		values.put(KEY_IS_ONLY_DATE_SET, event.isOnlyDateSet());
      
         // 3. updating row. needs the event ID!
         db.update(TABLE_HOMEWORK, //table
@@ -201,9 +205,9 @@ public class NUSBuddyDatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query, new String[]{moduleCode});
   
         // 3. go over each row, build event and add it to list
-        Event event = new Event();
         if (cursor.moveToFirst()) {
             do {
+            	Event event = new Event();
 				event.setId(cursor.getInt(0));
 				event.setModule(cursor.getString(1));
 				event.setTitle(cursor.getString(2));
@@ -213,6 +217,7 @@ public class NUSBuddyDatabaseHelper extends SQLiteOpenHelper {
 		        event.setRecurWeekly(cursor.getInt(6) == 1);
 		        event.setRecurOddWeek(cursor.getInt(7) == 1);
 		        event.setRecurEvenWeek(cursor.getInt(8) == 1);
+		        event.setOnlyDateSet(cursor.getInt(9) == 1);
             	
                 // Add event to events
             	events.add(event); 
@@ -252,6 +257,7 @@ public class NUSBuddyDatabaseHelper extends SQLiteOpenHelper {
 				event.setRecurWeekly(cursor.getInt(6) == 1);
 				event.setRecurOddWeek(cursor.getInt(7) == 1);
 				event.setRecurEvenWeek(cursor.getInt(8) == 1);
+				event.setOnlyDateSet(cursor.getInt(9) == 1);
             	
                 // Add event to events
             	events.add(event);

@@ -238,6 +238,11 @@ LoginAsyncTaskListener {
 			return;
 		}
 		
+		if (sharedPrefs.getString("studentName", null) != null) {
+			runGetModules(authToken, sharedPrefs.getString("userId", null));
+			return;
+		}
+		
 		GetStudentNameAsyncTask t = new GetStudentNameAsyncTask(this);
 		
 		t.execute(apiKey, authToken);
@@ -259,6 +264,11 @@ LoginAsyncTaskListener {
 			return;
 		}
 		
+		if (sharedPrefs.getString("modulesInfo", null) != null) {
+			goToHome();
+			return;
+		}
+		
 		pd.setMessage("Retrieving modules");
 		
 		GetModulesAsyncTask modulesTask = new GetModulesAsyncTask(this);
@@ -272,10 +282,14 @@ LoginAsyncTaskListener {
 		sharedPrefsEditor.commit();
 		pd.dismiss();
 		
+		goToHome();
+	}
+	
+	public void goToHome() {
 		// go to home page
 		Intent intent = new Intent(this, HomePage.class); 
 		startActivity(intent);
-		finish(); 
+		finish();
 	}
 	
 

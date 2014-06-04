@@ -18,6 +18,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Spanned;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
@@ -73,7 +74,7 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener {
 		//db = new NUSBuddySQLiteOpenHelper(this);
 		database = new NUSBuddyDatabaseHelper(this);
 		
-		Toast.makeText(this, ""+Build.VERSION.SDK_INT +" "+ Build.VERSION_CODES.JELLY_BEAN_MR1, Toast.LENGTH_LONG).show();
+		//Toast.makeText(this, ""+Build.VERSION.SDK_INT +" "+ Build.VERSION_CODES.JELLY_BEAN_MR1, Toast.LENGTH_LONG).show();
 		
 		sharedPrefs = getSharedPreferences("NUSBuddyPrefs", MODE_PRIVATE);
 		sharedPrefsEditor = sharedPrefs.edit();
@@ -173,21 +174,8 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener {
 				LinearLayout containerForModule = (LinearLayout) findViewById(R.id.Layout_homework_module);
 				LinearLayout containerForItems = (LinearLayout) findViewById(R.id.Layout_homework_module_items);
 				
-				// get a list of events under this module
-				//ArrayList<Event> thisModuleEvents = new ArrayList<Event>();
-				// for each event in the database
-				/*for (int j = 0; j < allEvents.size(); j++) {
-					Event event = allEvents.get(j);
-					//check if event is under this module
-					if (event != null && event.getModule().equals(moduleCode)) {
-						thisModuleEvents.add(event);
-					}
-				}*/
 				ArrayList<Event> thisModuleEvents = database.getAllEvents(moduleCode);
-				Log.w("mcode", moduleCode);
-				Log.w("mods", thisModuleEvents.toString());
-				
-				
+				Log.w("this mods", thisModuleEvents.toString());
 				// for each event under this module
 				for (int j = 0; j < thisModuleEvents.size(); j++) {
 					Event event = thisModuleEvents.get(j);
@@ -339,14 +327,14 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener {
 	            switch (actionId) {
 	            
 	            case ADD_ITEM_CODE:
-	            	Toast.makeText(getApplicationContext(), "Add item selected", Toast.LENGTH_SHORT).show();
+	            	//Toast.makeText(getApplicationContext(), "Add item selected", Toast.LENGTH_SHORT).show();
 	                
 	            	LinearLayout anchor = (LinearLayout) mQuickAction.mAnchor;
 	            	TextView textViewModuleCode = (TextView) anchor.findViewWithTag("moduleCode");
 	            	String moduleCode = textViewModuleCode.getText().toString();
 	            	
 	            	int viewId = anchor.getId();
-	            	Toast.makeText(Homework.this, ""+viewId, Toast.LENGTH_LONG).show();
+	            	//Toast.makeText(Homework.this, ""+viewId, Toast.LENGTH_LONG).show();
 	            	
 	                Intent addIntent = new Intent(Homework.this, AddHomework.class);
 	                
@@ -358,7 +346,7 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener {
 	        	    break;
 	        	    
 	            case VIEW_ITEMS_CODE:
-	            	Toast.makeText(getApplicationContext(), actionItem.getTitle() + " selected", Toast.LENGTH_SHORT).show();
+	            	//Toast.makeText(getApplicationContext(), actionItem.getTitle() + " selected", Toast.LENGTH_SHORT).show();
 	            	
 	            	Intent viewIntent = new Intent(Homework.this, ViewHomework.class);
 	            	startActivity(viewIntent);
@@ -371,7 +359,7 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener {
 	    mQuickAction.setOnDismissListener(new QuickAction.OnDismissListener() {
 	        @Override
 	        public void onDismiss() {
-	            Toast.makeText(getApplicationContext(), "Ups..dismissed", Toast.LENGTH_SHORT).show();
+	            //Toast.makeText(getApplicationContext(), "Ups..dismissed", Toast.LENGTH_SHORT).show();
 	        }
 	    });
  	}
@@ -386,5 +374,17 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener {
  		refreshContents();
  	}
 	
+ 	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
+		int id = item.getItemId();
+		if (id == R.id.action_settings) {
+			clear(null);
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
  	
 }

@@ -22,6 +22,13 @@ import android.widget.TimePicker;
 
 public class AddHomework extends Activity {
 	
+	public class DateTimeInfo {
+		int day, month, year, hour, minute;
+		boolean dateSet, timeSet;
+	}
+	
+	DateTimeInfo dtf;
+	
 	EditText eventTitleEditText;
 	EditText eventLocationEditText;
 	EditText descriptionEditText;
@@ -53,6 +60,8 @@ public class AddHomework extends Activity {
 		
 		database = new NUSBuddyDatabaseHelper(this);
 		
+		dtf = new DateTimeInfo();
+		
 		eventTitleEditText = (EditText) findViewById(R.id.eventTitleEditText);
 		eventLocationEditText = (EditText) findViewById(R.id.eventLocationEditText);
 		descriptionEditText = (EditText) findViewById(R.id.descriptionEditText);
@@ -64,7 +73,7 @@ public class AddHomework extends Activity {
 		
 		recurRadioGroup = (RadioGroup) findViewById(R.id.RadioGroupReccur);
 		recurWeeklyRadioButton = (RadioButton) findViewById(R.id.RadioButtonRecurWeekly);
-		recurOddWeekButton = (RadioButton) findViewById(R.id.RadioButtonEvenWeek);
+		recurOddWeekButton = (RadioButton) findViewById(R.id.RadioButtonOddWeek);
 		recurEvenWeekButton = (RadioButton) findViewById(R.id.RadioButtonEvenWeek);
 		
 		addEventButton = (Button) findViewById(R.id.addEventButton);
@@ -84,8 +93,8 @@ public class AddHomework extends Activity {
 	}
 	
 	private void showError() {
-		eventTitleEditText.setError("Invalid input");
-		dueDateTextView.setError("Invalid input");
+		eventTitleEditText.setError("Required fields");
+		dueDateTextView.setError("Required fields");
 		
 	}
 	
@@ -105,30 +114,14 @@ public class AddHomework extends Activity {
 		} else {
 			
 			Intent output = this.getIntent();
-			
-			output.putExtra("moduleCode", getIntent().getExtras().getString("moduleCode"));
-			event.setModule(getIntent().getExtras().getString("moduleCode"));
-			
-			output.putExtra("eventTitle", eventTitle);
+			event.setModule(output.getExtras().getString("moduleCode"));
 			event.setTitle(eventTitle);
-			
-			output.putExtra("eventLocation", eventLocation);
 			event.setLocation(eventLocation);
-			
-			output.putExtra("description", description);
 			event.setDescription(description);
 			
-			//month need to plus 1
-			output.putExtra("mDay", mDay);
-			output.putExtra("mMonth", mMonth);
-			output.putExtra("mYear", mYear);
-			output.putExtra("mHour", mHour);
-			output.putExtra("mMinute", mMinute);
-			
 			Calendar c = Calendar.getInstance();
-			c.set(mYear, mMonth, mDay, mHour, mMinute);
+			c.set(dtf.year, dtf.month, dtf.day, dtf.hour, dtf.minute);
 			long unixTimeValue = c.getTimeInMillis();
-			output.putExtra("unixTime", unixTimeValue);
 			event.setUnixTime(unixTimeValue);
 			
 			event.setOnlyDateSet(dueTimeTextView.getText().length() == 0);
@@ -150,11 +143,9 @@ public class AddHomework extends Activity {
 					break;
 				}
 			} else {
-				output.putExtra("recurFortnightly", false);
-				output.putExtra("recurWeekly", false);
+				
 			}
 			
-			output.putExtra("eventString", event.toString());
 			database.addEvent(event);
 			
 			setResult(RESULT_OK, output);
@@ -167,12 +158,13 @@ public class AddHomework extends Activity {
 	}
 	
 	public void showDatePickerDialog(View v) {
-		
-		// Process to get Current Date
-        final Calendar c = Calendar.getInstance();
-        mYear = c.get(Calendar.YEAR);
-        mMonth = c.get(Calendar.MONTH);
-        mDay = c.get(Calendar.DAY_OF_MONTH);
+        
+        if (!dtf.dateSet) {
+        	Calendar c = Calendar.getInstance();
+            dtf.year = c.get(Calendar.YEAR);
+            dtf.month = c.get(Calendar.MONTH);
+            dtf.day = c.get(Calendar.DAY_OF_MONTH);
+        }
         
         //Day, date, month, year format
 	
@@ -180,32 +172,33 @@ public class AddHomework extends Activity {
         DatePickerDialog.OnDateSetListener dpdl = new DatePickerDialog.OnDateSetListener() {
        	 
             @Override
-            public void onDateSet(DatePicker view, int year,
-                    int monthOfYear, int dayOfMonth) {
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 // Display Selected date in textbox
-            	dueDateTextView.setText(dayOfMonth + "-"
-                        + (monthOfYear + 1) + "-" + year);
-
+            	dueDateTextView.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+            	dtf.year = year;
+            	dtf.month = monthOfYear;
+            	dtf.day = dayOfMonth;
+            	dtf.dateSet = true;
             }
         };
      
-        DatePickerDialog dpd2 = new DatePickerDialog(AddHomework.this, dpdl, mYear, mMonth, mDay);
-        dpd2.show();
+        DatePickerDialog dpd = new DatePickerDialog(AddHomework.this, dpdl, dtf.year, dtf.month, dtf.day);
+        dpd.show();
 	}
 	
 	public void showTimePickerDialog(View v) {
 		
-		// Process to get Current Time
-        final Calendar c = Calendar.getInstance();
-        mHour = c.get(Calendar.HOUR_OF_DAY);
-        mMinute = c.get(Calendar.MINUTE);
+		if (!dtf.timeSet) {
+        	Calendar c = Calendar.getInstance();
+            dtf.hour = c.get(Calendar.HOUR);
+            dtf.minute = c.get(Calendar.MINUTE);
+        }
 
         // Launch Time Picker Dialog
         TimePickerDialog.OnTimeSetListener tpdl =  new TimePickerDialog.OnTimeSetListener() {
        	 
             @Override
-            public void onTimeSet(TimePicker view, int hourOfDay,
-                    int minute) {
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             	
             	//Calculate AM or PM
                 String amOrPm = "";
@@ -233,10 +226,13 @@ public class AddHomework extends Activity {
                 
             	// Display Selected time in textbox
             	dueTimeTextView.setText(hourOfDay + ":" + minuteString + amOrPm);
+            	dtf.hour = hourOfDay;
+            	dtf.minute = minute;
+            	dtf.timeSet = true;
             }
         };
         
-        TimePickerDialog tpd = new TimePickerDialog(AddHomework.this, tpdl, mHour, mMinute, false);
+        TimePickerDialog tpd = new TimePickerDialog(AddHomework.this, tpdl, dtf.hour, dtf.minute, false);
         tpd.show();
 	}
 	

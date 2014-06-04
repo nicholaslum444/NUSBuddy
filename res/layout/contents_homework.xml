@@ -10,11 +10,6 @@
     android:orientation="vertical"
     android:gravity="center_horizontal" >
 
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="clear"
-        android:onClick="clear" />
+    
 
 </LinearLayout>

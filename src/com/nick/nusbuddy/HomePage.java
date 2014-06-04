@@ -168,7 +168,8 @@ public class HomePage extends BaseActivity {
  	}
  	
  	public void openqa(View v) {
- 		mQuickAction.show(v);
+ 		NUSBuddyDatabaseHelper db = new NUSBuddyDatabaseHelper(this);
+ 		db.onUpgrade(db.getWritableDatabase(), 1, 1);
  	}
  	
  	

@@ -43,6 +43,7 @@ public class Event {
 	 * found, i.e. the JSONObject is invalid
 	 */
 	public Event(JSONObject obj) throws JSONException {
+		setId(obj.getInt("id"));
 		setModule(obj.getString("module"));
 		setTitle(obj.getString("title"));
 		setLocation(obj.getString("location"));
@@ -52,11 +53,13 @@ public class Event {
 		setRecurWeekly(obj.getBoolean("recurWeekly"));
 		setRecurEvenWeek(obj.getBoolean("recurEvenWeek"));
 		setRecurOddWeek(obj.getBoolean("recurOddWeek"));
+		setOnlyDateSet(obj.getBoolean("onlyDateSet"));
 		jsonRepresentation = obj;
 	}
 	
 	public Event(String string) throws JSONException {
 		JSONObject obj = new JSONObject(string);
+		setId(obj.getInt("id"));
 		setModule(obj.getString("module"));
 		setTitle(obj.getString("title"));
 		setLocation(obj.getString("location"));
@@ -66,6 +69,7 @@ public class Event {
 		setRecurWeekly(obj.getBoolean("recurWeekly"));
 		setRecurEvenWeek(obj.getBoolean("recurEvenWeek"));
 		setRecurOddWeek(obj.getBoolean("recurOddWeek"));
+		setOnlyDateSet(obj.getBoolean("onlyDateSet"));
 		jsonRepresentation = obj;
 	}
 
@@ -149,11 +153,10 @@ public class Event {
 		return recurOddWeek;
 	}
 	
-	
-
 	public void setRecurEvenWeek(boolean recurEvenWeek) {
 		if (recurEvenWeek) {
 			setRecurWeekly(false);
+			setRecurOddWeek(false);
 		}
 		this.recurEvenWeek = recurEvenWeek;
 	}
@@ -161,6 +164,7 @@ public class Event {
 	public void setRecurOddWeek(boolean recurOddWeek) {
 		if (recurOddWeek) {
 			setRecurWeekly(false);
+			setRecurEvenWeek(false);
 		}
 		this.recurOddWeek = recurOddWeek;
 	}
@@ -173,6 +177,7 @@ public class Event {
 	public JSONObject makeJsonRepresentation() {
 		JSONObject obj = new JSONObject();
 		try {
+			obj.put("id", id);
 			obj.put("module", module);
 			obj.put("title", title);
 			obj.put("location", location);
@@ -182,6 +187,7 @@ public class Event {
 			obj.put("recurWeekly", recurWeekly);
 			obj.put("recurEvenWeek", recurEvenWeek);
 			obj.put("recurOddWeek", recurOddWeek);
+			obj.put("onlyDateSet", onlyDateSet);
 			jsonRepresentation = obj;
 		} catch (JSONException e) {
 			e.printStackTrace();
