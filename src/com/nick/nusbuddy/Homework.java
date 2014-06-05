@@ -324,21 +324,19 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener {
 	        public void onItemClick(QuickAction quickAction, int pos, int actionId) {
 	            ActionItem actionItem = quickAction.getActionItem(pos);
 	            
+	            LinearLayout anchor = (LinearLayout) mQuickAction.mAnchor;
+            	TextView textViewModuleCode = (TextView) anchor.findViewWithTag("moduleCode");
+            	String moduleCode = textViewModuleCode.getText().toString();
+	            
 	            switch (actionId) {
 	            
 	            case ADD_ITEM_CODE:
 	            	//Toast.makeText(getApplicationContext(), "Add item selected", Toast.LENGTH_SHORT).show();
-	                
-	            	LinearLayout anchor = (LinearLayout) mQuickAction.mAnchor;
-	            	TextView textViewModuleCode = (TextView) anchor.findViewWithTag("moduleCode");
-	            	String moduleCode = textViewModuleCode.getText().toString();
 	            	
 	            	int viewId = anchor.getId();
 	            	//Toast.makeText(Homework.this, ""+viewId, Toast.LENGTH_LONG).show();
 	            	
 	                Intent addIntent = new Intent(Homework.this, AddHomework.class);
-	                
-	        	    addIntent.putExtra("viewId", viewId);
 	        	    addIntent.putExtra("moduleCode", moduleCode);
 	        	    
 	        	    startActivityForResult(addIntent, REQUEST_CODE);
@@ -349,6 +347,7 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener {
 	            	//Toast.makeText(getApplicationContext(), actionItem.getTitle() + " selected", Toast.LENGTH_SHORT).show();
 	            	
 	            	Intent viewIntent = new Intent(Homework.this, ViewHomework.class);
+	            	viewIntent.putExtra("moduleCode", moduleCode);
 	            	startActivity(viewIntent);
 	            	break;
 	            	
