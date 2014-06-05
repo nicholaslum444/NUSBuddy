@@ -35,8 +35,8 @@ import android.content.SharedPreferences.Editor;
 
 public class Homework extends BaseActivity implements ModulesAsyncTaskListener {
 	
-	
-	private static final int REQUEST_CODE = 1;
+	private static final int REQUEST_CODE_FOR_VIEW = 2;
+	private static final int REQUEST_CODE_FOR_ADD = 1;
 	private static final int ADD_ITEM_CODE = 0;
 	private static final int VIEW_ITEMS_CODE = 1;
 	
@@ -241,62 +241,13 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener {
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-	    if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+	    if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_FOR_ADD) {
 	    	
-	    	//check whether they fill in time
-	    	//get the must input fields out
-	    	/*String title = data.getExtras().getString("eventTitle"); 
-	    	
-	    	String module = data.getExtras().getString("moduleCode");
-	    	
-	    	int day = data.getExtras().getInt("mDay");
-	    	int month = data.getExtras().getInt("mMonth");
-	    	int year = data.getExtras().getInt("mYear");
-	    	int hour = data.getExtras().getInt("mHour"); 
-	    	int minute = data.getExtras().getInt("mMinute"); 
-	    	
-	    	
-	    	// changed to calendar object.
-	    	SimpleDateFormat sdfDay = new SimpleDateFormat("EEE", Locale.US);
-	    	SimpleDateFormat sdfTime = new SimpleDateFormat("h:mma", Locale.US);
-	    	Calendar cal = Calendar.getInstance();
-	    	//cal.set(year, month, day, hour, minute);
-	    	cal.setTimeInMillis(data.getExtras().getLong("unixTime"));
-	    	String date = sdfDay.format(cal.getTime());
-	    	String time = sdfTime.format(cal.getTime());
-	    	
-	    	cal.setTimeInMillis(data.getExtras().getLong("unixTime"));
-	    	
-	    	String description = data.getExtras().getString("description");
-	    	String location = data.getExtras().getString("eventLocation"); 
-	    	
-	    	String eventString = data.getExtras().getString("eventString");
-	    	
-	    	//show title and date, time if applicable
-	    	String result = title + " by " + date + ", " + time + " " + module;
-	    	
-	    	// get the module container
-	    	int layoutId = data.getExtras().getInt("viewId");
-	    	LinearLayout layout = (LinearLayout) findViewById(layoutId);
-	    	
-	    	// add a textview for the new item
-	    	View.inflate(this, R.layout.textview_homework_item_small, layout);
-	    	
-	    	// display the item text
-	    	TextView t = (TextView) findViewById(R.id.TextView_homework_item_small);
-	    	t.setText(result);
-	    	
-	    	// change the ID of the new item
-	    	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-	    		t.setId(View.generateViewId());
-			} else {
-				t.setId(new Random().nextInt(Integer.MAX_VALUE));
-			}*/
-	    	
-	    	//Toast.makeText(this, ""+layoutId, Toast.LENGTH_LONG).show();
-	    	
-	    	// trying with the db
 	    	refreshContents();
+	    } else if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_FOR_VIEW) {
+	    	if (data.getExtras().getBoolean("changed")) {
+	    		refreshContents();
+	    	}
 	    }
 	}
 	
@@ -339,7 +290,7 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener {
 	                Intent addIntent = new Intent(Homework.this, AddHomework.class);
 	        	    addIntent.putExtra("moduleCode", moduleCode);
 	        	    
-	        	    startActivityForResult(addIntent, REQUEST_CODE);
+	        	    startActivityForResult(addIntent, REQUEST_CODE_FOR_ADD);
 	        	    
 	        	    break;
 	        	    
@@ -348,7 +299,7 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener {
 	            	
 	            	Intent viewIntent = new Intent(Homework.this, ViewHomework.class);
 	            	viewIntent.putExtra("moduleCode", moduleCode);
-	            	startActivity(viewIntent);
+	            	startActivityForResult(viewIntent, REQUEST_CODE_FOR_VIEW);
 	            	break;
 	            	
 	            }

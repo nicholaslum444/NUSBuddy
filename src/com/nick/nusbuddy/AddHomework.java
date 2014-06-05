@@ -1,6 +1,9 @@
 package com.nick.nusbuddy;
 
 import java.util.Calendar;
+
+import org.json.JSONException;
+
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -47,6 +50,9 @@ public class AddHomework extends Activity {
 	
 	Button addEventButton;
 	Button cancelButton;
+	Button editButton;
+	
+	Event eventToEdit;
 	
 	NUSBuddyDatabaseHelper database;
 	
@@ -78,7 +84,29 @@ public class AddHomework extends Activity {
 		
 		addEventButton = (Button) findViewById(R.id.addEventButton);
 		cancelButton = (Button) findViewById(R.id.cancelButton);
+		editButton = (Button) findViewById(R.id.editEventButton);
 		
+		if (getIntent().getExtras().getBoolean("edit")) {
+			addEventButton.setVisibility(View.GONE);
+			String eventString = getIntent().getExtras().getString("event");
+			
+			try {
+				eventToEdit = new Event(eventString);
+				
+				// logic to fill up the details
+				
+				
+				
+				// end logic
+				
+				
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
+			editButton.setVisibility(View.GONE);
+		}
 		
 		recurCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
@@ -98,6 +126,10 @@ public class AddHomework extends Activity {
 		
 	}
 	
+	public void editEvent(View v) {
+		
+	}
+	
 	//how to alert for every odd week/ even week?
 	
 	public void addEvent(View v) {
@@ -114,6 +146,7 @@ public class AddHomework extends Activity {
 		} else {
 			
 			Intent output = this.getIntent();
+			
 			event.setModule(output.getExtras().getString("moduleCode"));
 			event.setTitle(eventTitle);
 			event.setLocation(eventLocation);

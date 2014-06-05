@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/TextView_homework_item_hidden_field"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_gravity="center_horizontal"
+	android:gravity="left"
+	android:text="Friday, 13 Feb"
+	android:textAppearance="?android:attr/textAppearanceMedium" />
