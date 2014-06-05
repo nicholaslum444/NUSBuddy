@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,9 +51,9 @@ public class ViewHomework extends Activity {
 		list.setAdapter(listAdapter);
 		
 		// Creating an item click listener, to open/close our toolbar for each item
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
-
+            	Log.w("vis", "clik");
                 expandItem(view);
                 
                 // Creating the expand animation for the item
@@ -61,7 +62,7 @@ public class ViewHomework extends Activity {
                 // Start the animation on the toolbar
                 //toolbar.startAnimation(expandAni);
             }
-        });
+        });*/
 		
 		
 		
@@ -75,10 +76,13 @@ public class ViewHomework extends Activity {
 	}
 	
 	public void expandItem(View v) {
+		Log.w("vis", "exp");
 		LinearLayout hiddenLayout = (LinearLayout) v.findViewById(R.id.Layout_homework_item_hidden);
 		if (hiddenLayout.getVisibility() == View.VISIBLE) {
+			Log.w("vis", "vis");
 			hiddenLayout.setVisibility(View.GONE);
 		} else {
+			Log.w("vis", "gon");
 			hiddenLayout.setVisibility(View.VISIBLE);
 		}
 	}
