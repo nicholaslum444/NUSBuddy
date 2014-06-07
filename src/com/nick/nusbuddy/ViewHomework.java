@@ -9,14 +9,18 @@ import java.util.Random;
 import android.os.Build;
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -24,13 +28,24 @@ import android.widget.TextView;
 public class ViewHomework extends Activity {
 	
 	ArrayList<Event> thisModuleItems;
+	
+	String moduleCode;
+	
 	NUSBuddyDatabaseHelper database;
+	
 	private static final int REQUEST_CODE_FOR_EDIT = 3;
+	private static final int REQUEST_CODE_FOR_ADD = 1;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.contents_view_homework);
+		
+		Intent incomingIntent = this.getIntent();
+		if (incomingIntent.getExtras().containsKey("moduleCode")) {
+			moduleCode = incomingIntent.getExtras().getString("moduleCode");
+			this.setTitle(moduleCode);
+		}
 		
 		database = new NUSBuddyDatabaseHelper(this);
 		
@@ -63,27 +78,23 @@ public class ViewHomework extends Activity {
                 //toolbar.startAnimation(expandAni);
             }
         });*/
-		
-		
-		
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.view_homework, menu);
-		return true;
-	}
+	
 	
 	public void expandItem(View v) {
 		Log.w("vis", "exp");
 		LinearLayout hiddenLayout = (LinearLayout) v.findViewById(R.id.Layout_homework_item_hidden);
+		ImageView img = (ImageView) v.findViewById(R.id.Image_expand_collapse);
 		if (hiddenLayout.getVisibility() == View.VISIBLE) {
 			Log.w("vis", "vis");
 			hiddenLayout.setVisibility(View.GONE);
+			img.setRotation(0);
 		} else {
 			Log.w("vis", "gon");
 			hiddenLayout.setVisibility(View.VISIBLE);
+			img.setRotation(180);
+			
 		}
 	}
 	
@@ -124,11 +135,11 @@ public class ViewHomework extends Activity {
 	    	
 	    	// check recur
 	    	if (event.isRecurWeekly()) {
-	    		dateTimeString = "every " + dateTimeString;
+	    		dateTimeString = "Every " + dateTimeString;
 	    	} else if (event.isRecurEvenWeek()) {
-	    		dateTimeString = "every even " + dateTimeString;
+	    		dateTimeString = "Every even " + dateTimeString;
 	    	} else if (event.isRecurOddWeek()) {
-	    		dateTimeString = "every odd " + dateTimeString;
+	    		dateTimeString = "Every odd " + dateTimeString;
 	    	}
 	    	
 	    	TextView itemDue = (TextView) convertView.findViewById(R.id.TextView_homework_item_due);
@@ -137,20 +148,21 @@ public class ViewHomework extends Activity {
 	    	LinearLayout hiddenTextViews = (LinearLayout) convertView.findViewById(R.id.Layout_homework_item_hidden_textviews);
 	    	
 	    	if (event.getLocation() != null && event.getLocation().length() > 0) {
-	    		TextView tt = new TextView(getContext(), null, android.R.attr.textAppearanceMedium);
-	    		tt.setText(event.getLocation());
-	    		hiddenTextViews.addView(tt);
+	    		TextView tt = (TextView) convertView.findViewById(R.id.Layout_homework_item_hidden_location);
+	    		tt.setText("Location: " + event.getLocation());
+	    		tt.setVisibility(View.VISIBLE);
+	    		Log.w("location", event.getTitle());
 	    	}
 	    	
 	    	if (event.getDescription() != null && event.getDescription().length() > 0) {
-	    		TextView dd = new TextView(getContext(), null, android.R.attr.textAppearanceMedium);
-	    		dd.setText(event.getDescription());
-	    		hiddenTextViews.addView(dd);
+	    		TextView dd = (TextView) convertView.findViewById(R.id.Layout_homework_item_hidden_description);
+	    		dd.setText("Description: " + event.getDescription());
+	    		dd.setVisibility(View.VISIBLE);
+	    		Log.w("desctp", event.getTitle());
 	    	}
             
             // end logic
             
-
             // Resets the toolbar to be closed
             hiddenLayout.setVisibility(View.GONE);
 
@@ -159,18 +171,40 @@ public class ViewHomework extends Activity {
     }
 	
 	public void refreshContents() {
+		/*startActivity(new Intent(this, ViewHomework.class).putExtra("moduleCode", moduleCode).putExtra("changed", true));
+		finish();*/
 		onCreate(null);
 	}
 	
-	public void deleteItem(View v) {
-		Event e = (Event) ((View) v.getParent().getParent().getParent()).getTag();
+	public void deleteItem(final View v) { // shows an alert
+		AlertDialog.Builder b = new AlertDialog.Builder(this);
+		b.setCancelable(true);
+		b.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				deleteItemConfirm(v);
+			}
+		});
+		b.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
+		b.setTitle(((TextView) ((LinearLayout) v.getParent().getParent().getParent().getParent()).findViewById(R.id.TextView_homework_item_title)).getText().toString());
+		b.setMessage("Delete item?");
+		b.create().show();
+	}
+	
+	public void deleteItemConfirm(View v) {
+		Event e = (Event) ((View) v.getParent().getParent().getParent().getParent()).getTag();
 		database.deleteEvent(e);
-		refreshContents();
 		getIntent().putExtra("changed", true);
+		refreshContents();
 	}
 	
 	public void editItem(View v) {
-		Event e = (Event) ((View) v.getParent().getParent().getParent()).getTag();
+		Event e = (Event) ((View) v.getParent().getParent().getParent().getParent()).getTag();
 		getIntent().putExtra("edit", true);
 		getIntent().putExtra("event", e.toString());
 		Intent i = new Intent(this, AddHomework.class);
@@ -178,12 +212,18 @@ public class ViewHomework extends Activity {
 		startActivityForResult(i, REQUEST_CODE_FOR_EDIT);
 	}
 	
+	public void addItem() {
+		Intent intent = new Intent(this, AddHomework.class);
+		intent.putExtra("moduleCode", moduleCode);
+		startActivityForResult(intent, REQUEST_CODE_FOR_ADD);
+	}
+	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-	    if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_FOR_EDIT) {
+	    if (resultCode == RESULT_OK && (requestCode == REQUEST_CODE_FOR_EDIT || requestCode == REQUEST_CODE_FOR_ADD)) {
 	    	getIntent().putExtra("changed", true);
 	    	refreshContents();
-	    } 
+	    }
 	}
 	
 	@Override
@@ -191,5 +231,26 @@ public class ViewHomework extends Activity {
 		setResult(RESULT_OK, getIntent());
 		super.onBackPressed();
 	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.view_homework, menu);
+		return true;
+	}
+	
+	public boolean onOptionsItemSelected(MenuItem item) {
+        // The action bar home/up action should open or close the drawer.
+        // ActionBarDrawerToggle will take care of this.
+		
+		int itemId = item.getItemId();
+		switch(itemId) {
+		case R.id.action_add_button:
+			addItem();
+			break;
+		}
+       
+       return super.onOptionsItemSelected(item);
+   }
 
 }

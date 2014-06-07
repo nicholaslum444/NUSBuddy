@@ -3,67 +3,95 @@
     android:id="@+id/Layout_view_homework_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/border"
-    android:orientation="vertical"
+    android:background="@drawable/view_homework_list_item"
+    android:orientation="horizontal"
     android:padding="5dp"
     android:layout_gravity="center_horizontal"
     android:layout_marginBottom="10dp"
     android:onClick="expandItem" >
 
-    <TextView
-        android:id="@+id/TextView_homework_item_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:gravity="left"
-        android:text="Tutorial 3"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-    
-    <TextView
-        android:id="@+id/TextView_homework_item_due"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:gravity="left"
-        android:text="Friday, 13 Feb"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <LinearLayout
-        android:id="@+id/Layout_homework_item_hidden"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="visible" >
-
-        
+	<LinearLayout
+	    android:layout_width="0dp"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical"
+	    android:layout_weight="1" >
+	
+	    <TextView
+	        android:id="@+id/TextView_homework_item_title"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:gravity="left"
+	        android:text="Tutorial 3"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+	
+	    <TextView
+	        android:id="@+id/TextView_homework_item_due"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:gravity="left"
+	        android:text="Friday, 13 Feb"
+	        android:textAppearance="?android:attr/textAppearanceMedium" />
+	
 	    <LinearLayout
-	        android:id="@+id/Layout_homework_item_hidden_textviews"
+	        android:id="@+id/Layout_homework_item_hidden"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:orientation="vertical"
 	        android:visibility="visible" >
-        
-        </LinearLayout>
+	
+	        <LinearLayout
+	            android:id="@+id/Layout_homework_item_hidden_textviews"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:orientation="vertical"
+	            android:visibility="visible" >
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+	            <TextView
+	                android:id="@+id/Layout_homework_item_hidden_location"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:text="TextView"
+	                android:visibility="gone" 
+	                android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <Button
-                android:id="@+id/button1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="del" 
-                android:onClick="deleteItem"/>
+	            <TextView
+	                android:id="@+id/Layout_homework_item_hidden_description"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:text="TextView" 
+	                android:visibility="gone"
+	                android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <Button
-                android:id="@+id/button2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="edit" 
-                android:onClick="editItem"/>
-        </LinearLayout>
-
-    </LinearLayout>
+	        </LinearLayout>
+	
+	        <LinearLayout
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:gravity="left" >
+	
+	            <Button
+	                android:id="@+id/Button_delete"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:onClick="deleteItem"
+	                android:text="Delete" />
+	
+	            <Button
+	                android:id="@+id/Button_edit"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:onClick="editItem"
+	                android:text="Edit" />
+	
+	        </LinearLayout>
+	    </LinearLayout>
+	</LinearLayout>
+	
+	<ImageView
+	    android:id="@+id/Image_expand_collapse"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:src="@drawable/ic_action_expand"
+	    android:contentDescription="Expand item" />
 
 </LinearLayout>

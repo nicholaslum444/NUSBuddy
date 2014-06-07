@@ -139,6 +139,7 @@ public class NUSBuddyDatabaseHelper extends SQLiteOpenHelper {
                 KEY_ID+" = ?", // selections
                 new String[] { String.valueOf(event.getId()) }); //selection args
      
+        Log.w("event", event.toString());
         // 4. close
         db.close();
      

@@ -8,6 +8,8 @@
     <ListView 
         android:id="@+id/ListView_homework_items"
         android:layout_height="fill_parent"
-		android:layout_width="fill_parent"/>
+		android:layout_width="fill_parent"
+		android:divider="#002F2F"
+		android:dividerHeight="1px"/>
 
 </LinearLayout>

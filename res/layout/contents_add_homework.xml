@@ -1,154 +1,167 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/activity_main_layout"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin" >
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/Layout_page_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+	<LinearLayout 
+	    android:id="@+id/activity_main_layout"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:orientation="vertical"
+	    android:paddingBottom="@dimen/activity_vertical_margin"
+	    android:paddingLeft="@dimen/activity_horizontal_margin"
+	    android:paddingRight="@dimen/activity_horizontal_margin"
+	    android:paddingTop="@dimen/activity_vertical_margin" >
 
-    <EditText
-        android:id="@+id/eventTitleEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Event title" >
-        <requestFocus />
-    </EditText>
-
-    <EditText
-        android:id="@+id/eventLocationEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Event Location"
-        android:textAppearance="?android:attr/textAppearanceMediumInverse" >
-
-    </EditText>
-
-    <LinearLayout
-        android:id="@+id/Layout_date_time"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
-        <TextView
-            android:id="@+id/dueDateTextView"
-            style="android:editTextStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="?android:attr/editTextBackground"
-            android:clickable="true"
-            android:hint="Date: dd/mm"
-            android:onClick="showDatePickerDialog"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <TextView
-            android:id="@+id/dueTimeTextView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="?android:attr/editTextBackground"
-            android:clickable="true"
-            android:hint="Time: hh/mm"
-            android:onClick="showTimePickerDialog"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/descriptionTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:text="@string/TextView_add_homework_description"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <EditText
-        android:id="@+id/descriptionEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10" />
-
-    <LinearLayout
-        android:id="@+id/Layout_recur"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
-        
-        <CheckBox
-        android:id="@+id/checkBoxRecur"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Recurring event"
-        android:checked="false" />
-
-        <RadioGroup
-            android:id="@+id/RadioGroupReccur"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone" >
-
-            <RadioButton
-                android:id="@+id/RadioButtonRecurWeekly"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/RadioButton_recur_weekly"
-                android:checked="true" />
-            
-            <RadioButton
-	            android:id="@+id/RadioButtonEvenWeek"
-	            android:layout_width="wrap_content"
+	    <EditText
+	        android:id="@+id/eventTitleEditText"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:ems="10"
+	        android:hint="Event title"
+	        android:inputType="textCapWords" >"
+	        <requestFocus />
+	    </EditText>
+	
+	    <EditText
+	        android:id="@+id/eventLocationEditText"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:ems="10"
+	        android:hint="Event Location"
+	        android:inputType="textCapWords"
+	        android:textAppearance="?android:attr/textAppearanceMediumInverse" >
+	
+	    </EditText>
+	
+	    <LinearLayout
+	        android:id="@+id/Layout_date_time"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal" >
+	
+	        <TextView
+	            android:id="@+id/dueDateTextView"
+	            style="android:editTextStyle"
+	            android:layout_width="0dp"
 	            android:layout_height="wrap_content"
-	            android:text="@string/RadioButton_odd_week" />
-            
-            <RadioButton
-	            android:id="@+id/RadioButtonOddWeek"
-	            android:layout_width="wrap_content"
+	            android:layout_weight="1.5"
+	            android:background="?android:attr/editTextBackground"
+	            android:clickable="true"
+	            android:hint="Date Due"
+	            android:onClick="showDatePickerDialog"
+	            android:textAppearance="?android:attr/textAppearanceMedium" />
+	
+	        <TextView
+	            android:id="@+id/dueTimeTextView"
+	            android:layout_width="0dp"
 	            android:layout_height="wrap_content"
-	            android:text="@string/RadioButton_even_week" />
-            
-        </RadioGroup>
+	            android:layout_weight="1"
+	            android:background="?android:attr/editTextBackground"
+	            android:clickable="true"
+	            android:hint="Time Due"
+	            android:onClick="showTimePickerDialog"
+	            android:textAppearance="?android:attr/textAppearanceMedium" />
+	    </LinearLayout>
+	
+	    <TextView
+	        android:id="@+id/descriptionTextView"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="10dp"
+	        android:text="@string/TextView_add_homework_description"
+	        android:textAppearance="?android:attr/textAppearanceMedium" />
+	
+	    <EditText
+	        android:id="@+id/descriptionEditText"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:ems="10"
+	        android:inputType="textCapSentences|textMultiLine" />
+	
+	    <LinearLayout
+	        android:id="@+id/Layout_recur"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical" >
+	        
+	        <CheckBox
+	        android:id="@+id/checkBoxRecur"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:text="Recurring event"
+	        android:checked="false" />
+	
+	        <RadioGroup
+	            android:id="@+id/RadioGroupReccur"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:paddingLeft="@dimen/activity_horizontal_margin"
+	            android:visibility="gone" >
+	
+	            <RadioButton
+	                android:id="@+id/RadioButtonRecurWeekly"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:text="@string/RadioButton_recur_weekly"
+	                android:checked="true" />
+	            
+	            <RadioButton
+		            android:id="@+id/RadioButtonOddWeek"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:text="@string/RadioButton_odd_week" />
+	            
+	            <RadioButton
+		            android:id="@+id/RadioButtonEvenWeek"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:text="@string/RadioButton_even_week" />
+	            
+	        </RadioGroup>
+	
+	    </LinearLayout>
+	
+	    <LinearLayout
+	        android:id="@+id/Layout_add_cancel"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal" >
+	
+	        <Button
+	            android:id="@+id/cancelButton"
+	            style="android:buttonBarButtonStyle"
+	            android:layout_weight="1"
+	            android:layout_width="0dp"
+	            android:layout_height="wrap_content"
+	            android:padding="5dp"
+	            android:onClick="cancelEvent"
+	            android:text="@string/Button_cancel_event" />
+	
+	        <Button
+	            android:id="@+id/editEventButton"
+	            style="android:buttonBarButtonStyle"
+	            android:layout_weight="1"
+	            android:layout_width="0dp"
+	            android:layout_height="wrap_content"
+	            android:padding="5dp"
+	            android:onClick="editEvent"
+	            android:text="@string/Button_save_edit_event" />
+	
+	        <Button
+	            android:id="@+id/addEventButton"
+	            style="android:buttonBarButtonStyle"
+	            android:layout_weight="1"
+	            android:layout_width="0dp"
+	            android:layout_height="wrap_content"
+	            android:padding="5dp"
+	            android:onClick="addEvent"
+	            android:text="@string/Button_add_event" />
+	
+	    </LinearLayout>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/Layout_add_cancel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
-        <Button
-            android:id="@+id/cancelButton"
-            style="android:buttonBarButtonStyle"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:onClick="cancelEvent"
-            android:text="@string/Button_cancel_event" />
-
-        <Button
-            android:id="@+id/editEventButton"
-            style="android:buttonBarButtonStyle"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:onClick="editEvent"
-            android:text="@string/Button_save_edit_event" />
-
-        <Button
-            android:id="@+id/addEventButton"
-            style="android:buttonBarButtonStyle"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:onClick="addEvent"
-            android:text="@string/Button_add_event" />
-
-    </LinearLayout>
-
-</LinearLayout>
+	</LinearLayout>
+	
+</ScrollView>

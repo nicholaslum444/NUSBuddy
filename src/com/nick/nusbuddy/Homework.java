@@ -41,6 +41,7 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener {
 	private static final int VIEW_ITEMS_CODE = 1;
 	
 	private QuickAction mQuickAction;
+	private ProgressDialog pd;
 	
 	private SharedPreferences sharedPrefs;
 	private Editor sharedPrefsEditor;
@@ -83,6 +84,10 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener {
 		userId = sharedPrefs.getString("userId", null);
 		authToken = sharedPrefs.getString("authToken", null);
 		modulesInfo = sharedPrefs.getString("modulesInfo", null);
+		
+		pd = new ProgressDialog(this);
+		pd.setMessage("Retrieving items");
+		pd.show();
 		
 		if (modulesInfo == null) {
 			runGetModules();
@@ -232,6 +237,8 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener {
 			} else { // module code == null
 				
 			}
+			
+			pd.dismiss();
 		}
 		
 		// testing
@@ -242,7 +249,6 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 	    if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_FOR_ADD) {
-	    	
 	    	refreshContents();
 	    } else if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_FOR_VIEW) {
 	    	if (data.getExtras().getBoolean("changed")) {

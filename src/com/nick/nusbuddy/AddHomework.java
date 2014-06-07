@@ -10,8 +10,10 @@ import org.json.JSONException;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -59,8 +61,15 @@ public class AddHomework extends Activity {
 	
 	NUSBuddyDatabaseHelper database;
 	
+	Intent incomingIntent;
+	
 	
 	public final static String EXTRA_MESSAGE = "com.nick.nusbuddy.addhomework.MESSAGE";
+	
+	final String DATE_FIELD_FORMAT = "EEE, d MMM yyyy";
+	final String TIME_FIELD_FORMAT = "h:mm a";
+	final SimpleDateFormat SDF_DATE_FIELD = new SimpleDateFormat(DATE_FIELD_FORMAT, Locale.US);
+	final SimpleDateFormat SDF_TIME_FIELD = new SimpleDateFormat(TIME_FIELD_FORMAT, Locale.US);
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -79,18 +88,38 @@ public class AddHomework extends Activity {
 		dueTimeTextView = (TextView) findViewById(R.id.dueTimeTextView);
 		
 		recurCheckBox = (CheckBox) findViewById(R.id.checkBoxRecur);
-		
 		recurRadioGroup = (RadioGroup) findViewById(R.id.RadioGroupReccur);
 		recurWeeklyRadioButton = (RadioButton) findViewById(R.id.RadioButtonRecurWeekly);
 		recurOddWeekButton = (RadioButton) findViewById(R.id.RadioButtonOddWeek);
 		recurEvenWeekButton = (RadioButton) findViewById(R.id.RadioButtonEvenWeek);
 		
+		recurCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if (isChecked) {
+					recurRadioGroup.setVisibility(View.VISIBLE);
+				} else {
+					recurRadioGroup.setVisibility(View.GONE);
+				}
+			}
+		});
+		
 		addEventButton = (Button) findViewById(R.id.addEventButton);
 		cancelButton = (Button) findViewById(R.id.cancelButton);
 		editButton = (Button) findViewById(R.id.editEventButton);
 		
+		incomingIntent = this.getIntent();
+		if (incomingIntent.getExtras().containsKey("moduleCode")) {
+			String moduleCode = incomingIntent.getExtras().getString("moduleCode");
+			this.setTitle(moduleCode);
+		}
+		
+		// if Editing mode
 		if (getIntent().getExtras().getBoolean("edit")) {
+			
+			// kill the add button, so only the edit button is visible
 			addEventButton.setVisibility(View.GONE);
+			// retrieve the event string
 			String eventString = getIntent().getExtras().getString("event");
 			
 			try {
@@ -107,23 +136,30 @@ public class AddHomework extends Activity {
 				long unixTime = eventToEdit.getUnixTime();
 				Calendar cal = Calendar.getInstance();
 		    	cal.setTimeInMillis(unixTime);
+		    	
 		    	dtf.year = cal.get(Calendar.YEAR);
 	            dtf.month = cal.get(Calendar.MONTH);
 	            dtf.day = cal.get(Calendar.DAY_OF_MONTH);
-	            SimpleDateFormat sdf = new SimpleDateFormat("h:mm a", Locale.US);
+	            dtf.hour = cal.get(Calendar.HOUR_OF_DAY);
+	            dtf.minute = cal.get(Calendar.MINUTE);
 	            
-            	if (eventToEdit.isOnlyDateSet()) {
-	            	
-		    	} else {
-		    		String dateTimeString = sdf.format(cal.getTime());
+	            dueDateTextView.setText(SDF_DATE_FIELD.format(cal.getTime()));
+            	dtf.dateSet = true;
+	            
+            	if (!eventToEdit.isOnlyDateSet()) { // time is set
+            		// fill up the time field
+    	            
+		    		String dateTimeString = SDF_TIME_FIELD.format(cal.getTime());
 			    	dueTimeTextView.setText(dateTimeString);
+			    	dtf.timeSet = true;
 		    	}
-            	dueDateTextView.setText(dtf.day + "-" + (dtf.month + 1) + "-" + dtf.year);
+            	
 				
 				//check checkboxes and radio buttons
 				if (eventToEdit.isRecur()) {
 					
 					recurCheckBox.setChecked(true);
+					recurRadioGroup.setVisibility(View.VISIBLE);
 					
 					if (eventToEdit.isRecurWeekly()) {
 						recurWeeklyRadioButton.setChecked(true);
@@ -136,122 +172,49 @@ public class AddHomework extends Activity {
 						
 					}
 				} else {
-					
+					recurCheckBox.setChecked(false);
 				}
 				
 				// end logic
 				
 				
-			} catch (JSONException e) {
+			} catch (JSONException e) { // poblem with creating event
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		} else {
+		} else { // not in edit mode, means in normal add mode
+			// kill the edit button, only left the add button
 			editButton.setVisibility(View.GONE);
 		}
-		
-		recurCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				if (isChecked) {
-					recurRadioGroup.setVisibility(View.VISIBLE);
-				} else {
-					recurRadioGroup.setVisibility(View.GONE);
-				}
-			}
-		});
 	}
 	
 	private void showError() {
 		eventTitleEditText.setError("Required fields");
 		dueDateTextView.setError("Required fields");
-		
 	}
 	
-	// EDIT BUTTON
-	public void editEvent(View v) {
-		
-		String eventTitle = eventTitleEditText.getText().toString(); 
-		String eventLocation = eventLocationEditText.getText().toString(); 
-		String date = dueDateTextView.getText().toString();
-		String description = descriptionEditText.getText().toString();
-		
-		if (eventTitle == "" || date == "") {
-			
-			showError();
-		
-		} else {
-			
-			Intent output = this.getIntent();
-			
-			eventToEdit.setModule(output.getExtras().getString("moduleCode"));
-			eventToEdit.setTitle(eventTitle);
-			eventToEdit.setLocation(eventLocation);
-			eventToEdit.setDescription(description);
-			
-			Calendar c = Calendar.getInstance();
-			c.set(dtf.year, dtf.month, dtf.day, dtf.hour, dtf.minute);
-			long unixTimeValue = c.getTimeInMillis();
-			eventToEdit.setUnixTime(unixTimeValue);
-			
-			eventToEdit.setOnlyDateSet(dueTimeTextView.getText().length() == 0);
-			
-			if (recurCheckBox.isChecked()) {
-				RadioButton rb = (RadioButton)findViewById(recurRadioGroup.getCheckedRadioButtonId());
-				switch (rb.getId()) {
-				case R.id.RadioButtonRecurWeekly:
-					output.putExtra("recurWeekly", true);
-					eventToEdit.setRecurWeekly(true);
-					break;
-				case R.id.RadioButtonEvenWeek:
-					output.putExtra("recurEvenWeek", true);
-					eventToEdit.setRecurEvenWeek(true);
-					break;
-				case R.id.RadioButtonOddWeek:
-					output.putExtra("recurOddWeek", true);
-					eventToEdit.setRecurOddWeek(true);
-					break;
-				}
-			} else {
-				
-			}
-			
-			database.updateEvent(eventToEdit);
-			
-			setResult(RESULT_OK, output);
-			
-			refreshContents();
-			getIntent().putExtra("changed", true);
-			finish();
-		}
-	}
-	
-	public void refreshContents() {
-		onCreate(null);
-	}
-	
-	public void addEvent(View v) {
+	public Event putInformationIntoEvent(Intent output) {
 		Event event = new Event();
 		String eventTitle = eventTitleEditText.getText().toString(); 
 		String eventLocation = eventLocationEditText.getText().toString(); 
+		Log.w("loc", eventLocation);
 		String date = dueDateTextView.getText().toString();
 		String description = descriptionEditText.getText().toString();
 		
 		if (eventTitle == "" || date == "") {
-			
 			showError();
-		
 		} else {
-			
-			Intent output = this.getIntent();
-			
 			event.setModule(output.getExtras().getString("moduleCode"));
 			event.setTitle(eventTitle);
 			event.setLocation(eventLocation);
 			event.setDescription(description);
 			
 			Calendar c = Calendar.getInstance();
-			c.set(dtf.year, dtf.month, dtf.day, dtf.hour, dtf.minute);
+			if (dtf.timeSet) {
+				c.set(dtf.year, dtf.month, dtf.day, dtf.hour, dtf.minute);
+			} else {
+				c.set(dtf.year, dtf.month, dtf.day, 0, 0);
+			}
 			long unixTimeValue = c.getTimeInMillis();
 			event.setUnixTime(unixTimeValue);
 			
@@ -273,15 +236,32 @@ public class AddHomework extends Activity {
 					event.setRecurOddWeek(true);
 					break;
 				}
-			} else {
-				
 			}
-			
-			database.addEvent(event);
-			
-			setResult(RESULT_OK, output);
-			finish();
 		}
+		return event;
+	}
+	
+	// EDIT BUTTON
+	public void editEvent(View v) {
+		Intent output = this.getIntent();
+		Event event = putInformationIntoEvent(output);
+		event.setId(eventToEdit.getId());
+		database.updateEvent(event);
+		output.putExtra("changed", true);
+		
+		setResult(RESULT_OK, output);
+		finish();
+	}
+	
+	public void addEvent(View v) {
+		Intent output = this.getIntent();
+		Event event = putInformationIntoEvent(output);
+		
+		database.addEvent(event);
+		
+		setResult(RESULT_OK, output);
+		finish();
+	
 	}
 	
 	public void cancelEvent(View v) {
@@ -305,7 +285,11 @@ public class AddHomework extends Activity {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 // Display Selected date in textbox
-            	dueDateTextView.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+            	Calendar c = Calendar.getInstance();
+            	c.set(Calendar.YEAR, year);
+            	c.set(Calendar.MONTH, monthOfYear);
+            	c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            	dueDateTextView.setText(SDF_DATE_FIELD.format(c.getTime()));
             	dtf.year = year;
             	dtf.month = monthOfYear;
             	dtf.day = dayOfMonth;
@@ -331,32 +315,18 @@ public class AddHomework extends Activity {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             	
-            	//Calculate AM or PM
-                String amOrPm = "";
-                	if (hourOfDay == 0 || hourOfDay < 12) {
-            		    amOrPm = " AM";  
-
-            		} else {
-            			hourOfDay = hourOfDay - 12;
-            		    amOrPm = " PM";
-            		}
                 	
                 //Displaying noon and midnight
-                	if (hourOfDay == 0 || hourOfDay == 12) {
-                		hourOfDay = 12;
-                	}
-                	
-                //Display minute
-                	String minuteString = "";
-                	if (minute < 10) {
-                		minuteString = "0" + minute;
-                	
-                	} else {
-                		minuteString = Integer.valueOf(minute).toString();
-                	}
-                
+            	/*if (hourOfDay == 0 || hourOfDay == 12) {
+            		hourOfDay = 12;
+            	}*/
+            	
+            
             	// Display Selected time in textbox
-            	dueTimeTextView.setText(hourOfDay + ":" + minuteString + amOrPm);
+            	Calendar c = Calendar.getInstance();
+            	c.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            	c.set(Calendar.MINUTE, minute);
+            	dueTimeTextView.setText(SDF_TIME_FIELD.format(c.getTime()));
             	dtf.hour = hourOfDay;
             	dtf.minute = minute;
             	dtf.timeSet = true;
@@ -364,6 +334,21 @@ public class AddHomework extends Activity {
         };
         
         TimePickerDialog tpd = new TimePickerDialog(AddHomework.this, tpdl, dtf.hour, dtf.minute, false);
+        
+        // making a "clear" button to unset the time
+        tpd.setButton(TimePickerDialog.BUTTON_NEUTRAL, (CharSequence)"Clear", new DialogInterface.OnClickListener() {
+        	
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dtf.hour = 0;
+				dtf.minute = 0;
+				dtf.timeSet = false;
+				dueTimeTextView.setText("");
+				dialog.dismiss();
+			}
+			
+        });
+        
         tpd.show();
 	}
 	
