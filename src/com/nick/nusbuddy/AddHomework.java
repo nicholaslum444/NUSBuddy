@@ -219,7 +219,7 @@ public class AddHomework extends Activity {
 			database.updateEvent(eventToEdit);
 			
 			setResult(RESULT_OK, output);
-			// didn't help
+			
 			refreshContents();
 			getIntent().putExtra("changed", true);
 			finish();
