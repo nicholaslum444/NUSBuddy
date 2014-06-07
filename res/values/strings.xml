@@ -100,6 +100,7 @@
     <string name="RadioButton_odd_week">Odd weeks</string>
     <string name="RadioButton_even_week">Even weeks</string>
     <string name="Button_add_event">Add Event</string>
+    <string name="Button_save_edit_event">Save</string>
     <string name="Button_cancel_event">Cancel</string>
 
     <!-- Test and Quizzes Page Contents -->

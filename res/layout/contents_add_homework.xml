@@ -138,7 +138,7 @@
             android:layout_height="wrap_content"
             android:padding="5dp"
             android:onClick="editEvent"
-            android:text="save" />
+            android:text="@string/Button_save_edit_event" />
 
         <Button
             android:id="@+id/addEventButton"

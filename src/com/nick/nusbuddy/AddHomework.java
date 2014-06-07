@@ -1,6 +1,9 @@
 package com.nick.nusbuddy;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 import org.json.JSONException;
 
@@ -95,7 +98,46 @@ public class AddHomework extends Activity {
 				
 				// logic to fill up the details
 				
+				eventTitleEditText.setText(eventToEdit.getTitle());
+				eventLocationEditText.setText(eventToEdit.getLocation());
+				descriptionEditText.setText(eventToEdit.getDescription());
 				
+				//get formatted date and time
+				
+				long unixTime = eventToEdit.getUnixTime();
+				Calendar cal = Calendar.getInstance();
+		    	cal.setTimeInMillis(unixTime);
+		    	dtf.year = cal.get(Calendar.YEAR);
+	            dtf.month = cal.get(Calendar.MONTH);
+	            dtf.day = cal.get(Calendar.DAY_OF_MONTH);
+	            SimpleDateFormat sdf = new SimpleDateFormat("h:mm a", Locale.US);
+	            
+            	if (eventToEdit.isOnlyDateSet()) {
+	            	
+		    	} else {
+		    		String dateTimeString = sdf.format(cal.getTime());
+			    	dueTimeTextView.setText(dateTimeString);
+		    	}
+            	dueDateTextView.setText(dtf.day + "-" + (dtf.month + 1) + "-" + dtf.year);
+				
+				//check checkboxes and radio buttons
+				if (eventToEdit.isRecur()) {
+					
+					recurCheckBox.setChecked(true);
+					
+					if (eventToEdit.isRecurWeekly()) {
+						recurWeeklyRadioButton.setChecked(true);
+						
+					} else if (eventToEdit.isRecurEvenWeek()) {
+						recurEvenWeekButton.setChecked(true);
+						
+					} else {
+						recurOddWeekButton.setChecked(true);
+						
+					}
+				} else {
+					
+				}
 				
 				// end logic
 				
@@ -126,11 +168,67 @@ public class AddHomework extends Activity {
 		
 	}
 	
+	// EDIT BUTTON
 	public void editEvent(View v) {
 		
+		String eventTitle = eventTitleEditText.getText().toString(); 
+		String eventLocation = eventLocationEditText.getText().toString(); 
+		String date = dueDateTextView.getText().toString();
+		String description = descriptionEditText.getText().toString();
+		
+		if (eventTitle == "" || date == "") {
+			
+			showError();
+		
+		} else {
+			
+			Intent output = this.getIntent();
+			
+			eventToEdit.setModule(output.getExtras().getString("moduleCode"));
+			eventToEdit.setTitle(eventTitle);
+			eventToEdit.setLocation(eventLocation);
+			eventToEdit.setDescription(description);
+			
+			Calendar c = Calendar.getInstance();
+			c.set(dtf.year, dtf.month, dtf.day, dtf.hour, dtf.minute);
+			long unixTimeValue = c.getTimeInMillis();
+			eventToEdit.setUnixTime(unixTimeValue);
+			
+			eventToEdit.setOnlyDateSet(dueTimeTextView.getText().length() == 0);
+			
+			if (recurCheckBox.isChecked()) {
+				RadioButton rb = (RadioButton)findViewById(recurRadioGroup.getCheckedRadioButtonId());
+				switch (rb.getId()) {
+				case R.id.RadioButtonRecurWeekly:
+					output.putExtra("recurWeekly", true);
+					eventToEdit.setRecurWeekly(true);
+					break;
+				case R.id.RadioButtonEvenWeek:
+					output.putExtra("recurEvenWeek", true);
+					eventToEdit.setRecurEvenWeek(true);
+					break;
+				case R.id.RadioButtonOddWeek:
+					output.putExtra("recurOddWeek", true);
+					eventToEdit.setRecurOddWeek(true);
+					break;
+				}
+			} else {
+				
+			}
+			
+			database.updateEvent(eventToEdit);
+			
+			setResult(RESULT_OK, output);
+			// didn't help
+			refreshContents();
+			getIntent().putExtra("changed", true);
+			finish();
+		}
 	}
 	
-	//how to alert for every odd week/ even week?
+	public void refreshContents() {
+		onCreate(null);
+	}
 	
 	public void addEvent(View v) {
 		Event event = new Event();
