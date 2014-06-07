@@ -9,6 +9,7 @@ import org.json.JSONException;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -32,6 +33,7 @@ public class AddHomework extends Activity {
 	
 	public class DateTimeInfo {
 		int day, month, year, hour, minute;
+		long todayDate;
 		boolean dateSet, timeSet;
 	}
 	
@@ -275,6 +277,7 @@ public class AddHomework extends Activity {
             dtf.year = c.get(Calendar.YEAR);
             dtf.month = c.get(Calendar.MONTH);
             dtf.day = c.get(Calendar.DAY_OF_MONTH);
+            
         }
         
         //Day, date, month, year format
@@ -300,6 +303,7 @@ public class AddHomework extends Activity {
         DatePickerDialog dpd = new DatePickerDialog(AddHomework.this, dpdl, dtf.year, dtf.month, dtf.day);
         dpd.show();
 	}
+
 	
 	public void showTimePickerDialog(View v) {
 		
