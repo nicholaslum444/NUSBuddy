@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/Layout_homework_module_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:layout_gravity="left"
+    android:divider="@drawable/divider_homework_module_items" >
+
+    <TextView
+        android:id="@+id/TextView_homework_item_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:text="Tutorial 3"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/TextView_homework_item_due"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:text="Friday, 13 Feb"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+</LinearLayout>

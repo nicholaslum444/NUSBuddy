@@ -87,14 +87,6 @@
             android:textColor="#FFFFFF"
             android:padding="4dp" />
         
-        <Button
-	        android:id="@+id/addEventButton"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_gravity="center"
-	        android:onClick="next"
-	        android:text="Bypass" />
-        
     </LinearLayout>
 
     

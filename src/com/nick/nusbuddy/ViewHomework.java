@@ -36,6 +36,15 @@ public class ViewHomework extends Activity {
 	private static final int REQUEST_CODE_FOR_EDIT = 3;
 	private static final int REQUEST_CODE_FOR_ADD = 1;
 	
+	final String DATE_FORMAT_NO_RECUR = "EEE, dd MMM yyyy";
+	final String DATE_FORMAT_RECUR_WEEKLY = "'Every' EEE";
+	final String DATE_FORMAT_RECUR_EVEN = "'Every even' EEE";
+	final String DATE_FORMAT_RECUR_ODD = "'Every odd' EEE";
+	final String DATE_TIME_FORMAT_NO_RECUR = "EEE, dd MMM yyyy 'at' h:mm a";
+	final String DATE_TIME_FORMAT_RECUR_WEEKLY = "'Every' EEE 'at' h:mm a";
+	final String DATE_TIME_FORMAT_RECUR_EVEN = "'Every even' EEE 'at' h:mm a";
+	final String DATE_TIME_FORMAT_RECUR_ODD = "'Every odd' EEE 'at' h:mm a";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -127,25 +136,32 @@ public class ViewHomework extends Activity {
 	    	SimpleDateFormat sdf;
 	    	// TODO set different text for recur vs no recur
 	    	if (event.isOnlyDateSet()) {
-	    		sdf = new SimpleDateFormat("EEE", Locale.US);
+	    		if (event.isRecurWeekly()) {
+	    			sdf = new SimpleDateFormat(DATE_FORMAT_RECUR_WEEKLY, Locale.US);
+		    	} else if (event.isRecurEvenWeek()) {
+		    		sdf = new SimpleDateFormat(DATE_FORMAT_RECUR_EVEN, Locale.US);
+		    	} else if (event.isRecurOddWeek()) {
+		    		sdf = new SimpleDateFormat(DATE_FORMAT_RECUR_ODD, Locale.US);
+		    	} else {
+		    		sdf = new SimpleDateFormat(DATE_FORMAT_NO_RECUR, Locale.US);
+		    	}
 	    	} else {
-	    		sdf = new SimpleDateFormat("EEE, h:mm a", Locale.US);
+	    		if (event.isRecurWeekly()) {
+	    			sdf = new SimpleDateFormat(DATE_TIME_FORMAT_RECUR_WEEKLY, Locale.US);
+		    	} else if (event.isRecurEvenWeek()) {
+		    		sdf = new SimpleDateFormat(DATE_TIME_FORMAT_RECUR_EVEN, Locale.US);
+		    	} else if (event.isRecurOddWeek()) {
+		    		sdf = new SimpleDateFormat(DATE_TIME_FORMAT_RECUR_ODD, Locale.US);
+		    	} else {
+		    		sdf = new SimpleDateFormat(DATE_TIME_FORMAT_NO_RECUR, Locale.US);
+		    	}
 	    	}
 	    	String dateTimeString = sdf.format(cal.getTime());
-	    	
-	    	// check recur
-	    	if (event.isRecurWeekly()) {
-	    		dateTimeString = "Every " + dateTimeString;
-	    	} else if (event.isRecurEvenWeek()) {
-	    		dateTimeString = "Every even " + dateTimeString;
-	    	} else if (event.isRecurOddWeek()) {
-	    		dateTimeString = "Every odd " + dateTimeString;
-	    	}
 	    	
 	    	TextView itemDue = (TextView) convertView.findViewById(R.id.TextView_homework_item_due);
 	    	itemDue.setText(dateTimeString);
 	    	
-	    	LinearLayout hiddenTextViews = (LinearLayout) convertView.findViewById(R.id.Layout_homework_item_hidden_textviews);
+	    	//LinearLayout hiddenTextViews = (LinearLayout) convertView.findViewById(R.id.Layout_homework_item_hidden_textviews);
 	    	
 	    	if (event.getLocation() != null && event.getLocation().length() > 0) {
 	    		TextView tt = (TextView) convertView.findViewById(R.id.Layout_homework_item_hidden_location);
@@ -168,7 +184,7 @@ public class ViewHomework extends Activity {
 
             return convertView;
         }
-    }
+    } 
 	
 	public void refreshContents() {
 		/*startActivity(new Intent(this, ViewHomework.class).putExtra("moduleCode", moduleCode).putExtra("changed", true));

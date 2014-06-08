@@ -55,7 +55,18 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener {
 	private ArrayList<String> modulesCodeList;
 	
 	//NUSBuddySQLiteOpenHelper db;
-	NUSBuddyDatabaseHelper database;
+	private NUSBuddyDatabaseHelper database;
+	
+	final String DATE_FORMAT_NO_RECUR = "EEE, dd MMM yyyy";
+	final String DATE_FORMAT_RECUR_WEEKLY = "'Every' EEE";
+	final String DATE_FORMAT_RECUR_EVEN = "'Every even' EEE";
+	final String DATE_FORMAT_RECUR_ODD = "'Every odd' EEE";
+	final String DATE_TIME_FORMAT_NO_RECUR = "EEE, dd MMM yyyy 'at' h:mm a";
+	final String DATE_TIME_FORMAT_RECUR_WEEKLY = "'Every' EEE 'at' h:mm a";
+	final String DATE_TIME_FORMAT_RECUR_EVEN = "'Every even' EEE 'at' h:mm a";
+	final String DATE_TIME_FORMAT_RECUR_ODD = "'Every odd' EEE 'at' h:mm a";
+	
+	
 
 	@Override
 	protected Activity getCurrentActivity() {
@@ -168,16 +179,16 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener {
 				
 				// create a container for that module
 				View.inflate(this, R.layout.container_homework_module, layoutHomework);
+				LinearLayout containerForModule = (LinearLayout) layoutHomework.findViewById(R.id.Layout_homework_module);
+				
+				// pointers to the internal layouts
+				TextView containerName = (TextView) containerForModule.findViewById(R.id.TextView_homework_module_name);
+				LinearLayout containerForItems = (LinearLayout) containerForModule.findViewById(R.id.Layout_homework_module_items);
 				
 				// call it the name of the module
-				TextView containerName = (TextView) findViewById(R.id.TextView_homework_module_name);
 				containerName.setText(moduleCode);
 				// setting a tag to keep track of the module code textview since we change its id later
 				containerName.setTag("moduleCode");
-				
-				// pointers to the internal layouts
-				LinearLayout containerForModule = (LinearLayout) findViewById(R.id.Layout_homework_module);
-				LinearLayout containerForItems = (LinearLayout) findViewById(R.id.Layout_homework_module_items);
 				
 				ArrayList<Event> thisModuleEvents = database.getAllEvents(moduleCode);
 				Log.w("this mods", thisModuleEvents.toString());
@@ -185,40 +196,49 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener {
 				for (int j = 0; j < thisModuleEvents.size(); j++) {
 					Event event = thisModuleEvents.get(j);
 					
-					// add a textview for the new item
-			    	View.inflate(this, R.layout.textview_homework_item_small, containerForItems);
-			    	
-			    	// getting the time object
-			    	long unixTime = event.getUnixTime();
-			    	Calendar cal = Calendar.getInstance();
+					View.inflate(this, R.layout.container_homework_module_item, containerForItems);
+					LinearLayout layoutItem = (LinearLayout) containerForItems.findViewById(R.id.Layout_homework_module_item);
+					
+					TextView itemTitle = (TextView) layoutItem.findViewById(R.id.TextView_homework_item_title);
+					itemTitle.setText(event.getTitle());
+					
+					long unixTime = event.getUnixTime();
+					Calendar cal = Calendar.getInstance();
 			    	cal.setTimeInMillis(unixTime);
 			    	SimpleDateFormat sdf;
+			    	
 			    	if (event.isOnlyDateSet()) {
-			    		sdf = new SimpleDateFormat("EEE", Locale.US);
+			    		if (event.isRecurWeekly()) {
+			    			sdf = new SimpleDateFormat(DATE_FORMAT_RECUR_WEEKLY, Locale.US);
+				    	} else if (event.isRecurEvenWeek()) {
+				    		sdf = new SimpleDateFormat(DATE_FORMAT_RECUR_EVEN, Locale.US);
+				    	} else if (event.isRecurOddWeek()) {
+				    		sdf = new SimpleDateFormat(DATE_FORMAT_RECUR_ODD, Locale.US);
+				    	} else {
+				    		sdf = new SimpleDateFormat(DATE_FORMAT_NO_RECUR, Locale.US);
+				    	}
 			    	} else {
-			    		sdf = new SimpleDateFormat("EEE, h:mm a", Locale.US);
+			    		if (event.isRecurWeekly()) {
+			    			sdf = new SimpleDateFormat(DATE_TIME_FORMAT_RECUR_WEEKLY, Locale.US);
+				    	} else if (event.isRecurEvenWeek()) {
+				    		sdf = new SimpleDateFormat(DATE_TIME_FORMAT_RECUR_EVEN, Locale.US);
+				    	} else if (event.isRecurOddWeek()) {
+				    		sdf = new SimpleDateFormat(DATE_TIME_FORMAT_RECUR_ODD, Locale.US);
+				    	} else {
+				    		sdf = new SimpleDateFormat(DATE_TIME_FORMAT_NO_RECUR, Locale.US);
+				    	}
 			    	}
+			    	
 			    	String dateTimeString = sdf.format(cal.getTime());
 			    	
-			    	// check recur
-			    	if (event.isRecurWeekly()) {
-			    		dateTimeString = "every " + dateTimeString;
-			    	} else if (event.isRecurEvenWeek()) {
-			    		dateTimeString = "every even " + dateTimeString;
-			    	} else if (event.isRecurOddWeek()) {
-			    		dateTimeString = "every odd " + dateTimeString;
-			    	}
-			    	
-			    	// display the item text
-			    	TextView t = (TextView) findViewById(R.id.TextView_homework_item_small);
-			    	t.setText(event.getTitle() + ", due " + dateTimeString);
-			    	//t.setText(event.getTitle());
+			    	TextView itemDue = (TextView) layoutItem.findViewById(R.id.TextView_homework_item_due);
+			    	itemDue.setText(dateTimeString);
 			    	
 			    	// change the ID of the new item
 			    	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-			    		t.setId(View.generateViewId());
+			    		layoutItem.setId(View.generateViewId());
 					} else {
-						t.setId(new Random().nextInt(Integer.MAX_VALUE));
+						layoutItem.setId(new Random().nextInt(Integer.MAX_VALUE));
 					}
 				}
 				

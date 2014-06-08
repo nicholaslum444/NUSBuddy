@@ -45,7 +45,7 @@ LoginAsyncTaskListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.contents_login);
-		getActionBar().hide();
+		//getActionBar().hide();
 		
 		TextView t = (TextView) findViewById(R.id.TextView_login);
 		t.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Bauhaus 93.ttf"));

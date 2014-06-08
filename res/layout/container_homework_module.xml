@@ -23,6 +23,8 @@
         android:id="@+id/Layout_homework_module_items"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:divider="@drawable/divider_homework_module_items"
+        android:showDividers="middle"
         android:orientation="vertical" >
         
         

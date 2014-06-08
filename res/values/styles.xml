@@ -24,6 +24,11 @@
     <style name="MyActionBar" parent="@android:style/Widget.Holo.ActionBar">
     	<item name="android:background">#BDD7EE</item>
 	</style>
+	
+    <style name="LoginTheme" parent="AppTheme" >
+    	<item name="android:windowActionBar">false</item>
+		<item name="android:windowTitleSize">0dp</item>
+	</style>
 
     <style name="LoginFormContainer">
         <item name="android:layout_width">match_parent</item>
