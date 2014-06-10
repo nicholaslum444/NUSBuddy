@@ -109,5 +109,59 @@
     <!-- CAP Calculator Page Contents -->
     <string name="title_activity_cap_calculator">CAP Calculator</string>
     <string name="title_activity_view_homework">View Homework</string>
+        <string-array name="Grade">
+        <item>A+</item>
+        <item>A</item>
+        <item>A-</item>
+        <item>B+</item>
+        <item>B</item>
+        <item>B-</item>
+        <item>C+</item>
+        <item>C</item>
+        <item>D+</item>
+        <item>D</item>
+        <item>F</item>
+        <item>S/U</item>
+    </string-array>
+    <string-array name="Credits">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+    </string-array>
+
+    <string name="button_start">Start!</string>
+    <string name="button_add">Add Module</string>
+    <string name="button_remove">Remove</string>
+    <string name="editText_moduleCode">Module Code</string>
+    <string name="textView_calc_instructions">Click the \&quot;Add\&quot; button to add a new module!</string>
+    <string name="textView_calc_go">Click \&quot;Go\&quot; to calculate your CAP!</string>
+    <string name="button_go">Calculate!</string>
+    <string name="textView_cap_name">New CAP: </string>
+    <string name="textView_cap_value">0.000</string>
+    <string name="textView_modules_name">Modules: </string>
+    <string name="editText_old_cap">CAP so far</string>
+    <string name="editText_old_credits">MCs so far</string>
+    <string name="checkBox_old_cap">Cumulative</string>
+    <string name="popup_title">Error!</string>
+    <string name="popup_button_cancel">OK</string>
+    <string name="popup_empty_cap">Please enter a valid CAP value!</string>
+    <string name="popup_empty_mc">Please enter a valid number of MCs!</string>
+    <string name="popup_empty_modules">Please add at least one module!</string>
+    <string name="popup_high_cap">The input CAP is too damn high.</string>
+    <string name="popup_unknown">An unknown error has occurred. Please restart the app.</string>
+    <string name="title_activity_help">Help</string>
 
 </resources>
