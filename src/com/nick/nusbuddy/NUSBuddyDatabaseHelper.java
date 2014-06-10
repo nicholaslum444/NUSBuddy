@@ -189,42 +189,6 @@ public class NUSBuddyDatabaseHelper extends SQLiteOpenHelper {
         return event;
     }
 	
-	public ArrayList<Event> getAllEventsBetween(long now, long then) {
-		ArrayList<Event> events = new ArrayList<Event>();
-		
-		// 1. build query
-		String query = "SELECT * FROM " + TABLE_HOMEWORK + " WHERE " + KEY_UNIX_TIME + " BETWEEN ? AND ?";
-		
-		// 2. get reference to writable DB
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(query, new String[] {now+"", then+""} );
-		
-        // 3. go over each row, build event and add it to list
-        if (cursor.moveToFirst()) {
-            do { 
-            	Event event = new Event();
-				event.setId(cursor.getInt(0)); 
-				event.setModule(cursor.getString(1));
-				event.setTitle(cursor.getString(2));
-		        event.setLocation(cursor.getString(3));
-		        event.setUnixTime(cursor.getLong(4));
-		        event.setDescription(cursor.getString(5));
-		        event.setRecurWeekly(cursor.getInt(6) == 1);
-		        event.setRecurOddWeek(cursor.getInt(7) == 1);
-		        event.setRecurEvenWeek(cursor.getInt(8) == 1);
-		        event.setOnlyDateSet(cursor.getInt(9) == 1);
-            	
-                // Add event to events
-            	events.add(event); 
-            	
-            } while (cursor.moveToNext());
-        }
-        
-        Log.w("eventsbetween", events.toString());
-        // return events
-        return events;
-	}
-	
 	
 	/**
 	 * gets all events corresponding to a certain module

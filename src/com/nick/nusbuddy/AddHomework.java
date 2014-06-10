@@ -220,10 +220,8 @@ public class AddHomework extends Activity {
 	public Event putInformationIntoEvent(Intent output) throws InvalidTimeException, EmptyTitleFieldException, EmptyDateFieldException {
 		Event event = new Event();
 		String eventTitle = eventTitleEditText.getText().toString(); 
-		String eventLocation = eventLocationEditText.getText().toString();
-		
-		//Log.w("loc", eventLocation);
-		
+		String eventLocation = eventLocationEditText.getText().toString(); 
+		Log.w("loc", eventLocation);
 		String date = dueDateTextView.getText().toString();
 		String description = descriptionEditText.getText().toString();
 		
@@ -231,7 +229,7 @@ public class AddHomework extends Activity {
 		if (dtf.timeSet) {
 			c.set(dtf.year, dtf.month, dtf.day, dtf.hour, dtf.minute);
 		} else {
-			c.set(dtf.year, dtf.month, dtf.day, 23, 59);
+			c.set(dtf.year, dtf.month, dtf.day, 0, 0);
 		}
 		long unixTimeValue = c.getTimeInMillis();
 		
