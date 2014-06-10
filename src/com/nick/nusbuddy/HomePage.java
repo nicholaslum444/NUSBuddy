@@ -1,6 +1,7 @@
 package com.nick.nusbuddy;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -20,12 +21,32 @@ import android.widget.Toast;
 
 public class HomePage extends BaseActivity {
 	
+	class UnixTimeComparator implements Comparator<Event> {
+		
+		@Override
+		public int compare(Event e1, Event e2) {
+			
+			// TODO Auto-generated method stub
+			if (e1.getUnixTime() < e2.getUnixTime()) {
+				return -1;
+			} else if (e1.getUnixTime() == e2.getUnixTime()) {
+				return 0;
+			} else {
+				return 1;
+			}
+		}
+		
+	}
 
 	Context context;
     LinearLayout layoutPageContent;
     SharedPreferences sharedPrefs;
     Editor sharedPrefsEditor;
     
+    final String DATE_TIME_FORMAT = "EEE, h:mm a";
+    final String DATE_FORMAT = "EEE";
+    final SimpleDateFormat sdfDateTimeFormat = new SimpleDateFormat(DATE_TIME_FORMAT, Locale.US);
+    final SimpleDateFormat sdfDateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.US);
     
     @Override
 	protected Activity getCurrentActivity() {
@@ -66,17 +87,37 @@ public class HomePage extends BaseActivity {
     	
     	
     	// TODO set homework list
+    	
+    	NUSBuddyDatabaseHelper db = new NUSBuddyDatabaseHelper(this);
+    	
+    	// TODO allow user to change how many days of homrwork to show
+    	ArrayList<Event> eventsDueSoon = db.getAllEventsBetween(System.currentTimeMillis(), System.currentTimeMillis()+86400000);
+    	Collections.sort(eventsDueSoon, new UnixTimeComparator());
+    	
     	LinearLayout homeworkListLayout = (LinearLayout) findViewById(R.id.Layout_home_page_homework_list);
-    	ArrayList<String> homeworkList = new ArrayList<String>();
-    	homeworkList.add("cs1231 tutorial 3");
-    	homeworkList.add("asdasd tutoal");
-    	homeworkList.add("stuff");
-    	for (int i = 0; i < homeworkList.size(); i++) {
-    		TextView newHomework = new TextView(context, null, android.R.attr.textAppearanceMedium);
-    		newHomework.setGravity(Gravity.CENTER_HORIZONTAL);
-    		newHomework.setTextColor(Color.parseColor("#046380"));
-    		newHomework.setText(homeworkList.get(i));
-    		homeworkListLayout.addView(newHomework, i);
+    	for (int i = 0; i < eventsDueSoon.size(); i++) {
+    		
+    		Event e = eventsDueSoon.get(i);
+    		
+    		View.inflate(this, R.layout.container_homepage_homework_item, homeworkListLayout);
+    		LinearLayout newHomeworkLayout = (LinearLayout) homeworkListLayout.findViewById(R.id.layout_homepage_homework_item);
+    		
+    		TextView titleField = (TextView) newHomeworkLayout.findViewById(R.id.title);
+    		titleField.setText(e.getTitle());
+    		
+    		TextView dueField = (TextView) newHomeworkLayout.findViewById(R.id.duedate);
+    		
+    		Calendar c = Calendar.getInstance();
+    		c.setTimeInMillis(e.getUnixTime());
+    		
+    		if (e.isOnlyDateSet()) {
+    			dueField.setText(sdfDateFormat.format(c.getTime()));
+    		} else {
+    			dueField.setText(sdfDateTimeFormat.format(c.getTime()));
+    		}
+    		
+    		newHomeworkLayout.setId(View.generateViewId());
+    		
     	}
     	
     	
@@ -121,12 +162,6 @@ public class HomePage extends BaseActivity {
     	builder.create().show();
     	
     }
-    
-    // for the testing button there. goes into app without login.
- 	public void next(View v) {
-     	Intent i = new Intent(this, Login.class);
-     	startActivity(i); 
-     }
  	
  	
  	QuickAction mQuickAction;
@@ -172,6 +207,10 @@ public class HomePage extends BaseActivity {
  		db.onUpgrade(db.getWritableDatabase(), 1, 1);
  	}
  	
+ 	public void goToHomework(View v) {
+ 		Intent i = new Intent(this, Homework.class);
+ 		startActivity(i);
+ 	}
  	
     
 }

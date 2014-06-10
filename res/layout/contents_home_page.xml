@@ -42,9 +42,9 @@
         android:id="@+id/Layout_home_page_homework"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/border"
         android:orientation="vertical"
-        android:layout_marginBottom="10dp" >
+        android:layout_marginBottom="10dp"
+        android:onClick="goToHomework" >
 
         <TextView
             android:id="@+id/TextView_home_page_homework_message"
