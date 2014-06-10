@@ -28,6 +28,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 public class AddHomework extends Activity {
 	
@@ -35,6 +36,19 @@ public class AddHomework extends Activity {
 		int day, month, year, hour, minute;
 		long todayDate;
 		boolean dateSet, timeSet;
+	}
+	
+	public class EmptyTitleFieldException extends Exception {
+		private static final long serialVersionUID = -885526777237707415L;
+	}
+	
+	public class InvalidTimeException extends Exception {
+		private static final long serialVersionUID = -7070245316521346702L;
+	}
+	
+	public class EmptyDateFieldException extends Exception {
+		private static final long serialVersionUID = 919582192965705223L;
+		
 	}
 	
 	DateTimeInfo dtf;
@@ -190,12 +204,20 @@ public class AddHomework extends Activity {
 		}
 	}
 	
-	private void showError() {
+	private void showTitleEmptyError() {
 		eventTitleEditText.setError("Required fields");
+	}
+	
+	private void showDateEmptyError() {
 		dueDateTextView.setError("Required fields");
 	}
 	
-	public Event putInformationIntoEvent(Intent output) {
+	private void showInvalidTimeError() {
+		//Toast.makeText(this, "Invalid due date", Toast.LENGTH_LONG).show();
+		dueTimeTextView.setError("Invalid due date");
+	}
+	
+	public Event putInformationIntoEvent(Intent output) throws InvalidTimeException, EmptyTitleFieldException, EmptyDateFieldException {
 		Event event = new Event();
 		String eventTitle = eventTitleEditText.getText().toString(); 
 		String eventLocation = eventLocationEditText.getText().toString(); 
@@ -203,23 +225,29 @@ public class AddHomework extends Activity {
 		String date = dueDateTextView.getText().toString();
 		String description = descriptionEditText.getText().toString();
 		
-		if (eventTitle == "" || date == "") {
-			showError();
+		Calendar c = Calendar.getInstance();
+		if (dtf.timeSet) {
+			c.set(dtf.year, dtf.month, dtf.day, dtf.hour, dtf.minute);
+		} else {
+			c.set(dtf.year, dtf.month, dtf.day, 0, 0);
+		}
+		long unixTimeValue = c.getTimeInMillis();
+		
+		if (eventTitle == null || eventTitle.length() == 0) {
+			throw new EmptyTitleFieldException();
+			
+		} else if (date == null || date.length() == 0) {
+			throw new EmptyDateFieldException();
+			
+		} else if (unixTimeValue < System.currentTimeMillis() && dtf.timeSet) {
+			throw new InvalidTimeException();
+			
 		} else {
 			event.setModule(output.getExtras().getString("moduleCode"));
 			event.setTitle(eventTitle);
 			event.setLocation(eventLocation);
 			event.setDescription(description);
-			
-			Calendar c = Calendar.getInstance();
-			if (dtf.timeSet) {
-				c.set(dtf.year, dtf.month, dtf.day, dtf.hour, dtf.minute);
-			} else {
-				c.set(dtf.year, dtf.month, dtf.day, 0, 0);
-			}
-			long unixTimeValue = c.getTimeInMillis();
 			event.setUnixTime(unixTimeValue);
-			
 			event.setOnlyDateSet(dueTimeTextView.getText().length() == 0);
 			
 			if (recurCheckBox.isChecked()) {
@@ -246,24 +274,62 @@ public class AddHomework extends Activity {
 	// EDIT BUTTON
 	public void editEvent(View v) {
 		Intent output = this.getIntent();
-		Event event = putInformationIntoEvent(output);
-		event.setId(eventToEdit.getId());
-		database.updateEvent(event);
-		output.putExtra("changed", true);
-		
-		setResult(RESULT_OK, output);
-		finish();
+		Event event;
+		try {
+			event = putInformationIntoEvent(output);
+			
+			event.setId(eventToEdit.getId());
+			database.updateEvent(event);
+			output.putExtra("changed", true);
+			
+			setResult(RESULT_OK, output);
+			finish();
+			
+		} catch (InvalidTimeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			showInvalidTimeError();
+			
+		} catch (EmptyTitleFieldException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			showTitleEmptyError();
+			
+		} catch (EmptyDateFieldException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			showDateEmptyError();
+			
+		}
 	}
 	
 	public void addEvent(View v) {
 		Intent output = this.getIntent();
-		Event event = putInformationIntoEvent(output);
-		
-		database.addEvent(event);
-		
-		setResult(RESULT_OK, output);
-		finish();
-	
+		Event event;
+		try {
+			event = putInformationIntoEvent(output);
+			
+			database.addEvent(event);
+			
+			setResult(RESULT_OK, output);
+			finish();
+			
+		} catch (InvalidTimeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			showInvalidTimeError();
+			
+		} catch (EmptyTitleFieldException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			showTitleEmptyError();
+			
+		} catch (EmptyDateFieldException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			showDateEmptyError();
+			
+		}
 	}
 	
 	public void cancelEvent(View v) {
@@ -301,6 +367,9 @@ public class AddHomework extends Activity {
         };
      
         DatePickerDialog dpd = new DatePickerDialog(AddHomework.this, dpdl, dtf.year, dtf.month, dtf.day);
+        
+        dpd.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+        
         dpd.show();
 	}
 
