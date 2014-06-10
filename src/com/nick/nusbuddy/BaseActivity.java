@@ -155,8 +155,15 @@ public abstract class BaseActivity extends Activity {
 
     private void selectItem(int position) {
     	if (!currentActivity.getClass().equals(drawerItems.get(position))) {
-        	// switching activities when item is selected.
-        	startActivity(new Intent(currentActivity, drawerItems.get(position)));
+    		
+    		if (position == 0) {
+    			Intent intent = new Intent(this, drawerItems.get(position));
+    			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); 
+    			startActivity(intent);
+    		} else {
+	        	// switching activities when item is selected.
+	        	startActivity(new Intent(currentActivity, drawerItems.get(position)));
+    		}
     	}
     	mDrawerList.setItemChecked(position, false);
         mDrawerLayout.closeDrawer(mDrawerList);
