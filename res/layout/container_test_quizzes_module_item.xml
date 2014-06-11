@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/Layout_test_quizzes_module_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:layout_gravity="left"
+    android:divider="@drawable/divider_homework_module_items"
+    android:onClick="expandItem" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" 
+            android:orientation="horizontal">
+            
+            <TextView
+		        android:id="@+id/TextView_test_quizzes_item_title"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:gravity="left"
+		        android:text="Tutorial 3"
+		        android:textAppearance="?android:attr/textAppearanceLarge" />
+            
+            <!-- Spacer -->
+		
+		    <View
+			    android:layout_width="0dp"
+			    android:layout_height="match_parent"
+			    android:layout_weight="1">
+			</View>
+			
+		    <LinearLayout
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:orientation="vertical" >
+		        
+		        <TextView
+			        android:id="@+id/TextView_test_quizzes_item_due"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:gravity="left"
+			        android:text="Friday, 13 Feb"
+			        android:textAppearance="?android:attr/textAppearanceSmall" />
+		        
+		        <TextView
+			        android:id="@+id/TextView_test_quizzes_item_due"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:gravity="left"
+			        android:text="10AM"
+			        android:textAppearance="?android:attr/textAppearanceSmall" />
+		        
+		    </LinearLayout>
+			
+		    <ImageView
+			    android:id="@+id/Image_expand_collapse"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:src="@drawable/ic_action_expand"
+			    android:contentDescription="Expand item" />
+            
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

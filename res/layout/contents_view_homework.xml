@@ -4,12 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    
-    <ListView 
+
+    <ListView
         android:id="@+id/ListView_homework_items"
+        android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-		android:layout_width="fill_parent"
-		android:divider="#002F2F"
-		android:dividerHeight="1px"/>
+        android:divider="#002F2F"
+        android:dividerHeight="1px" >
+    </ListView>
 
 </LinearLayout>
