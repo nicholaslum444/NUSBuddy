@@ -18,21 +18,22 @@ public class NUSBuddyDatabaseHelper extends SQLiteOpenHelper {
 	
 	
 	private static final String DATABASE_NAME = "NUSBuddyDatabase";
-	private static final int DATABASE_VERSION = 2;
+	private static final int DATABASE_VERSION = 3;
 	
-	// homework table name
-    private static final String TABLE_HOMEWORK = "homework";
-
-    // homework Table Columns names
+	// Table Columns names
     private static final String KEY_ID = "id";
     private static final String KEY_MODULE = "module";
     private static final String KEY_TITLE = "title";
     private static final String KEY_UNIX_TIME = "unixTime";
+    private static final String KEY_LOCATION = "location";
     private static final String KEY_DESCRIPTION = "description";
     private static final String KEY_RECUR_WEEKLY = "recurWeekly";
     private static final String KEY_RECUR_ODD_WEEK = "recurOddWeek";
     private static final String KEY_RECUR_EVEN_WEEK = "recurEvenWeek";
     private static final String KEY_IS_ONLY_DATE_SET = "onlyDateSet";
+	
+	// homework table name
+    private static final String TABLE_HOMEWORK = "homework";
     
     private static final String[] TABLE_HOMEWORK_COLUMNS = {
     	KEY_ID,
@@ -49,15 +50,24 @@ public class NUSBuddyDatabaseHelper extends SQLiteOpenHelper {
 
 	// tests table name
     private static final String TABLE_TESTS = "tests";
-	
-
+    
+    private static final String[] TABLE_TESTS_COLUMNS = {
+    	KEY_ID,
+    	KEY_MODULE,
+    	KEY_TITLE,
+    	KEY_UNIX_TIME,
+    	KEY_LOCATION,
+    	KEY_DESCRIPTION,
+    	KEY_IS_ONLY_DATE_SET
+    };
+    
 	public NUSBuddyDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		// SQL statement to create book table
+		// SQL statement to create hw table
         String CREATE_HOMEWORK_TABLE = "CREATE TABLE homework ( " +
                 KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
                 KEY_MODULE + " TEXT, " +
@@ -72,14 +82,27 @@ public class NUSBuddyDatabaseHelper extends SQLiteOpenHelper {
         // create homework table
         db.execSQL(CREATE_HOMEWORK_TABLE);
         
+     // SQL statement to create hw table
+        String CREATE_TEST_TABLE = "CREATE TABLE homework ( " +
+                KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
+                KEY_MODULE + " TEXT, " +
+                KEY_TITLE + " TEXT, " + 
+            	KEY_UNIX_TIME + " LONG, " +
+                KEY_LOCATION + " TEXT, " +
+            	KEY_DESCRIPTION + " TEXT, " +
+            	KEY_IS_ONLY_DATE_SET + " BOOLEAN)"; 
+ 
+        // create homework table
+        db.execSQL(CREATE_TEST_TABLE);
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVer, int newVer) {
 		// Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_HOMEWORK);
- 
-        // create fresh table
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TESTS);
+        
+        // create fresh tables
         this.onCreate(db);
 	}
 	
@@ -103,6 +126,31 @@ public class NUSBuddyDatabaseHelper extends SQLiteOpenHelper {
 		
 		// 3. insert
 		db.insert(TABLE_HOMEWORK, // table
+		        null, //nullColumnHack
+		        values); // key/value -> keys = column names/ values = column values
+		
+		// 4. close
+		db.close(); 
+	}
+	
+	public void addEventTest(EventTest test){
+        //for logging
+		Log.w("addBook", test.toString()); 
+		
+		// 1. get reference to writable DB
+		SQLiteDatabase db = this.getWritableDatabase();
+		
+		// 2. create ContentValues to add key "column"/value
+		ContentValues values = new ContentValues();
+		values.put(KEY_MODULE, test.getModule()); 
+		values.put(KEY_TITLE, test.getTitle());
+		values.put(KEY_UNIX_TIME, test.getUnixTime());
+		values.put(KEY_LOCATION, test.getLocation());
+		values.put(KEY_DESCRIPTION, test.getDescription());
+		values.put(KEY_IS_ONLY_DATE_SET, test.isOnlyDateSet());
+		
+		// 3. insert
+		db.insert(TABLE_TESTS, // table
 		        null, //nullColumnHack
 		        values); // key/value -> keys = column names/ values = column values
 		
@@ -134,9 +182,35 @@ public class NUSBuddyDatabaseHelper extends SQLiteOpenHelper {
         db.update(TABLE_HOMEWORK, //table
                 values, // column/value
                 KEY_ID+" = ?", // selections
-                new String[] { String.valueOf(homework.getId()) }); //selection args
+                new String[] { homework.getId()+"" }); //selection args
      
         Log.w("homework", homework.toString());
+        // 4. close
+        db.close();
+     
+    }
+	
+	public void updateEventTest(EventTest test) {
+	   	 
+        // 1. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+     
+        // 2. create ContentValues to add key "column"/value
+ 		ContentValues values = new ContentValues();
+ 		values.put(KEY_MODULE, test.getModule()); 
+ 		values.put(KEY_TITLE, test.getTitle());
+ 		values.put(KEY_UNIX_TIME, test.getUnixTime());
+ 		values.put(KEY_LOCATION, test.getLocation());
+ 		values.put(KEY_DESCRIPTION, test.getDescription());
+ 		values.put(KEY_IS_ONLY_DATE_SET, test.isOnlyDateSet());
+     
+        // 3. updating row. needs the homework ID!
+        db.update(TABLE_TESTS, //table
+                values, // column/value
+                KEY_ID+" = ?", // selections
+                new String[] { test.getId()+"" }); //selection args
+     
+        Log.w("homework", test.toString());
         // 4. close
         db.close();
      
@@ -221,6 +295,39 @@ public class NUSBuddyDatabaseHelper extends SQLiteOpenHelper {
         return events;
 	}
 	
+	public ArrayList<EventTest> getAllEventTestsBetween(long now, long then) {
+		ArrayList<EventTest> events = new ArrayList<EventTest>();
+		
+		// 1. build query
+		String query = "SELECT * FROM " + TABLE_HOMEWORK + " WHERE " + KEY_UNIX_TIME + " BETWEEN ? AND ?";
+		
+		// 2. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, new String[] {now+"", then+""} );
+		
+        // 3. go over each row, build homework and add it to list
+        if (cursor.moveToFirst()) {
+            do { 
+            	EventTest test = new EventTest();
+				test.setId(cursor.getInt(0)); 
+				test.setModule(cursor.getString(1));
+				test.setTitle(cursor.getString(2));
+				test.setUnixTime(cursor.getLong(3));
+				test.setLocation(cursor.getString(4));
+				test.setDescription(cursor.getString(5));
+				test.setOnlyDateSet(cursor.getInt(6) == 1);
+            	
+                // Add homework to events
+            	events.add(test); 
+            	
+            } while (cursor.moveToNext());
+        }
+        
+        Log.w("eventsbetween", events.toString());
+        // return events
+        return events;
+	}
+	
 	
 	/**
 	 * gets all events corresponding to a certain module
@@ -261,6 +368,39 @@ public class NUSBuddyDatabaseHelper extends SQLiteOpenHelper {
         return events;
 	}
 	
+	public ArrayList<EventTest> getAllEventTestsFrom(String moduleCode) {
+		ArrayList<EventTest> events = new ArrayList<EventTest>();
+		
+		// 1. build query
+		String query = "SELECT * FROM " + TABLE_HOMEWORK + " WHERE " + KEY_MODULE + " = ?";
+		
+		// 2. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, new String[] {moduleCode} );
+		
+        // 3. go over each row, build homework and add it to list
+        if (cursor.moveToFirst()) {
+            do { 
+            	EventTest test = new EventTest();
+				test.setId(cursor.getInt(0)); 
+				test.setModule(cursor.getString(1));
+				test.setTitle(cursor.getString(2));
+				test.setUnixTime(cursor.getLong(3));
+				test.setLocation(cursor.getString(4));
+				test.setDescription(cursor.getString(5));
+				test.setOnlyDateSet(cursor.getInt(6) == 1);
+            	
+                // Add homework to events
+            	events.add(test); 
+            	
+            } while (cursor.moveToNext());
+        }
+        
+        Log.w("eventsbetween", events.toString());
+        // return events
+        return events;
+	}
+	
 	/**
 	 * gets all events in the db
 	 * @return an arraylist containing all the events in the db
@@ -269,7 +409,7 @@ public class NUSBuddyDatabaseHelper extends SQLiteOpenHelper {
         ArrayList<EventHomework> events = new ArrayList<EventHomework>();
   
         // 1. build the query
-        String query = "SELECT  * FROM " + TABLE_HOMEWORK;
+        String query = "SELECT * FROM " + TABLE_HOMEWORK;
   
         // 2. get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
@@ -309,6 +449,21 @@ public class NUSBuddyDatabaseHelper extends SQLiteOpenHelper {
         db.delete(TABLE_HOMEWORK, //table name
                 KEY_ID+" = ?",  // selections
                 new String[] { String.valueOf(homework.getId()) }); //selections args
+ 
+        // 3. close
+        db.close();
+ 
+    }
+	
+	public void deleteEventTest(EventTest test) {
+	   	 
+        // 1. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+ 
+        // 2. delete
+        db.delete(TABLE_TESTS, //table name
+                KEY_ID+" = ?",  // selections
+                new String[] { String.valueOf(test.getId()) }); //selections args
  
         // 3. close
         db.close();
