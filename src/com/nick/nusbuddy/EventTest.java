@@ -7,7 +7,6 @@ import android.util.Log;
 
 public class EventTest extends Event {
 	
-
 	private String location;
 	
 	public EventTest() {
@@ -49,6 +48,7 @@ public class EventTest extends Event {
 			obj.put("module", getModule());
 			obj.put("title", getTitle());
 			obj.put("unixTime", getUnixTime());
+			obj.put("location", getLocation());
 			obj.put("onlyDateSet", isOnlyDateSet());
 			obj.put("description", getDescription());
 			obj.put("onlyDateSet", isOnlyDateSet());

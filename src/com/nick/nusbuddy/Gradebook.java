@@ -216,7 +216,7 @@ public class Gradebook extends RefreshableActivity implements ModulesAsyncTaskLi
 		
 		
 		// FOR TESTING PURPOSES ONLY
-		for (int h = 0; h < 10; h++) {
+		//for (int h = 0; h < 10; h++) {
 		// THIS WILL DUPLICATE MODULES 4 TIMES TO SIMULATE MANY MODULES
 		
 			
@@ -339,7 +339,7 @@ public class Gradebook extends RefreshableActivity implements ModulesAsyncTaskLi
 		
 		
 		// THE DEBUG } IS HERE
-		}
+		//}
 		// THE DEBUG } IS HERE
 		
 		pd.dismiss();

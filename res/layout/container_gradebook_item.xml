@@ -12,7 +12,7 @@
 
     <TextView
         android:id="@+id/TextView_item_name_value"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:maxLines="1"
@@ -39,7 +39,7 @@
     
     <TextView
         android:id="@+id/TextView_item_grade_value"
-        android:layout_weight="1"
+        android:layout_weight="0.5"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:maxLines="1"
