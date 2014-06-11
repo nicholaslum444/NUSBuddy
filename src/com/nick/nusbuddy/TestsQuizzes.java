@@ -14,7 +14,7 @@ public class TestsQuizzes extends BaseActivity {
 
 	@Override
 	protected int getCurrentActivityLayout() {
-		return R.layout.activity_tests_quizzes;
+		return R.layout.contents_test_quizzes;
 	}
 	
 	@Override
