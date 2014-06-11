@@ -21,10 +21,10 @@ import android.widget.Toast;
 
 public class HomePage extends BaseActivity {
 	
-	class UnixTimeComparator implements Comparator<Event> {
+	class UnixTimeComparator implements Comparator<EventHomework> {
 		
 		@Override
-		public int compare(Event e1, Event e2) {
+		public int compare(EventHomework e1, EventHomework e2) {
 			
 			// TODO Auto-generated method stub
 			if (e1.getUnixTime() < e2.getUnixTime()) {
@@ -91,13 +91,13 @@ public class HomePage extends BaseActivity {
     	NUSBuddyDatabaseHelper db = new NUSBuddyDatabaseHelper(this);
     	
     	// TODO allow user to change how many days of homrwork to show
-    	ArrayList<Event> eventsDueSoon = db.getAllEventsBetween(System.currentTimeMillis(), System.currentTimeMillis()+86400000);
+    	ArrayList<EventHomework> eventsDueSoon = db.getAllEventHomeworksBetween(System.currentTimeMillis(), System.currentTimeMillis()+86400000);
     	Collections.sort(eventsDueSoon, new UnixTimeComparator());
     	
     	LinearLayout homeworkListLayout = (LinearLayout) findViewById(R.id.Layout_home_page_homework_list);
     	for (int i = 0; i < eventsDueSoon.size(); i++) {
     		
-    		Event e = eventsDueSoon.get(i);
+    		EventHomework e = eventsDueSoon.get(i);
     		
     		View.inflate(this, R.layout.container_homepage_homework_item, homeworkListLayout);
     		LinearLayout newHomeworkLayout = (LinearLayout) homeworkListLayout.findViewById(R.id.layout_homepage_homework_item);

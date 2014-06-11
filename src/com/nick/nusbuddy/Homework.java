@@ -161,12 +161,7 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener {
 	@Override
 	protected void createPageContents() {
 		
-		// get a list of all events in the database
-		ArrayList<Event> allEvents = database.getAllEvents();
-		Log.w("events", allEvents.toString());
-		
 		LinearLayout layoutHomework = (LinearLayout) findViewById(R.id.Layout_homework);
-		
 		
 		// FOR TESTING PURPOSES ONLY
 		//for (int h = 0; h < 3; h++) {
@@ -190,39 +185,39 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener {
 				// setting a tag to keep track of the module code textview since we change its id later
 				containerName.setTag("moduleCode");
 				
-				ArrayList<Event> thisModuleEvents = database.getAllEvents(moduleCode);
-				Log.w("this mods", thisModuleEvents.toString());
-				// for each event under this module
-				for (int j = 0; j < thisModuleEvents.size(); j++) {
-					Event event = thisModuleEvents.get(j);
+				ArrayList<EventHomework> thisModuleHomeworks = database.getAllEventHomeworksFrom(moduleCode);
+				Log.w("this mods", thisModuleHomeworks.toString());
+				// for each homework under this module
+				for (int j = 0; j < thisModuleHomeworks.size(); j++) {
+					EventHomework homework = thisModuleHomeworks.get(j);
 					
 					View.inflate(this, R.layout.container_homework_module_item, containerForItems);
 					LinearLayout layoutItem = (LinearLayout) containerForItems.findViewById(R.id.Layout_homework_module_item);
 					
 					TextView itemTitle = (TextView) layoutItem.findViewById(R.id.TextView_homework_item_title);
-					itemTitle.setText(event.getTitle());
+					itemTitle.setText(homework.getTitle());
 					
-					long unixTime = event.getUnixTime();
+					long unixTime = homework.getUnixTime();
 					Calendar cal = Calendar.getInstance();
 			    	cal.setTimeInMillis(unixTime);
 			    	SimpleDateFormat sdf;
 			    	
-			    	if (event.isOnlyDateSet()) {
-			    		if (event.isRecurWeekly()) {
+			    	if (homework.isOnlyDateSet()) {
+			    		if (homework.isRecurWeekly()) {
 			    			sdf = new SimpleDateFormat(DATE_FORMAT_RECUR_WEEKLY, Locale.US);
-				    	} else if (event.isRecurEvenWeek()) {
+				    	} else if (homework.isRecurEvenWeek()) {
 				    		sdf = new SimpleDateFormat(DATE_FORMAT_RECUR_EVEN, Locale.US);
-				    	} else if (event.isRecurOddWeek()) {
+				    	} else if (homework.isRecurOddWeek()) {
 				    		sdf = new SimpleDateFormat(DATE_FORMAT_RECUR_ODD, Locale.US);
 				    	} else {
 				    		sdf = new SimpleDateFormat(DATE_FORMAT_NO_RECUR, Locale.US);
 				    	}
 			    	} else {
-			    		if (event.isRecurWeekly()) {
+			    		if (homework.isRecurWeekly()) {
 			    			sdf = new SimpleDateFormat(DATE_TIME_FORMAT_RECUR_WEEKLY, Locale.US);
-				    	} else if (event.isRecurEvenWeek()) {
+				    	} else if (homework.isRecurEvenWeek()) {
 				    		sdf = new SimpleDateFormat(DATE_TIME_FORMAT_RECUR_EVEN, Locale.US);
-				    	} else if (event.isRecurOddWeek()) {
+				    	} else if (homework.isRecurOddWeek()) {
 				    		sdf = new SimpleDateFormat(DATE_TIME_FORMAT_RECUR_ODD, Locale.US);
 				    	} else {
 				    		sdf = new SimpleDateFormat(DATE_TIME_FORMAT_NO_RECUR, Locale.US);
@@ -346,7 +341,7 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener {
  	}
  	
  	public void clear(View v) {
- 		database.deleteAllEvents();
+ 		database.deleteAllEventHomeworks();
  		refreshContents();
  	}
 	

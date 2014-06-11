@@ -16,24 +16,13 @@
 	    android:paddingTop="@dimen/activity_vertical_margin" >
 
 	    <EditText
-	        android:id="@+id/eventTitleEditText"
+	        android:id="@+id/homeworkTitleEditText"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:ems="10"
 	        android:hint="Event title"
 	        android:inputType="textCapWords" >"
 	        <requestFocus />
-	    </EditText>
-	
-	    <EditText
-	        android:id="@+id/eventLocationEditText"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:ems="10"
-	        android:hint="Event Location"
-	        android:inputType="textCapWords"
-	        android:textAppearance="?android:attr/textAppearanceMediumInverse" >
-	
 	    </EditText>
 	
 	    <LinearLayout
@@ -137,27 +126,27 @@
 	            android:layout_width="0dp"
 	            android:layout_height="wrap_content"
 	            android:padding="5dp"
-	            android:onClick="cancelEvent"
+	            android:onClick="cancelButtonPressed"
 	            android:text="@string/Button_cancel_event" />
 	
 	        <Button
-	            android:id="@+id/editEventButton"
+	            android:id="@+id/editButton"
 	            style="android:buttonBarButtonStyle"
 	            android:layout_weight="1"
 	            android:layout_width="0dp"
 	            android:layout_height="wrap_content"
 	            android:padding="5dp"
-	            android:onClick="editEvent"
+	            android:onClick="editButtonPressed"
 	            android:text="@string/Button_save_edit_event" />
 	
 	        <Button
-	            android:id="@+id/addEventButton"
+	            android:id="@+id/addButton"
 	            style="android:buttonBarButtonStyle"
 	            android:layout_weight="1"
 	            android:layout_width="0dp"
 	            android:layout_height="wrap_content"
 	            android:padding="5dp"
-	            android:onClick="addEvent"
+	            android:onClick="addButtonPressed"
 	            android:text="@string/Button_add_event" />
 	
 	    </LinearLayout>

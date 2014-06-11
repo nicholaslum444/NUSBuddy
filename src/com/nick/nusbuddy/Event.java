@@ -13,20 +13,16 @@ import android.util.Log;
  * @author Nicholas
  *
  */
-public class Event {
+public abstract class Event {
 	
 	// event id is set by the database as the row primary key. 
 	
 	private int id;
 	private String module;
 	private String title;
-	private String location;
 	private long unixTime;
 	private boolean onlyDateSet;
 	private String description;
-	private boolean recurWeekly;
-	private boolean recurEvenWeek;
-	private boolean recurOddWeek;
 	private JSONObject jsonRepresentation;
 
 	/**
@@ -46,15 +42,11 @@ public class Event {
 		setId(obj.getInt("id"));
 		setModule(obj.getString("module"));
 		setTitle(obj.getString("title"));
-		setLocation(obj.getString("location"));
 		setUnixTime(obj.getLong("unixTime"));
 		setOnlyDateSet(obj.getBoolean("onlyDateSet"));
 		setDescription(obj.getString("description"));
-		setRecurWeekly(obj.getBoolean("recurWeekly"));
-		setRecurEvenWeek(obj.getBoolean("recurEvenWeek"));
-		setRecurOddWeek(obj.getBoolean("recurOddWeek"));
 		setOnlyDateSet(obj.getBoolean("onlyDateSet"));
-		jsonRepresentation = obj;
+		setJsonRepresentation(obj);
 	}
 	
 	public Event(String string) throws JSONException {
@@ -62,15 +54,11 @@ public class Event {
 		setId(obj.getInt("id"));
 		setModule(obj.getString("module"));
 		setTitle(obj.getString("title"));
-		setLocation(obj.getString("location"));
 		setUnixTime(obj.getLong("unixTime"));
 		setOnlyDateSet(obj.getBoolean("onlyDateSet"));
 		setDescription(obj.getString("description"));
-		setRecurWeekly(obj.getBoolean("recurWeekly"));
-		setRecurEvenWeek(obj.getBoolean("recurEvenWeek"));
-		setRecurOddWeek(obj.getBoolean("recurOddWeek"));
 		setOnlyDateSet(obj.getBoolean("onlyDateSet"));
-		jsonRepresentation = obj;
+		setJsonRepresentation(obj);
 	}
 
 	public int getId() {
@@ -97,14 +85,6 @@ public class Event {
 		this.title = title;
 	}
 
-	public String getLocation() {
-		return location;
-	}
-
-	public void setLocation(String location) {
-		this.location = location;
-	}
-
 	public long getUnixTime() {
 		return unixTime;
 	}
@@ -129,71 +109,14 @@ public class Event {
 		this.description = description;
 	}
 
-	public boolean isRecur() {
-		return recurWeekly || recurEvenWeek || recurOddWeek;
+	public abstract JSONObject makeJsonRepresentation();
+	
+	public JSONObject getJsonRepresentation() {
+		return this.jsonRepresentation;
 	}
 
-	public boolean isRecurWeekly() {
-		return recurWeekly;
-	}
-
-	public void setRecurWeekly(boolean recurWeekly) {
-		if (recurWeekly) {
-			setRecurEvenWeek(false);
-			setRecurOddWeek(false);
-		}
-		this.recurWeekly = recurWeekly;
-	}
-
-	public boolean isRecurEvenWeek() {
-		return recurEvenWeek;
-	}
-	
-	public boolean isRecurOddWeek() {
-		return recurOddWeek;
-	}
-	
-	public void setRecurEvenWeek(boolean recurEvenWeek) {
-		if (recurEvenWeek) {
-			setRecurWeekly(false);
-			setRecurOddWeek(false);
-		}
-		this.recurEvenWeek = recurEvenWeek;
-	}
-	
-	public void setRecurOddWeek(boolean recurOddWeek) {
-		if (recurOddWeek) {
-			setRecurWeekly(false);
-			setRecurEvenWeek(false);
-		}
-		this.recurOddWeek = recurOddWeek;
-	}
-	/**
-	 * This method makes a JSON representation of the object from the information 
-	 * it holds.
-	 * @return the JSONObject that holds all the information, or null if there's 
-	 * a JSONException while putting information.
-	 */
-	public JSONObject makeJsonRepresentation() {
-		JSONObject obj = new JSONObject();
-		try {
-			obj.put("id", id);
-			obj.put("module", module);
-			obj.put("title", title);
-			obj.put("location", location);
-			obj.put("unixTime", unixTime);
-			obj.put("onlyDateSet", onlyDateSet);
-			obj.put("description", description);
-			obj.put("recurWeekly", recurWeekly);
-			obj.put("recurEvenWeek", recurEvenWeek);
-			obj.put("recurOddWeek", recurOddWeek);
-			obj.put("onlyDateSet", onlyDateSet);
-			jsonRepresentation = obj;
-		} catch (JSONException e) {
-			e.printStackTrace();
-			jsonRepresentation = null;
-		}
-		return jsonRepresentation;
+	public void setJsonRepresentation(JSONObject jsonRepresentation) {
+		this.jsonRepresentation = jsonRepresentation;
 	}
 	
 	/**
@@ -209,9 +132,8 @@ public class Event {
 			Log.w("fail", "you fail");
 			return null;
 		} else {
-			Log.w("fail", obj.toString());
+			Log.w("obj made", obj.toString());
 			return obj.toString();
 		}
 	}
-
 }

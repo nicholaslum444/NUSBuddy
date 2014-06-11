@@ -27,7 +27,7 @@ import android.widget.TextView;
 
 public class ViewHomework extends Activity {
 	
-	ArrayList<Event> thisModuleItems;
+	ArrayList<EventHomework> thisModuleItems;
 	
 	String moduleCode;
 	
@@ -59,17 +59,17 @@ public class ViewHomework extends Activity {
 		database = new NUSBuddyDatabaseHelper(this);
 		
 		String moduleCode = getIntent().getExtras().getString("moduleCode");
-		thisModuleItems = database.getAllEvents(moduleCode);
+		thisModuleItems = database.getAllEventHomeworksFrom(moduleCode);
 		
 		LinearLayout layoutViewHomework = (LinearLayout) findViewById(R.id.Layout_view_homework);
 		
 		ListView list = (ListView)findViewById(R.id.ListView_homework_items);
 
         // Creating the list adapter and populating the list
-        ArrayAdapter<Event> listAdapter = new EventListAdapter(this, R.layout.container_view_homework_item);
+        ArrayAdapter<EventHomework> listAdapter = new EventListAdapter(this, R.layout.container_view_homework_item);
 		
-		for (Event event : thisModuleItems) {
-			listAdapter.add(event);
+		for (EventHomework homework : thisModuleItems) {
+			listAdapter.add(homework);
 		}
 		
 		list.setAdapter(listAdapter);
@@ -107,7 +107,7 @@ public class ViewHomework extends Activity {
 		}
 	}
 	
-	class EventListAdapter extends ArrayAdapter<Event> {
+	class EventListAdapter extends ArrayAdapter<EventHomework> {
 
         public EventListAdapter(Context context, int textViewResourceId) {
             super(context, textViewResourceId);
@@ -120,37 +120,37 @@ public class ViewHomework extends Activity {
                 convertView = getLayoutInflater().inflate(R.layout.container_view_homework_item, null);
             }
             
-            // logic for filling up the event details
-            Event event = getItem(position);
-            convertView.setTag(event);
+            // logic for filling up the homework details
+            EventHomework homework = getItem(position);
+            convertView.setTag(homework);
             
 			LinearLayout hiddenLayout = (LinearLayout) convertView.findViewById(R.id.Layout_homework_item_hidden);
 			hiddenLayout.setTag("hiddenLayout");
 			
 			TextView itemTitle = (TextView) convertView.findViewById(R.id.TextView_homework_item_title);
-			itemTitle.setText(event.getTitle());
+			itemTitle.setText(homework.getTitle());
 			
-			long unixTime = event.getUnixTime();
+			long unixTime = homework.getUnixTime();
 			Calendar cal = Calendar.getInstance();
 	    	cal.setTimeInMillis(unixTime);
 	    	SimpleDateFormat sdf;
 	    	// TODO set different text for recur vs no recur
-	    	if (event.isOnlyDateSet()) {
-	    		if (event.isRecurWeekly()) {
+	    	if (homework.isOnlyDateSet()) {
+	    		if (homework.isRecurWeekly()) {
 	    			sdf = new SimpleDateFormat(DATE_FORMAT_RECUR_WEEKLY, Locale.US);
-		    	} else if (event.isRecurEvenWeek()) {
+		    	} else if (homework.isRecurEvenWeek()) {
 		    		sdf = new SimpleDateFormat(DATE_FORMAT_RECUR_EVEN, Locale.US);
-		    	} else if (event.isRecurOddWeek()) {
+		    	} else if (homework.isRecurOddWeek()) {
 		    		sdf = new SimpleDateFormat(DATE_FORMAT_RECUR_ODD, Locale.US);
 		    	} else {
 		    		sdf = new SimpleDateFormat(DATE_FORMAT_NO_RECUR, Locale.US);
 		    	}
 	    	} else {
-	    		if (event.isRecurWeekly()) {
+	    		if (homework.isRecurWeekly()) {
 	    			sdf = new SimpleDateFormat(DATE_TIME_FORMAT_RECUR_WEEKLY, Locale.US);
-		    	} else if (event.isRecurEvenWeek()) {
+		    	} else if (homework.isRecurEvenWeek()) {
 		    		sdf = new SimpleDateFormat(DATE_TIME_FORMAT_RECUR_EVEN, Locale.US);
-		    	} else if (event.isRecurOddWeek()) {
+		    	} else if (homework.isRecurOddWeek()) {
 		    		sdf = new SimpleDateFormat(DATE_TIME_FORMAT_RECUR_ODD, Locale.US);
 		    	} else {
 		    		sdf = new SimpleDateFormat(DATE_TIME_FORMAT_NO_RECUR, Locale.US);
@@ -163,18 +163,18 @@ public class ViewHomework extends Activity {
 	    	
 	    	//LinearLayout hiddenTextViews = (LinearLayout) convertView.findViewById(R.id.Layout_homework_item_hidden_textviews);
 	    	
-	    	if (event.getLocation() != null && event.getLocation().length() > 0) {
+	    	/*if (homework.getLocation() != null && homework.getLocation().length() > 0) {
 	    		TextView tt = (TextView) convertView.findViewById(R.id.Layout_homework_item_hidden_location);
-	    		tt.setText("Location: " + event.getLocation());
+	    		tt.setText("Location: " + homework.getLocation());
 	    		tt.setVisibility(View.VISIBLE);
-	    		Log.w("location", event.getTitle());
-	    	}
+	    		Log.w("location", homework.getTitle());
+	    	}*/
 	    	
-	    	if (event.getDescription() != null && event.getDescription().length() > 0) {
+	    	if (homework.getDescription() != null && homework.getDescription().length() > 0) {
 	    		TextView dd = (TextView) convertView.findViewById(R.id.Layout_homework_item_hidden_description);
-	    		dd.setText("Description: " + event.getDescription());
+	    		dd.setText("Description: " + homework.getDescription());
 	    		dd.setVisibility(View.VISIBLE);
-	    		Log.w("desctp", event.getTitle());
+	    		Log.w("desctp", homework.getTitle());
 	    	}
             
             // end logic
@@ -213,16 +213,16 @@ public class ViewHomework extends Activity {
 	}
 	
 	public void deleteItemConfirm(View v) {
-		Event e = (Event) ((View) v.getParent().getParent().getParent().getParent()).getTag();
-		database.deleteEvent(e);
+		EventHomework e = (EventHomework) ((View) v.getParent().getParent().getParent().getParent()).getTag();
+		database.deleteEventHomework(e);
 		getIntent().putExtra("changed", true);
 		refreshContents();
 	}
 	
 	public void editItem(View v) {
-		Event e = (Event) ((View) v.getParent().getParent().getParent().getParent()).getTag();
+		EventHomework e = (EventHomework) ((View) v.getParent().getParent().getParent().getParent()).getTag();
 		getIntent().putExtra("edit", true);
-		getIntent().putExtra("event", e.toString());
+		getIntent().putExtra("homework", e.toString());
 		Intent i = new Intent(this, AddHomework.class);
 		i.putExtras(getIntent());
 		startActivityForResult(i, REQUEST_CODE_FOR_EDIT);

@@ -53,8 +53,7 @@ public class AddHomework extends Activity {
 	
 	DateTimeInfo dtf;
 	
-	EditText eventTitleEditText;
-	EditText eventLocationEditText;
+	EditText homeworkTitleEditText;
 	EditText descriptionEditText;
 	
 	TextView dueDateTextView;
@@ -69,11 +68,11 @@ public class AddHomework extends Activity {
 	RadioButton recurOddWeekButton;
 	RadioButton recurEvenWeekButton;
 	
-	Button addEventButton;
+	Button addButton;
 	Button cancelButton;
 	Button editButton;
 	
-	Event eventToEdit;
+	EventHomework homeworkToEdit;
 	
 	NUSBuddyDatabaseHelper database;
 	
@@ -96,8 +95,7 @@ public class AddHomework extends Activity {
 		
 		dtf = new DateTimeInfo();
 		
-		eventTitleEditText = (EditText) findViewById(R.id.eventTitleEditText);
-		eventLocationEditText = (EditText) findViewById(R.id.eventLocationEditText);
+		homeworkTitleEditText = (EditText) findViewById(R.id.homeworkTitleEditText);
 		descriptionEditText = (EditText) findViewById(R.id.descriptionEditText);
 		
 		dueDateTextView = (TextView) findViewById(R.id.dueDateTextView);
@@ -120,9 +118,9 @@ public class AddHomework extends Activity {
 			}
 		});
 		
-		addEventButton = (Button) findViewById(R.id.addEventButton);
+		addButton = (Button) findViewById(R.id.addButton);
 		cancelButton = (Button) findViewById(R.id.cancelButton);
-		editButton = (Button) findViewById(R.id.editEventButton);
+		editButton = (Button) findViewById(R.id.editButton);
 		
 		incomingIntent = this.getIntent();
 		if (incomingIntent.getExtras().containsKey("moduleCode")) {
@@ -134,22 +132,21 @@ public class AddHomework extends Activity {
 		if (getIntent().getExtras().getBoolean("edit")) {
 			
 			// kill the add button, so only the edit button is visible
-			addEventButton.setVisibility(View.GONE);
-			// retrieve the event string
-			String eventString = getIntent().getExtras().getString("event");
+			addButton.setVisibility(View.GONE);
+			// retrieve the homework string
+			String homeworkString = getIntent().getExtras().getString("homework");
 			
 			try {
-				eventToEdit = new Event(eventString);
+				homeworkToEdit = new EventHomework(homeworkString);
 				
 				// logic to fill up the details
 				
-				eventTitleEditText.setText(eventToEdit.getTitle());
-				eventLocationEditText.setText(eventToEdit.getLocation());
-				descriptionEditText.setText(eventToEdit.getDescription());
+				homeworkTitleEditText.setText(homeworkToEdit.getTitle());
+				descriptionEditText.setText(homeworkToEdit.getDescription());
 				
 				//get formatted date and time
 				
-				long unixTime = eventToEdit.getUnixTime();
+				long unixTime = homeworkToEdit.getUnixTime();
 				Calendar cal = Calendar.getInstance();
 		    	cal.setTimeInMillis(unixTime);
 		    	
@@ -162,7 +159,7 @@ public class AddHomework extends Activity {
 	            dueDateTextView.setText(SDF_DATE_FIELD.format(cal.getTime()));
             	dtf.dateSet = true;
 	            
-            	if (!eventToEdit.isOnlyDateSet()) { // time is set
+            	if (!homeworkToEdit.isOnlyDateSet()) { // time is set
             		// fill up the time field
     	            
 		    		String dateTimeString = SDF_TIME_FIELD.format(cal.getTime());
@@ -172,15 +169,15 @@ public class AddHomework extends Activity {
             	
 				
 				//check checkboxes and radio buttons
-				if (eventToEdit.isRecur()) {
+				if (homeworkToEdit.isRecur()) {
 					
 					recurCheckBox.setChecked(true);
 					recurRadioGroup.setVisibility(View.VISIBLE);
 					
-					if (eventToEdit.isRecurWeekly()) {
+					if (homeworkToEdit.isRecurWeekly()) {
 						recurWeeklyRadioButton.setChecked(true);
 						
-					} else if (eventToEdit.isRecurEvenWeek()) {
+					} else if (homeworkToEdit.isRecurEvenWeek()) {
 						recurEvenWeekButton.setChecked(true);
 						
 					} else {
@@ -194,7 +191,7 @@ public class AddHomework extends Activity {
 				// end logic
 				
 				
-			} catch (JSONException e) { // poblem with creating event
+			} catch (JSONException e) { // poblem with creating homework
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -205,24 +202,21 @@ public class AddHomework extends Activity {
 	}
 	
 	private void showTitleEmptyError() {
-		eventTitleEditText.setError("Required fields");
+		homeworkTitleEditText.setError("Required field");
 	}
 	
 	private void showDateEmptyError() {
-		dueDateTextView.setError("Required fields");
+		dueDateTextView.setError("Required field");
 	}
 	
 	private void showInvalidTimeError() {
-		//Toast.makeText(this, "Invalid due date", Toast.LENGTH_LONG).show();
+		Toast.makeText(this, "Invalid due date", Toast.LENGTH_LONG).show();
 		dueTimeTextView.setError("Invalid due date");
 	}
 	
-	public Event putInformationIntoEvent(Intent output) throws InvalidTimeException, EmptyTitleFieldException, EmptyDateFieldException {
-		Event event = new Event();
-		String eventTitle = eventTitleEditText.getText().toString(); 
-		String eventLocation = eventLocationEditText.getText().toString();
-		
-		//Log.w("loc", eventLocation);
+	public EventHomework putInformationIntoEvent(Intent output) throws InvalidTimeException, EmptyTitleFieldException, EmptyDateFieldException {
+		EventHomework homework = new EventHomework();
+		String homeworkTitle = homeworkTitleEditText.getText().toString();
 		
 		String date = dueDateTextView.getText().toString();
 		String description = descriptionEditText.getText().toString();
@@ -235,7 +229,7 @@ public class AddHomework extends Activity {
 		}
 		long unixTimeValue = c.getTimeInMillis();
 		
-		if (eventTitle == null || eventTitle.length() == 0) {
+		if (homeworkTitle == null || homeworkTitle.length() == 0) {
 			throw new EmptyTitleFieldException();
 			
 		} else if (date == null || date.length() == 0) {
@@ -245,43 +239,42 @@ public class AddHomework extends Activity {
 			throw new InvalidTimeException();
 			
 		} else {
-			event.setModule(output.getExtras().getString("moduleCode"));
-			event.setTitle(eventTitle);
-			event.setLocation(eventLocation);
-			event.setDescription(description);
-			event.setUnixTime(unixTimeValue);
-			event.setOnlyDateSet(dueTimeTextView.getText().length() == 0);
+			homework.setModule(output.getExtras().getString("moduleCode"));
+			homework.setTitle(homeworkTitle);
+			homework.setDescription(description);
+			homework.setUnixTime(unixTimeValue);
+			homework.setOnlyDateSet(dueTimeTextView.getText().length() == 0);
 			
 			if (recurCheckBox.isChecked()) {
 				RadioButton rb = (RadioButton)findViewById(recurRadioGroup.getCheckedRadioButtonId());
 				switch (rb.getId()) {
 				case R.id.RadioButtonRecurWeekly:
 					output.putExtra("recurWeekly", true);
-					event.setRecurWeekly(true);
+					homework.setRecurWeekly(true);
 					break;
 				case R.id.RadioButtonEvenWeek:
 					output.putExtra("recurEvenWeek", true);
-					event.setRecurEvenWeek(true);
+					homework.setRecurEvenWeek(true);
 					break;
 				case R.id.RadioButtonOddWeek:
 					output.putExtra("recurOddWeek", true);
-					event.setRecurOddWeek(true);
+					homework.setRecurOddWeek(true);
 					break;
 				}
 			}
 		}
-		return event;
+		return homework;
 	}
 	
 	// EDIT BUTTON
-	public void editEvent(View v) {
+	public void editButtonPressed(View v) {
 		Intent output = this.getIntent();
-		Event event;
+		EventHomework homework;
 		try {
-			event = putInformationIntoEvent(output);
+			homework = putInformationIntoEvent(output);
 			
-			event.setId(eventToEdit.getId());
-			database.updateEvent(event);
+			homework.setId(homeworkToEdit.getId());
+			database.updateEventHomework(homework);
 			output.putExtra("changed", true);
 			
 			setResult(RESULT_OK, output);
@@ -305,13 +298,13 @@ public class AddHomework extends Activity {
 		}
 	}
 	
-	public void addEvent(View v) {
+	public void addButtonPressed(View v) {
 		Intent output = this.getIntent();
-		Event event;
+		EventHomework homework;
 		try {
-			event = putInformationIntoEvent(output);
+			homework = putInformationIntoEvent(output);
 			
-			database.addEvent(event);
+			database.addEventHomework(homework);
 			
 			setResult(RESULT_OK, output);
 			finish();
@@ -334,7 +327,7 @@ public class AddHomework extends Activity {
 		}
 	}
 	
-	public void cancelEvent(View v) {
+	public void cancelButtonPressed(View v) {
 		finish();
 	}
 	
@@ -380,7 +373,7 @@ public class AddHomework extends Activity {
 		
 		if (!dtf.timeSet) {
         	Calendar c = Calendar.getInstance();
-            dtf.hour = c.get(Calendar.HOUR);
+            dtf.hour = c.get(Calendar.HOUR_OF_DAY);
             dtf.minute = c.get(Calendar.MINUTE);
         }
 
@@ -389,13 +382,6 @@ public class AddHomework extends Activity {
        	 
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            	
-                	
-                //Displaying noon and midnight
-            	/*if (hourOfDay == 0 || hourOfDay == 12) {
-            		hourOfDay = 12;
-            	}*/
-            	
             
             	// Display Selected time in textbox
             	Calendar c = Calendar.getInstance();
@@ -411,7 +397,7 @@ public class AddHomework extends Activity {
         TimePickerDialog tpd = new TimePickerDialog(AddHomework.this, tpdl, dtf.hour, dtf.minute, false);
         
         // making a "clear" button to unset the time
-        tpd.setButton(TimePickerDialog.BUTTON_NEUTRAL, (CharSequence)"Clear", new DialogInterface.OnClickListener() {
+        tpd.setButton(TimePickerDialog.BUTTON_NEUTRAL, "Clear", new DialogInterface.OnClickListener() {
         	
 			@Override
 			public void onClick(DialogInterface dialog, int which) {

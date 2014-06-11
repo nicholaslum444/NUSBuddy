@@ -111,7 +111,7 @@ public class NUSBuddySQLiteOpenHelper extends SQLiteOpenHelper {
             // 4. build book object
 	        try {
 				JSONObject obj = new JSONObject(cursor.getString(1));
-				event = new Event(obj);
+				event = new EventHomework(obj);
 				event.setModule(cursor.getString(0));
 				//log 
 		        Log.w("getBook("+id+")", event.toString());
@@ -140,7 +140,7 @@ public class NUSBuddySQLiteOpenHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
             	try {
-					event = new Event(cursor.getString(2));
+					event = new EventHomework(cursor.getString(2));
 					event.setId(Integer.parseInt(cursor.getString(0)));
 	            	event.setModule(cursor.getString(1));
 				} catch (JSONException e) {
