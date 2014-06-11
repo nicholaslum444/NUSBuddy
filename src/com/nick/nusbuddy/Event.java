@@ -126,14 +126,5 @@ public abstract class Event {
 	 * Returns null if makeJsonRepresentation() fails.
 	 */
 	@Override
-	public String toString() {
-		JSONObject obj = makeJsonRepresentation();
-		if (obj == null) {
-			Log.w("fail", "you fail");
-			return null;
-		} else {
-			Log.w("obj made", obj.toString());
-			return obj.toString();
-		}
-	}
+	public abstract String toString();
 }
