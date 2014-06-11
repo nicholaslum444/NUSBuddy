@@ -83,7 +83,6 @@ public class Homework extends BaseActivity implements ModulesAsyncTaskListener {
 		super.onCreate(savedInstanceState);
 		createQuickActionBar();
 		
-		//db = new NUSBuddySQLiteOpenHelper(this);
 		database = new NUSBuddyDatabaseHelper(this);
 		
 		//Toast.makeText(this, ""+Build.VERSION.SDK_INT +" "+ Build.VERSION_CODES.JELLY_BEAN_MR1, Toast.LENGTH_LONG).show();

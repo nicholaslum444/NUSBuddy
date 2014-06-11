@@ -3,6 +3,7 @@
     android:id="@+id/Layout_test_quizzes_module_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/view_homework_list_item"
     android:orientation="vertical"
     android:padding="10dp"
     android:layout_gravity="left"
@@ -41,7 +42,7 @@
 		        android:orientation="vertical" >
 		        
 		        <TextView
-			        android:id="@+id/TextView_test_quizzes_item_due"
+			        android:id="@+id/TextView_test_quizzes_item_dueDate"
 			        android:layout_width="wrap_content"
 			        android:layout_height="wrap_content"
 			        android:gravity="left"
@@ -49,7 +50,7 @@
 			        android:textAppearance="?android:attr/textAppearanceSmall" />
 		        
 		        <TextView
-			        android:id="@+id/TextView_test_quizzes_item_due"
+			        android:id="@+id/TextView_test_quizzes_item_dueTime"
 			        android:layout_width="wrap_content"
 			        android:layout_height="wrap_content"
 			        android:gravity="left"
@@ -66,7 +67,61 @@
 			    android:contentDescription="Expand item" />
             
         </LinearLayout>
+        
+        <LinearLayout
+	        android:id="@+id/Layout_test_quizzes_item_hidden"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical"
+	        android:visibility="visible" >
+	
+	        <LinearLayout
+	            android:id="@+id/Layout_test_quizzes_item_hidden_textviews"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:orientation="vertical"
+	            android:visibility="visible" >
 
-    </LinearLayout>
+	            <TextView
+	                android:id="@+id/Layout_test_quizzes_item_hidden_location"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:text="TextView"
+	                android:visibility="gone" 
+	                android:textAppearance="?android:attr/textAppearanceMedium" />
 
+	            <TextView
+	                android:id="@+id/Layout_test_quizzes_item_hidden_description"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:text="TextView" 
+	                android:visibility="gone"
+	                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+	        </LinearLayout>
+	        
+	        <LinearLayout
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:gravity="left" >
+	
+	            <Button
+	                android:id="@+id/Button_delete"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:onClick="deleteItem"
+	                android:text="Delete" />
+	
+	            <Button
+	                android:id="@+id/Button_edit"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:onClick="editItem"
+	                android:text="Edit" />
+	
+	       </LinearLayout>
+
+    	</LinearLayout>
+
+	</LinearLayout>
 </LinearLayout>
