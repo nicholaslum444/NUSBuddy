@@ -57,7 +57,6 @@ public abstract class Event {
 		setUnixTime(obj.getLong("unixTime"));
 		setOnlyDateSet(obj.getBoolean("onlyDateSet"));
 		setDescription(obj.getString("description"));
-		setOnlyDateSet(obj.getBoolean("onlyDateSet"));
 		setJsonRepresentation(obj);
 	}
 

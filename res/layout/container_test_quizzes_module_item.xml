@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/view_homework_list_item"
     android:orientation="vertical"
-    android:padding="10dp"
+    android:padding="5dp"
     android:layout_gravity="left"
     android:divider="@drawable/divider_homework_module_items"
     android:onClick="expandItem" >
@@ -22,19 +22,15 @@
             
             <TextView
 		        android:id="@+id/TextView_test_quizzes_item_title"
-		        android:layout_width="wrap_content"
+		        android:layout_width="0dp"
 		        android:layout_height="wrap_content"
+			    android:layout_weight="1"
 		        android:gravity="left"
+		        android:ellipsize="marquee"
+		        android:singleLine="true"
 		        android:text="Tutorial 3"
 		        android:textAppearance="?android:attr/textAppearanceLarge" />
             
-            <!-- Spacer -->
-		
-		    <View
-			    android:layout_width="0dp"
-			    android:layout_height="match_parent"
-			    android:layout_weight="1">
-			</View>
 			
 		    <LinearLayout
 		        android:layout_width="wrap_content"
@@ -101,6 +97,7 @@
 	        </LinearLayout>
 	        
 	        <LinearLayout
+	            android:id="@+id/Layout_buttons"
 	            android:layout_width="match_parent"
 	            android:layout_height="wrap_content"
 	            android:gravity="left" >

@@ -68,7 +68,7 @@ public class NUSBuddyDatabaseHelper extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		// SQL statement to create hw table
-        String CREATE_HOMEWORK_TABLE = "CREATE TABLE homework ( " +
+        String CREATE_HOMEWORK_TABLE = "CREATE TABLE " + TABLE_HOMEWORK + " ( " +
                 KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
                 KEY_MODULE + " TEXT, " +
                 KEY_TITLE + " TEXT, " + 
@@ -83,7 +83,7 @@ public class NUSBuddyDatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_HOMEWORK_TABLE);
         
      // SQL statement to create hw table
-        String CREATE_TEST_TABLE = "CREATE TABLE homework ( " +
+        String CREATE_TEST_TABLE = "CREATE TABLE " + TABLE_TESTS + " ( " +
                 KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
                 KEY_MODULE + " TEXT, " +
                 KEY_TITLE + " TEXT, " + 
@@ -299,7 +299,7 @@ public class NUSBuddyDatabaseHelper extends SQLiteOpenHelper {
 		ArrayList<EventTest> events = new ArrayList<EventTest>();
 		
 		// 1. build query
-		String query = "SELECT * FROM " + TABLE_HOMEWORK + " WHERE " + KEY_UNIX_TIME + " BETWEEN ? AND ?";
+		String query = "SELECT * FROM " + TABLE_TESTS + " WHERE " + KEY_UNIX_TIME + " BETWEEN ? AND ?";
 		
 		// 2. get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
@@ -372,7 +372,7 @@ public class NUSBuddyDatabaseHelper extends SQLiteOpenHelper {
 		ArrayList<EventTest> events = new ArrayList<EventTest>();
 		
 		// 1. build query
-		String query = "SELECT * FROM " + TABLE_HOMEWORK + " WHERE " + KEY_MODULE + " = ?";
+		String query = "SELECT * FROM " + TABLE_TESTS + " WHERE " + KEY_MODULE + " = ?";
 		
 		// 2. get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
@@ -395,8 +395,8 @@ public class NUSBuddyDatabaseHelper extends SQLiteOpenHelper {
             	
             } while (cursor.moveToNext());
         }
-        
-        Log.w("eventsbetween", events.toString());
+        Log.w("events from", moduleCode);
+        Log.w("events from", events.toString());
         // return events
         return events;
 	}
