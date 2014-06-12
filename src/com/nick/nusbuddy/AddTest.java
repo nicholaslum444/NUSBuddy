@@ -12,6 +12,7 @@ import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -104,12 +105,11 @@ public class AddTest extends Activity {
 			addButton.setVisibility(View.GONE);
 			// retrieve the test string
 			String testString = getIntent().getExtras().getString("test");
-			
+			Log.w("test string", testString);
 			try {
 				testToEdit = new EventTest(testString);
 				
 				// logic to fill up the details
-				
 				testTitleEditText.setText(testToEdit.getTitle());
 				testLocationEditText.setText(testToEdit.getLocation());
 				testDescriptionEditText.setText(testToEdit.getDescription());

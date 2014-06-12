@@ -51,6 +51,7 @@ public class EventTest extends Event {
 			obj.put("unixTime", getUnixTime());
 			obj.put("onlyDateSet", isOnlyDateSet());
 			obj.put("description", getDescription());
+			obj.put("location", getLocation());
 			obj.put("onlyDateSet", isOnlyDateSet());
 			setJsonRepresentation(obj);
 		} catch (JSONException e) {

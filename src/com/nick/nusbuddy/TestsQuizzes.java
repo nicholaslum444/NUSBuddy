@@ -15,17 +15,21 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
 public class TestsQuizzes extends BaseActivity implements ModulesAsyncTaskListener {
 
+	private static final int REQUEST_CODE_FOR_EDIT = 3;
 	private static final int REQUEST_CODE_FOR_VIEW = 2;
 	private static final int REQUEST_CODE_FOR_ADD = 1;
 	private static final int ADD_ITEM_CODE = 0;
@@ -182,11 +186,34 @@ public class TestsQuizzes extends BaseActivity implements ModulesAsyncTaskListen
 						timeField.setText(sdfTime.format(cal.getTime()));
 					}
 					
+					LinearLayout hiddenLayout = (LinearLayout) layoutItem.findViewById(R.id.Layout_test_quizzes_item_hidden);
+					hiddenLayout.setVisibility(View.GONE);
+					
+					if (test.getLocation() != null && test.getLocation().length() > 0) {
+			    		TextView tt = (TextView) hiddenLayout.findViewById(R.id.Layout_test_quizzes_item_hidden_location);
+			    		tt.setText("Location: " + test.getLocation());
+			    		tt.setVisibility(View.VISIBLE);
+			    		Log.w("location", test.getTitle());
+			    	}
+			    	
+			    	if (test.getDescription() != null && test.getDescription().length() > 0) {
+			    		TextView dd = (TextView) hiddenLayout.findViewById(R.id.Layout_test_quizzes_item_hidden_description);
+			    		dd.setText("Description: " + test.getDescription());
+			    		dd.setVisibility(View.VISIBLE);
+			    		Log.w("desctp", test.getTitle());
+			    	}
+			    	
+			    	LinearLayout layoutButtons = (LinearLayout) hiddenLayout.findViewById(R.id.Layout_buttons);
+			    	layoutButtons.setTag(test);
+					
+					
 					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
 						layoutItem.setId(View.generateViewId());
 					} else {
 						layoutItem.setId(new Random().nextInt(Integer.MAX_VALUE));
 					}
+					
+					
 				}
 				
 				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -204,6 +231,22 @@ public class TestsQuizzes extends BaseActivity implements ModulesAsyncTaskListen
 		
 	}
 	
+	public void expandItem(View v) {
+		Log.w("vis", "exp");
+		LinearLayout hiddenLayout = (LinearLayout) v.findViewById(R.id.Layout_test_quizzes_item_hidden);
+		ImageView img = (ImageView) v.findViewById(R.id.Image_expand_collapse);
+		if (hiddenLayout.getVisibility() == View.VISIBLE) {
+			Log.w("vis", "vis");
+			hiddenLayout.setVisibility(View.GONE);
+			img.setRotation(0);
+		} else {
+			Log.w("vis", "gon");
+			hiddenLayout.setVisibility(View.VISIBLE);
+			img.setRotation(180);
+			
+		}
+	}
+	
 	public void addTest(View v) {
 		Intent addIntent = new Intent(TestsQuizzes.this, AddTest.class);
 		LinearLayout ll = (LinearLayout) v.getParent();
@@ -212,13 +255,52 @@ public class TestsQuizzes extends BaseActivity implements ModulesAsyncTaskListen
 	    addIntent.putExtra("moduleCode", moduleCode);
 	    startActivityForResult(addIntent, REQUEST_CODE_FOR_ADD);
 	}
+	
+	public void deleteItem(final View v) { // shows an alert
+		AlertDialog.Builder b = new AlertDialog.Builder(this);
+		b.setCancelable(true);
+		b.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				deleteItemConfirm(v);
+			}
+		});
+		b.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
+		//b.setTitle(((TextView) ((LinearLayout) v.getParent().getParent().getParent().getParent()).findViewById(R.id.TextView_homework_item_title)).getText().toString());
+		b.setMessage("Delete item?");
+		b.create().show();
+	}
+	
+	public void deleteItemConfirm(View v) {
+		LinearLayout layoutButton = (LinearLayout) v.getParent();
+		EventTest e = (EventTest) layoutButton.getTag();
+		database.deleteEventTest(e);
+		getIntent().putExtra("changed", true);
+		refreshContents();
+	}
+	
+	public void editItem(View v) {
+		LinearLayout layoutButton = (LinearLayout) v.getParent();
+		EventTest e = (EventTest) layoutButton.getTag();
+		getIntent().putExtra("edit", true);
+		getIntent().putExtra("moduleCode", e.getModule());
+		getIntent().putExtra("test", e.toString());
+		Intent i = new Intent(this, AddTest.class);
+		i.putExtras(getIntent());
+		startActivityForResult(i, REQUEST_CODE_FOR_EDIT);
+	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_FOR_ADD) {
 			Log.w("onact", "jjj");
 			refreshContents();
-		} else if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_FOR_VIEW) {
+		} else if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_FOR_EDIT) {
 			if (data.getExtras().getBoolean("changed")) {
 				refreshContents();
 			}
