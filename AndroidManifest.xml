@@ -8,8 +8,8 @@
         android:minSdkVersion="16"
         android:targetSdkVersion="19" />
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -18,8 +18,8 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.nick.nusbuddy.Login"
-            android:theme="@style/LoginTheme"
             android:label="@string/app_name"
+            android:theme="@style/LoginTheme"
             android:windowSoftInputMode="adjustResize" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -62,6 +62,10 @@
         <activity
             android:name="com.nick.nusbuddy.ViewHomework"
             android:label="@string/title_activity_view_homework" >
+        </activity>
+        <activity
+            android:name="com.nick.nusbuddy.AddTest"
+            android:label="@string/title_activity_add_test" >
         </activity>
     </application>
 

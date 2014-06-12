@@ -7,16 +7,32 @@
     android:background="@drawable/border"
     android:layout_gravity="center_horizontal"
     android:layout_marginBottom="10dp" >
-    
-    <TextView
-        android:id="@+id/TextView_test_quizzes_module_name"
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:background="@drawable/textview_border"
+        android:orientation="horizontal"
         android:gravity="center"
-        android:text="@string/TextView_announcements_module_code_default"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:background="@drawable/textview_border" >
+
+        <TextView
+            android:id="@+id/TextView_test_quizzes_module_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/TextView_announcements_module_code_default"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <ImageView
+            android:id="@+id/Button_test_quizzes_add_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_action_new"
+            android:paddingRight="10dp"
+            android:onClick="addTest" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/Layout_test_quizzes_module_items"

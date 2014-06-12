@@ -1,16 +1,26 @@
 package com.nick.nusbuddy;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.Random;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.net.ConnectivityManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
@@ -38,14 +48,8 @@ public class TestsQuizzes extends BaseActivity implements ModulesAsyncTaskListen
 	//NUSBuddySQLiteOpenHelper db;
 	private NUSBuddyDatabaseHelper database;
 	
-	final String DATE_FORMAT_NO_RECUR = "EEE, dd MMM yyyy";
-	final String DATE_FORMAT_RECUR_WEEKLY = "'Every' EEE";
-	final String DATE_FORMAT_RECUR_EVEN = "'Every even' EEE";
-	final String DATE_FORMAT_RECUR_ODD = "'Every odd' EEE";
-	final String DATE_TIME_FORMAT_NO_RECUR = "EEE, dd MMM yyyy 'at' h:mm a";
-	final String DATE_TIME_FORMAT_RECUR_WEEKLY = "'Every' EEE 'at' h:mm a";
-	final String DATE_TIME_FORMAT_RECUR_EVEN = "'Every even' EEE 'at' h:mm a";
-	final String DATE_TIME_FORMAT_RECUR_ODD = "'Every odd' EEE 'at' h:mm a";
+	final String DATE_FORMAT = "EEE, dd MMM yyyy";
+	final String TIME_FORMAT = "h:mm a";
 
 	@Override
 	protected Activity getCurrentActivity() {
@@ -136,7 +140,96 @@ public class TestsQuizzes extends BaseActivity implements ModulesAsyncTaskListen
 
 	@Override
 	protected void createPageContents() {
+		LinearLayout layoutTest = (LinearLayout) findViewById(R.id.Layout_test_quizzes);
+		
+		for (int i = 0; i < numOfModules; i++) {
+			String moduleCode = modulesCodeList.get(i);
+			if (moduleCode != null) {
+				
+				View.inflate(this, R.layout.container_test_quizzes_module, layoutTest);
+				LinearLayout containerForModule = (LinearLayout) layoutTest.findViewById(R.id.Layout_test_quizzes_module);
+				
+				TextView containerName = (TextView) containerForModule.findViewById(R.id.TextView_test_quizzes_module_name);
+				LinearLayout containerForItems = (LinearLayout) containerForModule.findViewById(R.id.Layout_test_quizzes_module_items);
+				
+				containerName.setText(moduleCode);
+				containerName.setTag("moduleCode");
+				
+				ArrayList<EventTest> thisModuleTests = database.getAllEventTestsFrom(moduleCode);
+				
+				for (int j = 0; j < thisModuleTests.size(); j++) {
+					EventTest test = thisModuleTests.get(j);
+					
+					View.inflate(this,  R.layout.container_test_quizzes_module_item, containerForItems);
+					LinearLayout layoutItem = (LinearLayout) containerForItems.findViewById(R.id.Layout_test_quizzes_module_item);
+					
+					TextView itemTitle = (TextView) layoutItem.findViewById(R.id.TextView_test_quizzes_item_title);
+					itemTitle.setText(test.getTitle());
+					
+					long unixTime = test.getUnixTime();
+					Calendar cal = Calendar.getInstance();
+					cal.setTimeInMillis(unixTime);
+					SimpleDateFormat sdfDate = new SimpleDateFormat(DATE_FORMAT, Locale.US);
+					SimpleDateFormat sdfTime = new SimpleDateFormat(TIME_FORMAT, Locale.US);
+					
+					TextView timeField = (TextView) layoutItem.findViewById(R.id.TextView_test_quizzes_item_dueTime);
+					TextView dateField = (TextView) layoutItem.findViewById(R.id.TextView_test_quizzes_item_dueDate);
+					dateField.setText(sdfDate.format(cal.getTime()));
+					
+					if (test.isOnlyDateSet()) {
+						timeField.setVisibility(View.INVISIBLE);
+					} else {
+						timeField.setText(sdfTime.format(cal.getTime()));
+					}
+					
+					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+						layoutItem.setId(View.generateViewId());
+					} else {
+						layoutItem.setId(new Random().nextInt(Integer.MAX_VALUE));
+					}
+				}
+				
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+					containerForModule.setId(View.generateViewId());
+				} else {
+					containerForModule.setId(new Random().nextInt(Integer.MAX_VALUE));
+				}
+			} else {
+				
+			}
+			
+			pd.dismiss();
+		}
+		
 		
 	}
+	
+	public void addTest(View v) {
+		Intent addIntent = new Intent(TestsQuizzes.this, AddTest.class);
+		LinearLayout ll = (LinearLayout) v.getParent();
+		TextView tv = (TextView) ll.findViewById(R.id.TextView_test_quizzes_module_name);
+		String moduleCode = tv.getText().toString();
+	    addIntent.putExtra("moduleCode", moduleCode);
+	    startActivityForResult(addIntent, REQUEST_CODE_FOR_ADD);
+	}
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_FOR_ADD) {
+			Log.w("onact", "jjj");
+			refreshContents();
+		} else if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_FOR_VIEW) {
+			if (data.getExtras().getBoolean("changed")) {
+				refreshContents();
+			}
+		}
+	}
+	
+	public void refreshContents() {
+		super.onCreate(null);
+		createPageContents();
+	}
+	
+	
+	
 }
