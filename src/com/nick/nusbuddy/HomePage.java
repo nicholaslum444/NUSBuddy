@@ -20,23 +20,6 @@ import android.widget.Toast;
 
 
 public class HomePage extends BaseActivity {
-	
-	class UnixTimeComparator implements Comparator<EventHomework> {
-		
-		@Override
-		public int compare(EventHomework e1, EventHomework e2) {
-			
-			// TODO Auto-generated method stub
-			if (e1.getUnixTime() < e2.getUnixTime()) {
-				return -1;
-			} else if (e1.getUnixTime() == e2.getUnixTime()) {
-				return 0;
-			} else {
-				return 1;
-			}
-		}
-		
-	}
 
 	Context context;
     LinearLayout layoutPageContent;

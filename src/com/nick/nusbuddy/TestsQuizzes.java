@@ -3,6 +3,7 @@ package com.nick.nusbuddy;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Locale;
 import java.util.Random;
 
@@ -15,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -160,6 +162,7 @@ public class TestsQuizzes extends BaseActivity implements ModulesAsyncTaskListen
 				containerName.setTag("moduleCode");
 				
 				ArrayList<EventTest> thisModuleTests = database.getAllEventTestsFrom(moduleCode);
+				Collections.sort(thisModuleTests, new UnixTimeComparator());
 				
 				for (int j = 0; j < thisModuleTests.size(); j++) {
 					EventTest test = thisModuleTests.get(j);
@@ -168,7 +171,9 @@ public class TestsQuizzes extends BaseActivity implements ModulesAsyncTaskListen
 					LinearLayout layoutItem = (LinearLayout) containerForItems.findViewById(R.id.Layout_test_quizzes_module_item);
 					
 					TextView itemTitle = (TextView) layoutItem.findViewById(R.id.TextView_test_quizzes_item_title);
+					Button deleteButton = (Button) layoutItem.findViewById(R.id.Button_delete);
 					itemTitle.setText(test.getTitle());
+					deleteButton.setTag(test.getTitle());
 					
 					long unixTime = test.getUnixTime();
 					Calendar cal = Calendar.getInstance();
@@ -190,16 +195,16 @@ public class TestsQuizzes extends BaseActivity implements ModulesAsyncTaskListen
 					hiddenLayout.setVisibility(View.GONE);
 					
 					if (test.getLocation() != null && test.getLocation().length() > 0) {
+						hiddenLayout.findViewById(R.id.Layout_test_quizzes_item_location).setVisibility(View.VISIBLE);
 			    		TextView tt = (TextView) hiddenLayout.findViewById(R.id.Layout_test_quizzes_item_hidden_location);
-			    		tt.setText("Location: " + test.getLocation());
-			    		tt.setVisibility(View.VISIBLE);
+			    		tt.setText(test.getLocation());
 			    		Log.w("location", test.getTitle());
 			    	}
 			    	
 			    	if (test.getDescription() != null && test.getDescription().length() > 0) {
+			    		hiddenLayout.findViewById(R.id.Layout_test_quizzes_item_description).setVisibility(View.VISIBLE);
 			    		TextView dd = (TextView) hiddenLayout.findViewById(R.id.Layout_test_quizzes_item_hidden_description);
-			    		dd.setText("Description: " + test.getDescription());
-			    		dd.setVisibility(View.VISIBLE);
+			    		dd.setText(test.getDescription());
 			    		Log.w("desctp", test.getTitle());
 			    	}
 			    	
@@ -271,7 +276,7 @@ public class TestsQuizzes extends BaseActivity implements ModulesAsyncTaskListen
 				dialog.dismiss();
 			}
 		});
-		//b.setTitle(((TextView) ((LinearLayout) v.getParent().getParent().getParent().getParent()).findViewById(R.id.TextView_homework_item_title)).getText().toString());
+		b.setTitle((String)v.getTag());
 		b.setMessage("Delete item?");
 		b.create().show();
 	}

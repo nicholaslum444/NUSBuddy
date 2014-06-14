@@ -105,6 +105,7 @@
 
     <!-- Test and Quizzes Page Contents -->
     <string name="title_activity_tests_quizzes">Tests and Quizzes</string>
+    <string name="Textview_location_header">"\@ "</string>
 
     <!-- CAP Calculator Page Contents -->
     <string name="title_activity_cap_calculator">CAP Calculator</string>
@@ -142,7 +143,6 @@
         <item>15</item>
         <item>16</item>
     </string-array>
-
     <string name="button_start">Start!</string>
     <string name="button_add">Add Module</string>
     <string name="button_remove">Remove</string>

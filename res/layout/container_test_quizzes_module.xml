@@ -4,16 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@drawable/border"
     android:layout_gravity="center_horizontal"
+    android:divider="@drawable/divider_homework_module_items"
+    android:showDividers="beginning|middle"
     android:layout_marginBottom="10dp" >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center"
-        android:background="@drawable/textview_border" >
+   		android:background="@color/grey"
+        android:gravity="center" >
 
         <TextView
             android:id="@+id/TextView_test_quizzes_module_name"
@@ -21,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="left"
-            android:padding="5dp"
+            android:paddingLeft="10dp"
             android:text="@string/TextView_announcements_module_code_default"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -29,9 +30,10 @@
             android:id="@+id/Button_test_quizzes_add_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:src="@drawable/ic_action_new"
-            android:paddingRight="10dp"
-            android:onClick="addTest" />
+            android:paddingRight="5dp"
+            android:onClick="addTest" /> 
 
     </LinearLayout>
 
@@ -40,9 +42,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:divider="@drawable/divider_homework_module_items"
-        android:showDividers="middle"
-        android:orientation="vertical" >
-
+        android:orientation="vertical"
+        android:showDividers="middle|end" >
+        
     </LinearLayout>   
 
 </LinearLayout>

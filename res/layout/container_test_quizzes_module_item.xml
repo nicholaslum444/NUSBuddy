@@ -3,7 +3,7 @@
     android:id="@+id/Layout_test_quizzes_module_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/view_homework_list_item"
+    android:background="@color/light_blue"
     android:orientation="vertical"
     android:padding="5dp"
     android:layout_gravity="left"
@@ -11,114 +11,148 @@
     android:onClick="expandItem" >
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" 
-            android:orientation="horizontal">
-            
-            <TextView
-		        android:id="@+id/TextView_test_quizzes_item_title"
-		        android:layout_width="0dp"
-		        android:layout_height="wrap_content"
-			    android:layout_weight="1"
-		        android:gravity="left"
-		        android:ellipsize="marquee"
-		        android:singleLine="true"
-		        android:text="Tutorial 3"
-		        android:textAppearance="?android:attr/textAppearanceLarge" />
-            
-			
-		    <LinearLayout
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:orientation="vertical" >
-		        
-		        <TextView
-			        android:id="@+id/TextView_test_quizzes_item_dueDate"
-			        android:layout_width="wrap_content"
-			        android:layout_height="wrap_content"
-			        android:gravity="left"
-			        android:text="Friday, 13 Feb"
-			        android:textAppearance="?android:attr/textAppearanceSmall" />
-		        
-		        <TextView
-			        android:id="@+id/TextView_test_quizzes_item_dueTime"
-			        android:layout_width="wrap_content"
-			        android:layout_height="wrap_content"
-			        android:gravity="left"
-			        android:text="10AM"
-			        android:textAppearance="?android:attr/textAppearanceSmall" />
-		        
-		    </LinearLayout>
-			
-		    <ImageView
-			    android:id="@+id/Image_expand_collapse"
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:src="@drawable/ic_action_expand"
-			    android:contentDescription="Expand item" />
-            
-        </LinearLayout>
-        
-        <LinearLayout
-	        android:id="@+id/Layout_test_quizzes_item_hidden"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:orientation="vertical"
-	        android:visibility="visible" >
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
 	
-	        <LinearLayout
-	            android:id="@+id/Layout_test_quizzes_item_hidden_textviews"
-	            android:layout_width="match_parent"
+	    <LinearLayout
+	        android:layout_width="0dp"
+	        android:layout_weight="1"
+	        android:layout_height="wrap_content"
+	        android:paddingLeft="5dp"
+	        android:orientation="vertical" >
+	
+	        <TextView
+	            android:id="@+id/TextView_test_quizzes_item_title"
+	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:orientation="vertical"
-	            android:visibility="visible" >
-
-	            <TextView
-	                android:id="@+id/Layout_test_quizzes_item_hidden_location"
-	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-	                android:text="TextView"
-	                android:visibility="gone" 
-	                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-	            <TextView
-	                android:id="@+id/Layout_test_quizzes_item_hidden_description"
-	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-	                android:text="TextView" 
-	                android:visibility="gone"
-	                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-	        </LinearLayout>
+	            android:ellipsize="marquee"
+	            android:gravity="left"
+	            android:singleLine="true"
+	            android:text="Tutorial 3"
+	            android:textAppearance="?android:attr/textAppearanceMedium" />
 	        
 	        <LinearLayout
-	            android:id="@+id/Layout_buttons"
-	            android:layout_width="match_parent"
-	            android:layout_height="wrap_content"
-	            android:gravity="left" >
-	
-	            <Button
-	                android:id="@+id/Button_delete"
-	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-	                android:onClick="deleteItem"
-	                android:text="Delete" />
-	
-	            <Button
-	                android:id="@+id/Button_edit"
-	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-	                android:onClick="editItem"
-	                android:text="Edit" />
-	
-	       </LinearLayout>
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal" >
+				
+				<TextView
+				    android:id="@+id/TextView_test_quizzes_item_dueDate"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:gravity="left"
+				    android:text="Friday, 13 Feb"
+				    android:paddingRight="20dp"
+				    android:textAppearance="?android:attr/textAppearanceSmall" />
+				
+				<!-- <View
+					android:layout_weight="1"
+					android:layout_width="0dp"
+					android:layout_height="0dp" /> -->
+				
+				<TextView
+				    android:id="@+id/TextView_test_quizzes_item_dueTime"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:gravity="left"
+				    android:text="10 AM"
+				    android:textAppearance="?android:attr/textAppearanceSmall" />
+				
+	        </LinearLayout>
+	        
+	    </LinearLayout>
 
-    	</LinearLayout>
+        <ImageView
+            android:id="@+id/Image_expand_collapse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:contentDescription="Expand item"
+            android:src="@drawable/ic_action_expand" />
 
 	</LinearLayout>
+       
+   	<LinearLayout
+	    android:id="@+id/Layout_test_quizzes_item_hidden"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical"
+	    android:visibility="visible" >
+	
+	    <LinearLayout
+	        android:id="@+id/Layout_test_quizzes_item_location"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:paddingLeft="5dp"
+	        android:visibility="gone"
+	        android:orientation="horizontal" >
+	
+	        <TextView
+	            android:id="@+id/Layout_test_quizzes_item_hidden_location_header"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/Textview_location_header"
+	            android:textAppearance="?android:attr/textAppearanceSmall" />
+	        
+	        <TextView
+	            android:id="@+id/Layout_test_quizzes_item_hidden_location"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:textAppearance="?android:attr/textAppearanceSmall" />
+	
+	    </LinearLayout>
+	    
+	    <LinearLayout
+	        android:id="@+id/Layout_test_quizzes_item_description"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:paddingLeft="5dp"
+	        android:visibility="gone"
+	        android:orientation="horizontal" >
+	        
+	        <TextView
+	            android:id="@+id/Layout_test_quizzes_item_hidden_description_header"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="" 
+	            android:textAppearance="?android:attr/textAppearanceSmall" />
+	        
+	        <TextView
+	            android:id="@+id/Layout_test_quizzes_item_hidden_description"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:textAppearance="?android:attr/textAppearanceSmall" />
+	        
+	    </LinearLayout>
+	    
+		<LinearLayout
+			android:id="@+id/Layout_buttons"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:gravity="left" >
+			
+			<Button
+			    android:id="@+id/Button_delete"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:onClick="deleteItem"
+			    android:text="Delete" />
+			
+			<View
+			    android:layout_weight="1"
+			    android:layout_width="0dp"
+			    android:layout_height="0dp" />
+			
+			<Button
+			    android:id="@+id/Button_edit"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:onClick="editItem"
+			    android:text="Edit" />
+		
+		</LinearLayout>
+
+	</LinearLayout>
+   	
 </LinearLayout>
