@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/Layout_module"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+
+    <EditText
+        android:id="@+id/Edittext_module_code"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Module Code"
+        android:maxLength="10"
+        android:inputType="textCapCharacters" />
+
+    <Spinner
+        android:id="@+id/Spinner_mc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:entries="@array/MC_options" />
+
+    <Spinner
+        android:id="@+id/Spinner_grade"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:entries="@array/Grade_options" />"
+
+    <Button
+        android:id="@+id/Button_remove"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Remove"
+        android:onClick="removeModule" />
+
+</TableRow>
