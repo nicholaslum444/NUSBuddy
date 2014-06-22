@@ -1,5 +1,6 @@
 package com.nick.nusbuddy;
 
+import java.text.DecimalFormat;
 import java.util.Locale;
 
 import helpers.com.nick.nusbuddy.ViewHelper;
@@ -21,11 +22,32 @@ import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 
 public class CapCalculator extends BaseActivity {
+	
+	public class Pair<T1, T2> {
+		private T1 head;
+		private T2 tail;
+		public Pair(T1 head, T2 tail) {
+			this.head = head;
+			this.tail = tail;
+		}
+		public T1 getHead() {
+			return head;
+		}
+		public T2 getTail() {
+			return tail;
+		}
+	}
+	
+	// to format the cap value field
+	String format;
+	
+	DecimalFormat capFormat;
 	
 	// the hardcoded array for grade points :(
 	// TODO find a better way to store this
@@ -50,6 +72,11 @@ public class CapCalculator extends BaseActivity {
 		
 		vh = new ViewHelper();
 		
+		// format for the cap value
+		// this means numbers only.
+		format = "%.4g%n";
+		capFormat = new DecimalFormat("0.000");
+		
 		layoutModules = (LinearLayout) findViewById(R.id.Layout_modules);
 		
 		createPageContents();
@@ -61,27 +88,129 @@ public class CapCalculator extends BaseActivity {
 		
 		// start off with 4 modules
 		for (int i = 0; i < 4; i++) {
-			//addModule(null);
+			addModule();
 		}
 	}
 	
-	public void addModule(View v) {
+	public void updateCalculateButton() {
+		// show number of modules in the calc button
+		int numOfModulesAdded = layoutModules.getChildCount();
+		Button buttonCalculate = (Button) findViewById(R.id.Button_calculate_cap);
+		if (numOfModulesAdded == 1) {
+			buttonCalculate.setText("Calculate!\n("+ numOfModulesAdded + " module)");
+		} else {
+			buttonCalculate.setText("Calculate!\n("+ numOfModulesAdded + " modules)");
+		}
+	}
+	
+	public void addModule() {
 		View.inflate(this, R.layout.container_cap_calculator_module, layoutModules);
-		//LinearLayout newModule = (LinearLayout) layoutModules.findViewById(R.id.Layout_module);
 		TableRow newModule = (TableRow) layoutModules.findViewById(R.id.Layout_module);
 		vh.changeViewId(newModule);
 		
 		// set up the mc spinner default selection
 		Spinner mcSpinner = (Spinner) newModule.findViewById(R.id.Spinner_mc);
 		mcSpinner.setSelection(3);
+		
+		updateCalculateButton();
 	}
 	
 	public void removeModule(View v) {
 		layoutModules.removeView((View) v.getParent());
+		updateCalculateButton();
 	}
 	
-	private void calculateCap() {
+	public void calculateCap(View v) {
 		
+		if (layoutModules.getChildCount() <= 0) {
+			Toast.makeText(this, "Please add at least one module!", Toast.LENGTH_LONG).show();
+		} else {
+			
+			EditText editTextCurrentCap = (EditText) findViewById(R.id.Edittext_current_cap);
+			EditText editTextMcsTaken = (EditText) findViewById(R.id.Edittext_mcs_taken);
+			
+			TextView textViewCalculatedCap = (TextView) findViewById(R.id.Textview_calculated_value);
+			
+			String currentCapString = editTextCurrentCap.getText().toString();
+			String mcsTakenString = editTextMcsTaken.getText().toString();
+			
+			boolean currentCapFilled = currentCapString.length() > 0;
+			boolean mcsTakenFilled = mcsTakenString.length() > 0;
+			boolean noError = true;
+			
+			int mcsTotal = 0;
+			double pointsTotal = 0;
+			double cap = 0;
+			
+			// add up from the modules first
+			
+			for (int i = 0; i < layoutModules.getChildCount(); i++) {
+				
+				LinearLayout currentModule = (LinearLayout) layoutModules.getChildAt(i);
+				
+				// get the grade spinner
+				Spinner gradeSpinner = (Spinner) currentModule.getChildAt(2);
+				
+				// get the points for the selected grade (-1 for s/u)
+				double points = getPoints(gradeSpinner.getSelectedItemPosition());
+				
+				// check if s/u selected; if selected, do nothing
+				if (points >= 0) {
+					// s/u not selected
+					
+					// get the MCs
+					Spinner creditsSpinner = (Spinner) currentModule.getChildAt(1);
+					
+					// the MCs are 1-indexed. so we just add 1 to the position
+					int mc = creditsSpinner.getSelectedItemPosition() + 1;
+					
+					// get the score and sum up
+					double score = points * mc;
+					mcsTotal += mc;
+					pointsTotal += score;
+				}
+				
+			}
+			
+			
+			if (currentCapFilled && mcsTakenFilled) { // use details when both are provided
+				
+				// TODO check the inputs for current cap and mcs taken
+				double currentCap = Double.parseDouble(currentCapString);
+				int mcsTaken = Integer.parseInt(mcsTakenString);
+				
+				if (currentCap > 5) {
+					editTextCurrentCap.setError("Invalid Input");
+					noError = false;
+				} else if (mcsTaken > 500) {
+					editTextMcsTaken.setError("Invalid Input");
+					noError = false;
+				} else {
+					mcsTotal += mcsTaken;
+					pointsTotal += currentCap * mcsTaken;
+				}
+				
+			// else show error if only half filled
+			} else if (currentCapFilled && !mcsTakenFilled) { 
+				editTextMcsTaken.setError("Invalid Input");
+				noError = false;
+			} else if (!currentCapFilled && mcsTakenFilled) {
+				editTextCurrentCap.setError("Invalid Input");
+				noError = false;
+			}
+			
+			// update the calculated cap value
+			if (mcsTotal > 0 && noError) { // to prevent divide by 0 error
+				cap = pointsTotal / mcsTotal;
+				textViewCalculatedCap.setText(capFormat.format(cap));
+			}
+			
+			
+		}
+	}
+	
+	public double getPoints(int position) {
+		return points[position];
 	}
 	
 	@Override
@@ -99,8 +228,8 @@ public class CapCalculator extends BaseActivity {
 		
 		switch (itemId) {
 		
-		case R.id.action_calculate:
-			calculateCap();
+		case R.id.action_add_module:
+			addModule();
 			break;
 		}
        

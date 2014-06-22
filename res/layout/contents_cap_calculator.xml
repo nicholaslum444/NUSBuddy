@@ -93,11 +93,13 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/Button_add_module"
+            android:id="@+id/Button_calculate_cap"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="Add Module"
-            android:onClick="addModule" />
+            android:gravity="center"
+            android:text="Calculate!"
+            android:onClick="calculateCap" />
+        
     </LinearLayout>
 
     <ImageView

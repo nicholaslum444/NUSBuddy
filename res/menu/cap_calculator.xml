@@ -1,11 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/action_calculate"
+        android:id="@+id/action_add_module"
         android:orderInCategory="1"
         android:showAsAction="always"
-        android:title="Calculate" 
-        android:titleCondensed="Go"
-        android:icon="@drawable/ic_action_accept" />
+        android:title="Add Module" 
+        android:titleCondensed="Add"
+        android:icon="@drawable/ic_action_new" />
 
 </menu>
