@@ -1,6 +1,8 @@
-package com.nick.nusbuddy;
+package helpers.com.nick.nusbuddy;
 
 import java.util.Comparator;
+
+import com.nick.nusbuddy.Event;
 
 public class UnixTimeComparator implements Comparator<Event> {
 		

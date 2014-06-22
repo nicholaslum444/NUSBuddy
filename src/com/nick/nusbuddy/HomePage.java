@@ -1,5 +1,7 @@
 package com.nick.nusbuddy;
 
+import helpers.com.nick.nusbuddy.UnixTimeComparator;
+
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -31,6 +33,8 @@ public class HomePage extends BaseActivity {
     final SimpleDateFormat sdfDateTimeFormat = new SimpleDateFormat(DATE_TIME_FORMAT, Locale.US);
     final SimpleDateFormat sdfDateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.US);
     
+    NUSBuddyDatabaseHelper db;
+    
     @Override
 	protected Activity getCurrentActivity() {
 		return this;
@@ -51,6 +55,8 @@ public class HomePage extends BaseActivity {
         sharedPrefs = getSharedPreferences("NUSBuddyPrefs", MODE_PRIVATE);
         sharedPrefsEditor = sharedPrefs.edit();
         
+    	NUSBuddyDatabaseHelper db = new NUSBuddyDatabaseHelper(this);
+        
         createqa();
         createPageContents();
         
@@ -65,15 +71,11 @@ public class HomePage extends BaseActivity {
     	welcomeNameView.setText(studentName);
     	
     	
-    	// set target cap and required cap
-    	// TODO
+    	// TODO set target cap and required cap
     	
-    	
-    	// TODO set homework list
-    	
-    	NUSBuddyDatabaseHelper db = new NUSBuddyDatabaseHelper(this);
     	
     	// TODO allow user to change how many days of homrwork to show
+    	
     	ArrayList<EventHomework> eventsDueSoon = db.getAllEventHomeworksBetween(System.currentTimeMillis(), System.currentTimeMillis()+86400000);
     	Collections.sort(eventsDueSoon, new UnixTimeComparator());
     	
@@ -105,7 +107,8 @@ public class HomePage extends BaseActivity {
     	
     	
     	// TODO set quizzes list
-    	LinearLayout testsListLayout = (LinearLayout) findViewById(R.id.Layout_home_page_tests_list);
+    	
+    	/*LinearLayout testsListLayout = (LinearLayout) findViewById(R.id.Layout_home_page_tests_list);
     	ArrayList<String> testsList = new ArrayList<String>();
     	testsList.add("cs1231 tutorial 3");
     	testsList.add("asdasd tutasdasoal");
@@ -116,7 +119,37 @@ public class HomePage extends BaseActivity {
     		newTest.setTextColor(Color.parseColor("#046380"));
     		newTest.setText(testsList.get(i));
     		testsListLayout.addView(newTest, i);
-    	}
+    	}*/
+    	
+
+    	/*ArrayList<EventTest> testsDueSoon = db.getAllEventTestsBetween(System.currentTimeMillis(), System.currentTimeMillis()+86400000);
+    	Collections.sort(eventsDueSoon, new UnixTimeComparator());
+    	
+    	LinearLayout testsListLayout = (LinearLayout) findViewById(R.id.Layout_home_page_tests_list);
+    	for (int i = 0; i < eventsDueSoon.size(); i++) {
+    		
+    		EventHomework e = eventsDueSoon.get(i);
+    		
+    		View.inflate(this, R.layout.container_homepage_homework_item, testsListLayout);
+    		LinearLayout newTestLayout = (LinearLayout) testsListLayout.findViewById(R.id.layout_homepage_homework_item);
+    		
+    		TextView titleField = (TextView) newTestLayout.findViewById(R.id.title);
+    		titleField.setText(e.getTitle());
+    		
+    		TextView dueField = (TextView) newTestLayout.findViewById(R.id.duedate);
+    		
+    		Calendar c = Calendar.getInstance();
+    		c.setTimeInMillis(e.getUnixTime());
+    		
+    		if (e.isOnlyDateSet()) {
+    			dueField.setText(sdfDateFormat.format(c.getTime()));
+    		} else {
+    			dueField.setText(sdfDateTimeFormat.format(c.getTime()));
+    		}
+    		
+    		newTestLayout.setId(View.generateViewId());
+    		
+    	}*/
     	
     }
     

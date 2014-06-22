@@ -16,7 +16,6 @@
     <string name="title_activity_nusivleactivity2">NUSIVLEActivity2</string>
 
     <!-- Login Screen -->
-    <string name="title_activity_home_page">Home Page</string>
     <string name="EditText_userid_hint">IVLE UserID</string>
     <string name="EditText_password_hint">Password</string>
     <string name="TextView_login">NUS Buddy</string>
@@ -47,6 +46,7 @@
     </string-array>
 
     <!-- Home Page Contents -->
+    <string name="title_activity_home_page">NUS Buddy</string>
     <!-- Welcome Box -->
     <string name="TextView_welcome_message_default">Hello</string>
     <string name="TextView_welcome_message_morning">Good morning</string>

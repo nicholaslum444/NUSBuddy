@@ -4,7 +4,7 @@
  * This file is part of the specification for the
  * Java Content Repository API
  */
-package com.nick.nusbuddy;
+package helpers.com.nick.nusbuddy;
 
 import java.text.SimpleDateFormat;
 import java.text.ParsePosition;
