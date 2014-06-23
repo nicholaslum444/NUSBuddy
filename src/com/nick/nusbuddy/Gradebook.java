@@ -127,7 +127,6 @@ public class Gradebook extends RefreshableActivity implements ModulesAsyncTaskLi
 			JSONArray modulesArray = responseObject.getJSONArray("Results");
 			numOfModules = modulesArray.length();
 			
-			sharedPrefsEditor.putString("modulesInfo", modulesInfo);
 			sharedPrefsEditor.putInt("numOfModules", numOfModules);
 			sharedPrefsEditor.commit();
 			

@@ -1,16 +1,23 @@
 package com.nick.nusbuddy;
 
-import java.util.*;
+import java.util.ArrayList;
 
-import android.os.*;
-import android.app.*;
-import android.content.*;
-import android.content.res.*;
+import android.app.Activity;
+import android.content.Intent;
+import android.content.res.Configuration;
+import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.view.*;
-import android.support.v4.widget.*;
-import android.view.*;
-import android.widget.*;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.ScrollView;
+
+
 
 /**
  * this is some arcane, mysterious stuff
@@ -57,6 +64,7 @@ public abstract class BaseActivity extends Activity {
 		drawerItems.add(Homework.class);
 		drawerItems.add(TestsQuizzes.class);
 		drawerItems.add(CapCalculator.class);
+		drawerItems.add(Profile.class);
 		// end of drawer list
 		
 		

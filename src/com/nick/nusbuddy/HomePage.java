@@ -55,7 +55,7 @@ public class HomePage extends BaseActivity {
         sharedPrefs = getSharedPreferences("NUSBuddyPrefs", MODE_PRIVATE);
         sharedPrefsEditor = sharedPrefs.edit();
         
-    	NUSBuddyDatabaseHelper db = new NUSBuddyDatabaseHelper(this);
+    	db = new NUSBuddyDatabaseHelper(this);
         
         createqa();
         createPageContents();

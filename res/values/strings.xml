@@ -110,6 +110,7 @@
     <!-- CAP Calculator Page Contents -->
     <string name="title_activity_cap_calculator">CAP Calculator</string>
     <string name="title_activity_view_homework">View Homework</string>
+
     <string-array name="Grade_options">
         <item>A+</item>
         <item>A</item>
@@ -142,6 +143,7 @@
         <item>15</item>
         <item>16</item>
     </string-array>
+
     <string name="button_start">Start!</string>
     <string name="button_add">Add Module</string>
     <string name="button_remove">Remove</string>
@@ -163,5 +165,6 @@
     <string name="popup_high_cap">The input CAP is too damn high.</string>
     <string name="popup_unknown">An unknown error has occurred. Please restart the app.</string>
     <string name="title_activity_add_test">Add Test</string>
+    <string name="title_activity_profile">Profile</string>
 
 </resources>

@@ -64,8 +64,12 @@
             android:label="@string/title_activity_view_homework" >
         </activity>
         <activity
-            android:name="com.nick.nusbuddy.AddTest" 
+            android:name="com.nick.nusbuddy.AddTest"
             android:label="@string/title_activity_add_test" >
+        </activity>
+        <activity
+            android:name="com.nick.nusbuddy.Profile"
+            android:label="@string/title_activity_profile" >
         </activity>
     </application>
 

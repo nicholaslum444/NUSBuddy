@@ -1,0 +1,127 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LinearLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:showDividers="middle"
+    android:divider="@drawable/divider_homework_module_items"
+    android:dividerPadding="0dp"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".Profile" >
+    
+    <LinearLayout
+        android:id="@+id/Layout_personal_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="5dp" >
+	
+        <ImageView
+            android:id="@+id/Image_display_pic"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:contentDescription="Display Picture"
+            android:src="@drawable/smiley" />
+	
+	    <LinearLayout
+	        android:id="@+id/Layout_name_matric_email"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical" >
+	
+	        <TextView
+	            android:id="@+id/Textview_student_name"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="Student Name"
+	            android:textAppearance="?android:attr/textAppearanceLarge" />
+	
+	        <TextView
+	            android:id="@+id/Textview_matric_number"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="Matric Number"
+	            android:textAppearance="?android:attr/textAppearanceSmall" />
+	
+	        <TextView
+	            android:id="@+id/Textview_email"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="Email"
+	            android:textAppearance="?android:attr/textAppearanceSmall" />
+	
+	    </LinearLayout>
+	    
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/Layout_degree_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="5dp" >
+
+        <TextView
+            android:id="@+id/Textview_faculty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Faculty Name"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <LinearLayout
+            android:id="@+id/Layout_major_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/Textview_major_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Major 1"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/Textview_specialisation_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Specialisation (Click to edit)"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:paddingLeft="10dp"
+                android:clickable="true"
+                android:onClick="popupEditSpecialisation" />
+
+        </LinearLayout>
+        
+        <LinearLayout
+            android:id="@+id/Layout_major_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/Textview_major_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Major 2"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/Textview_specialisation_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Specialisation (Click to edit)"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:paddingLeft="10dp"
+                android:clickable="true"
+                android:onClick="popupEditSpecialisation" />
+
+        </LinearLayout>
+	    
+	</LinearLayout>
+    
+</LinearLayout>
