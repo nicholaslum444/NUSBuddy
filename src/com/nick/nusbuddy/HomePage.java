@@ -102,20 +102,20 @@ public class HomePage extends BaseActivity {
     			EventHomework e = eventsDueSoon.get(i);
     		
 	    		TextView titleField = (TextView) newHomeworkLayout.findViewById(R.id.title);
-	    		TextView moduleField = (TextView) newHomeworkLayout.findViewById(R.id.modulename);
+	    		//TextView moduleField = (TextView) newHomeworkLayout.findViewById(R.id.modulename);
 	    		titleField.setText(e.getTitle());
-	    		moduleField.setText(e.getModule());
+	    		//moduleField.setText(e.getModule());
 	    		
-	    		TextView dueField = (TextView) newHomeworkLayout.findViewById(R.id.duedate);
+	    		//TextView dueField = (TextView) newHomeworkLayout.findViewById(R.id.duedate);
 	    		
-	    		Calendar c = Calendar.getInstance();
-	    		c.setTimeInMillis(e.getUnixTime());
+	    		//Calendar c = Calendar.getInstance();
+	    		//c.setTimeInMillis(e.getUnixTime());
 	    		
-	    		if (e.isOnlyDateSet()) {
-	    			dueField.setText(sdfDateFormat.format(c.getTime()));
-	    		} else {
-	    			dueField.setText(sdfDateTimeFormat.format(c.getTime()));
-	    		}
+	    		//if (e.isOnlyDateSet()) {
+	    			//dueField.setText(sdfDateFormat.format(c.getTime()));
+	    		//} else {
+	    			//dueField.setText(sdfDateTimeFormat.format(c.getTime()));
+	    		//}
 	    		
     		}
     		newHomeworkLayout.setId(View.generateViewId());
@@ -143,20 +143,20 @@ public class HomePage extends BaseActivity {
 	    		EventTest e = testsDueSoon.get(i);
 	    		
 	    		TextView titleField = (TextView) newTestLayout.findViewById(R.id.title);
-	    		TextView moduleField = (TextView) newTestLayout.findViewById(R.id.modulename);
+	    		//TextView moduleField = (TextView) newTestLayout.findViewById(R.id.modulename);
 	    		titleField.setText(e.getTitle());
-	    		moduleField.setText(e.getModule());
+	    		//moduleField.setText(e.getModule());
 	    		
-	    		TextView dueField = (TextView) newTestLayout.findViewById(R.id.duedate);
+	    		//TextView dueField = (TextView) newTestLayout.findViewById(R.id.duedate);
 	    		
-	    		Calendar c = Calendar.getInstance();
-	    		c.setTimeInMillis(e.getUnixTime());
+	    		//Calendar c = Calendar.getInstance();
+	    		//c.setTimeInMillis(e.getUnixTime());
 	    		
-	    		if (e.isOnlyDateSet()) {
-	    			dueField.setText(sdfDateFormat.format(c.getTime()));
-	    		} else {
-	    			dueField.setText(sdfDateTimeFormat.format(c.getTime()));
-	    		}
+	    		//if (e.isOnlyDateSet()) {
+	    			//dueField.setText(sdfDateFormat.format(c.getTime()));
+	    		//} else {
+	    			//dueField.setText(sdfDateTimeFormat.format(c.getTime()));
+	    		//}
 	    		
     		}
     		newTestLayout.setId(View.generateViewId());

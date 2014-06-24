@@ -34,6 +34,7 @@
             android:layout_gravity="left"
             android:text="@string/TextView_welcome_message_default"
             android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/white"
             android:textSize="28sp" />
 
         <TextView
@@ -44,7 +45,7 @@
             android:gravity="center"
             android:text="@string/TextView_welcome_name_default"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="#046380"
+            android:textColor="@color/white"
             android:textSize="28sp" />
         
     </LinearLayout>
@@ -72,7 +73,8 @@
 	            android:layout_height="wrap_content"
 	            android:layout_gravity="center"
 	            android:text="To Do"
-	            android:textAppearance="?android:attr/textAppearanceLarge" />
+	            android:textAppearance="?android:attr/textAppearanceLarge"
+	            android:textColor="@color/white" />
 	
 	        <LinearLayout
 	            android:id="@+id/Layout_home_page_homework_list"
@@ -112,7 +114,8 @@
 	            android:layout_height="wrap_content"
 	            android:layout_gravity="center"
 	            android:text="To Study"
-	            android:textAppearance="?android:attr/textAppearanceLarge" />
+	            android:textAppearance="?android:attr/textAppearanceLarge"
+	            android:textColor="@color/white" />
 	
 	        <LinearLayout
 	            android:id="@+id/Layout_home_page_tests_list"

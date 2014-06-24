@@ -19,6 +19,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/white" />
 
+    <!-- to be removed
     <TextView
         android:id="@+id/modulename"
         android:layout_width="0dp"
@@ -40,5 +41,5 @@
         android:paddingRight="5dp"
         android:paddingLeft="5dp"
         android:textAppearance="?android:attr/textAppearanceSmall" />
-
+   -->
 </LinearLayout>
