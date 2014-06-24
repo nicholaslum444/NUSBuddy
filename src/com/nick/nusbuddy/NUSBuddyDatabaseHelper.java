@@ -1,8 +1,6 @@
 package com.nick.nusbuddy;
 
 import java.util.ArrayList;
-import java.util.Locale;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -82,7 +80,7 @@ public class NUSBuddyDatabaseHelper extends SQLiteOpenHelper {
         // create homework table
         db.execSQL(CREATE_HOMEWORK_TABLE);
         
-     // SQL statement to create hw table
+        // SQL statement to create test table
         String CREATE_TEST_TABLE = "CREATE TABLE " + TABLE_TESTS + " ( " +
                 KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
                 KEY_MODULE + " TEXT, " +
@@ -92,7 +90,7 @@ public class NUSBuddyDatabaseHelper extends SQLiteOpenHelper {
             	KEY_DESCRIPTION + " TEXT, " +
             	KEY_IS_ONLY_DATE_SET + " BOOLEAN)"; 
  
-        // create homework table
+        // create test table
         db.execSQL(CREATE_TEST_TABLE);
 	}
 
@@ -216,52 +214,8 @@ public class NUSBuddyDatabaseHelper extends SQLiteOpenHelper {
      
     }
 	
-	/**
-	 * 
-	 * @param id
-	 * @return Null if string stored in db is invalid.
-	 */
-	public EventHomework getEventHomework(int id) {
-   	 
-        // 1. get reference to readable DB
-        SQLiteDatabase db = this.getReadableDatabase();
-     
-        // 2. build query
-        Cursor cursor = 
-                db.query(TABLE_HOMEWORK, // a. table
-	                TABLE_HOMEWORK_COLUMNS, // b. column names
-	                " id = ?", // c. selections 
-	                new String[] { String.valueOf(id) }, // d. selections args
-	                null, // e. group by
-	                null, // f. having
-	                null, // g. order by
-	                null); // h. limit
-     
-        EventHomework homework = null;
-        
-        // 3. if we got results get the first one
-        if (cursor != null) {
-            cursor.moveToFirst();
-            
-            // 4. build book object
-	        try {
-				JSONObject obj = new JSONObject(cursor.getString(1));
-				homework = new EventHomework(obj);
-				homework.setModule(cursor.getString(0));
-				//log 
-		        Log.w("getBook("+id+")", homework.toString());
-			} catch (JSONException e) {
-				e.printStackTrace();
-				
-			}
-        }
-        
-        // 5. return book
-        return homework;
-    }
-	
 	public ArrayList<EventHomework> getAllEventHomeworksBetween(long now, long then) {
-		ArrayList<EventHomework> events = new ArrayList<EventHomework>();
+		ArrayList<EventHomework> homeworks = new ArrayList<EventHomework>();
 		
 		// 1. build query
 		String query = "SELECT * FROM " + TABLE_HOMEWORK + " WHERE " + KEY_UNIX_TIME + " BETWEEN ? AND ?";
@@ -285,14 +239,14 @@ public class NUSBuddyDatabaseHelper extends SQLiteOpenHelper {
 		        homework.setOnlyDateSet(cursor.getInt(8) == 1);
             	
                 // Add homework to events
-            	events.add(homework); 
+		        homeworks.add(homework); 
             	
             } while (cursor.moveToNext());
         }
         
-        Log.w("eventsbetween", events.toString());
+        Log.w("eventsbetween", homeworks.toString());
         // return events
-        return events;
+        return homeworks;
 	}
 	
 	public ArrayList<EventTest> getAllEventTestsBetween(long now, long then) {

@@ -19,13 +19,92 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="5dp" >
-	
-        <ImageView
-            android:id="@+id/Image_display_pic"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:contentDescription="Display Picture"
-            android:src="@drawable/smiley" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <ImageView
+                android:id="@+id/Image_display_pic"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:contentDescription="Display Picture"
+                android:src="@drawable/smiley"
+                android:onClick="changeDisplayPic" />
+
+            <View
+                android:id="@+id/view1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:id="@+id/Layout_current_cap_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center|top"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/Textview_current_cap_edit_header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Current CAP"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                <TextView
+                    android:id="@+id/Textview_current_cap_edit_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:hint="0.00"
+                    android:maxLines="1"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:clickable="true"
+                    android:onClick="popupEditCap"
+                	android:tag="currentCap" />
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/View01"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:id="@+id/Layout_target_cap_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center|top"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/Textview_target_cap_edit_header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Target CAP"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                <TextView
+                    android:id="@+id/Textview_target_cap_edit_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:hint="0.00"
+                    android:maxLines="1"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:clickable="true"
+                    android:onClick="popupEditCap"
+                    android:tag="targetCap" />
+
+            </LinearLayout>
+
+        </LinearLayout>
 	
 	    <LinearLayout
 	        android:id="@+id/Layout_name_matric_email"
@@ -45,14 +124,14 @@
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:text="Matric Number"
-	            android:textAppearance="?android:attr/textAppearanceSmall" />
+	            android:textAppearance="?android:attr/textAppearanceMedium" />
 	
 	        <TextView
 	            android:id="@+id/Textview_email"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:text="Email"
-	            android:textAppearance="?android:attr/textAppearanceSmall" />
+	            android:textAppearance="?android:attr/textAppearanceMedium" />
 	
 	    </LinearLayout>
 	    
@@ -70,7 +149,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Faculty Name"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <LinearLayout
             android:id="@+id/Layout_major_1"
@@ -83,17 +162,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Major 1"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
                 android:id="@+id/Textview_specialisation_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="Specialisation (Click to edit)"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:paddingLeft="10dp"
                 android:clickable="true"
-                android:onClick="popupEditSpecialisation" />
+                android:hint="Specialisation (Click to edit)"
+                android:onClick="popupEditSpecialisation"
+                android:paddingLeft="10dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:tag="spec1" />
 
         </LinearLayout>
         
@@ -108,20 +188,55 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Major 2"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
                 android:id="@+id/Textview_specialisation_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="Specialisation (Click to edit)"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:paddingLeft="10dp"
                 android:clickable="true"
-                android:onClick="popupEditSpecialisation" />
+                android:hint="Specialisation (Click to edit)"
+                android:onClick="popupEditSpecialisation"
+                android:paddingLeft="10dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:tag="spec2" />
 
         </LinearLayout>
 	    
 	</LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/Layout_academic_history"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="5dp" >
+
+        <TextView
+            android:id="@+id/Textview_academic_history_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Academic History"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <LinearLayout
+            android:id="@+id/Layout_academic_history_values"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+        </LinearLayout>
+        
+        <LinearLayout
+            android:id="@+id/Layout_academic_history_items"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+            
+            
+
+        </LinearLayout>
+
+    </LinearLayout>
     
 </LinearLayout>

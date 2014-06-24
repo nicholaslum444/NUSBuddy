@@ -1,5 +1,7 @@
 package com.nick.nusbuddy;
 
+import java.text.DecimalFormat;
+
 import helpers.com.nick.nusbuddy.CheckDigitException;
 
 import org.json.JSONArray;
@@ -9,23 +11,28 @@ import org.json.JSONObject;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.text.InputType;
-import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Profile extends RefreshableActivity implements ProfileAsyncTaskListener {
 	
 
 	private SharedPreferences sharedPrefs;
 	private Editor sharedPrefsEditor;
+	
+	private DecimalFormat capFormat;
+	
+	private double currentCap;
+	private double targetCap;
+	private String spec1;
+	private String spec2;
 	
 	private String authToken;
 	private String apiKey;
@@ -61,6 +68,13 @@ public class Profile extends RefreshableActivity implements ProfileAsyncTaskList
 
 		sharedPrefs = this.getSharedPreferences("NUSBuddyPrefs", MODE_PRIVATE);
 		sharedPrefsEditor = sharedPrefs.edit();
+		
+		capFormat = new DecimalFormat("0.00");
+		
+		currentCap = sharedPrefs.getFloat("currentCap", -1);
+		targetCap = sharedPrefs.getFloat("targetCap", -1);
+		spec1 = sharedPrefs.getString("spec1", null);
+		spec2 = sharedPrefs.getString("spec2", null);
 		
 		apiKey = getString(R.string.api_key_mine);
 		authToken = sharedPrefs.getString("authToken", null);
@@ -123,8 +137,12 @@ public class Profile extends RefreshableActivity implements ProfileAsyncTaskList
 			TextView textviewEmail = (TextView) findViewById(R.id.Textview_email);
 			TextView textviewFaculty = (TextView) findViewById(R.id.Textview_faculty);
 			TextView textviewMajor1 = (TextView) findViewById(R.id.Textview_major_1);
+			TextView textviewSpec1 = (TextView) findViewById(R.id.Textview_specialisation_1);
 			LinearLayout layoutMajor2 = (LinearLayout) findViewById(R.id.Layout_major_2);
 			TextView textviewMajor2 = (TextView) findViewById(R.id.Textview_major_2);
+			TextView textviewSpec2 = (TextView) findViewById(R.id.Textview_specialisation_2);
+			TextView textviewCurrentCapValue = (TextView) findViewById(R.id.Textview_current_cap_edit_value);
+			TextView textviewTargetCapValue = (TextView) findViewById(R.id.Textview_target_cap_edit_value);
 			
 			// set name
 			textviewStudentName.setText(profile.getString("Name"));
@@ -151,6 +169,28 @@ public class Profile extends RefreshableActivity implements ProfileAsyncTaskList
 			} else {
 				textviewMajor2.setText(major2);
 			}
+			
+			// set up specialisations
+			if (spec1 != null) {
+				textviewSpec1.setText(spec1);
+			}
+			if (spec2 != null) {
+				textviewSpec2.setText(spec2);
+			}
+			
+			// set up cap values
+			if (currentCap > 0) {
+				textviewCurrentCapValue.setText(capFormat.format(currentCap));
+			}
+			if (targetCap > 0) {
+				textviewTargetCapValue.setText(capFormat.format(targetCap));
+			}
+			
+			// set up academic history
+			
+			// TODO
+			// get the list of modules taken, then for each mod, get the MC from api.nusmods.com
+			// http://api.nusmods.com/2012-2013/2/modules/CS2020.json
 			
 			
 		} catch (JSONException e) {
@@ -188,23 +228,35 @@ public class Profile extends RefreshableActivity implements ProfileAsyncTaskList
 		final TextView textviewSpecialisation = (TextView) v;
 		LinearLayout layoutMajor = (LinearLayout) textviewSpecialisation.getParent();
 		TextView textviewMajor = (TextView) layoutMajor.getChildAt(0);
-		b = new AlertDialog.Builder(this);
-		b.setTitle(textviewMajor.getText());
-		final EditText specInput = new EditText(this);
-		specInput.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+		
+		final String tag = (String) textviewSpecialisation.getTag(); 
 		
 		final View layout = View.inflate(this, R.layout.dialog_profile_specialisation, null);
 		TextView message = (TextView) layout.findViewById(R.id.Textview_message);
+		EditText input = (EditText) layout.findViewById(R.id.Edittext_input);
 		message.append(textviewMajor.getText());
+		input.setText(textviewSpecialisation.getText());
 		
+		b = new AlertDialog.Builder(this);
+		b.setTitle(textviewMajor.getText());
 		b.setView(layout);
 		b.setCancelable(true);
 		b.setPositiveButton("Set", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				EditText input = (EditText) layout.findViewById(R.id.Edittext_input);
-				textviewSpecialisation.setText(input.getText());
-				dialog.dismiss();
+				String value = input.getText().toString();
+				if (value.length() <= 0) {
+					return;
+				} else {
+					// set the view
+					textviewSpecialisation.setText(value);
+					// set the shared prefs
+					sharedPrefsEditor.putString(tag, value);
+					sharedPrefsEditor.commit();
+					
+					dialog.dismiss();
+				}
 			}
 		});
 		b.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -213,15 +265,89 @@ public class Profile extends RefreshableActivity implements ProfileAsyncTaskList
 				dialog.cancel();
 			}
 		});
-		b.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+		b.setNeutralButton("Clear", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
+				// clear view
 				textviewSpecialisation.setText(null);
+				// clear shared prefs
+				sharedPrefsEditor.remove(tag);
+				sharedPrefsEditor.commit();
 				dialog.dismiss();
 			}
 		});
 		
 		b.show();
+	}
+	
+	public void popupEditCap(View v) {
+		final TextView textviewCapValue = (TextView) v;
+		LinearLayout layoutCapEdit = (LinearLayout) textviewCapValue.getParent();
+		TextView textviewCapEditHeader = (TextView) layoutCapEdit.getChildAt(0);
+		
+		final String tag = (String) textviewCapValue.getTag();
+		
+		final View layout = View.inflate(this, R.layout.dialog_profile_cap_edit, null);
+		TextView message = (TextView) layout.findViewById(R.id.Textview_message);
+		EditText input = (EditText) layout.findViewById(R.id.Edittext_input);
+		message.append(textviewCapEditHeader.getText());
+		input.setText(textviewCapValue.getText());
+		
+		b = new AlertDialog.Builder(this);
+		b.setTitle(textviewCapEditHeader.getText());
+		b.setView(layout);
+		b.setCancelable(true);
+		b.setPositiveButton("Set", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				EditText input = (EditText) layout.findViewById(R.id.Edittext_input);
+				String value = input.getText().toString();
+				if (value.length() <= 0) {
+					return;
+				}
+				
+				String capString = "";
+				// check the value.
+				double capValue = Double.parseDouble(value);
+				if (capValue > 5 || capValue < 0) {
+					Toast.makeText(Profile.this, "Invalid CAP value", Toast.LENGTH_LONG).show();
+				} else {
+					capString = capFormat.format(capValue);
+					
+					// set the view
+					textviewCapValue.setText(capString);
+					// save it in shared prefs.
+					sharedPrefsEditor.putFloat(tag, Float.parseFloat(capString));
+					sharedPrefsEditor.commit();
+					
+					dialog.dismiss();
+				}
+			}
+		});
+		b.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.cancel();
+			}
+		});
+		b.setNeutralButton("Clear", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// clear the view
+				textviewCapValue.setText(null);
+				// clear from shared prefs.
+				sharedPrefsEditor.remove(tag);
+				sharedPrefsEditor.commit();
+				
+				dialog.dismiss();
+			}
+		});
+		
+		b.show();
+	}
+	
+	public void changeDisplayPic(View v) {
+		
 	}
 
 }

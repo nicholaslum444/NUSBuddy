@@ -8,7 +8,7 @@
         android:id="@+id/Textview_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Set specialisation for "
+        android:text="Set value for "
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:padding="5dp" />
 
@@ -16,10 +16,11 @@
         android:id="@+id/Edittext_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Specialisation"
+        android:hint="Value"
         android:ems="10"
-        android:inputType="textCapWords"
-        android:padding="5dp" >"
+        android:inputType="numberDecimal"
+        android:maxLength="4"
+        android:padding="5dp" >
 
         <requestFocus />
     </EditText>

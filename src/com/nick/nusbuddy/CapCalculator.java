@@ -1,31 +1,20 @@
 package com.nick.nusbuddy;
 
 import java.text.DecimalFormat;
-import java.util.Locale;
-
 import helpers.com.nick.nusbuddy.ViewHelper;
 
 import android.os.Bundle;
-import android.text.InputFilter;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 
 public class CapCalculator extends BaseActivity {
 	
@@ -45,7 +34,6 @@ public class CapCalculator extends BaseActivity {
 	}
 	
 	// to format the cap value field
-	String format;
 	
 	DecimalFormat capFormat;
 	
@@ -74,7 +62,6 @@ public class CapCalculator extends BaseActivity {
 		
 		// format for the cap value
 		// this means numbers only.
-		format = "%.4g%n";
 		capFormat = new DecimalFormat("0.000");
 		
 		layoutModules = (LinearLayout) findViewById(R.id.Layout_modules);

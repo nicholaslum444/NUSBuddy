@@ -40,7 +40,7 @@
             android:orientation="vertical" >
 
             <LinearLayout
-                android:id="@+id/Layout_current_cap"
+                android:id="@+id/Layout_current_cap_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal" >
