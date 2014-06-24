@@ -5,4 +5,7 @@
     <color name="cantaloupe">#f9ead4</color>
     <color name="grey">#BFD0DF</color>
     <color name="light_blue">#B6D0F2</color>
+    <color name="transparentGrey">#55BFD0DF</color>
+    <color name="transparentBlack">#55111111</color>
+    <color name="white">#abffffff</color>
 </resources>

@@ -30,6 +30,8 @@ public abstract class BaseActivity extends Activity {
 		super();
 	}
 	
+	protected boolean contentSetAlready;
+	
 	private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -74,12 +76,16 @@ public abstract class BaseActivity extends Activity {
 		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.drawer_layout);
-		layoutPageContent = (ScrollView) findViewById(R.id.Layout_page_content);
+		
+		if (!contentSetAlready) {
+			layoutPageContent = (ScrollView) findViewById(R.id.Layout_page_content);
+
+			// inflates the view v with the layout of currentActivityLayout
+			// then adds v to the pageContent layout
+			View v = View.inflate(currentActivity, currentActivityLayout, null);
+	    	layoutPageContent.addView(v);
+		}
     	
-		// inflates the view v with the layout of currentActivityLayout
-		// then adds v to the pageContent layout
-		View v = View.inflate(currentActivity, currentActivityLayout, null);
-    	layoutPageContent.addView(v);
 		
 		
 		mTitle = (String) currentActivity.getTitle();

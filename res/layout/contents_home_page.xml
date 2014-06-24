@@ -3,33 +3,44 @@
     android:id="@+id/Layout_home_page"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:gravity="bottom"
     android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin" >
 
-    <LinearLayout android:id="@+id/Layout_home_page_welcome" 
-        android:layout_width="match_parent" 
-        android:layout_height="wrap_content" 
-        android:clickable="true" 
-        android:orientation="vertical"
-        android:layout_marginBottom="10dp" >
+    <View
+        android:id="@+id/view1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:id="@+id/Layout_home_page_welcome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|left"
+        android:layout_marginBottom="10dp"
+        android:clickable="true"
+        android:gravity="left"
+        android:orientation="vertical" >
 
         <TextView
             android:id="@+id/TextView_home_page_welcome_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="left"
             android:text="@string/TextView_welcome_message_default"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textSize="28sp" />
 
         <TextView
             android:id="@+id/TextView_home_page_welcome_name"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="left"
             android:gravity="center"
             android:text="@string/TextView_welcome_name_default"
             android:textAppearance="?android:attr/textAppearanceLarge"
@@ -37,58 +48,96 @@
             android:textSize="28sp" />
         
     </LinearLayout>
-
+    
     <LinearLayout
-        android:id="@+id/Layout_home_page_homework"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginBottom="10dp"
-        android:onClick="goToHomework" >
-
-        <TextView
-            android:id="@+id/TextView_home_page_homework_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/TextView_homework_message"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
+        android:layout_gravity="bottom"
+        android:orientation="horizontal" >
+        
         <LinearLayout
-            android:id="@+id/Layout_home_page_homework_list"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:textAppearance="?android:attr/textAppearanceMedium" >
-        </LinearLayout>
+            android:id="@+id/Layout_home_page_homework"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
+            android:background="@color/transparentBlack"
+            android:onClick="goToHomework"
+            android:orientation="vertical" >
+	
+	        <TextView
+	            android:id="@+id/TextView_home_page_homework_message"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center"
+	            android:text="To Do"
+	            android:textAppearance="?android:attr/textAppearanceLarge" />
+	
+	        <LinearLayout
+	            android:id="@+id/Layout_home_page_homework_list"
+	            android:orientation="vertical"
+	            android:layout_width="match_parent"
+	            android:layout_height="match_parent"
+	            android:layout_gravity="center"
+	            android:textAppearance="?android:attr/textAppearanceMedium" >
+	        </LinearLayout>
+	        
+	        <TextView
+	            android:id="@+id/TextView_home_page_homework_see_more"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center"
+	            android:text="..."
+	            android:visibility="invisible"
+	            android:textAppearance="?android:attr/textAppearanceSmall"
+	            android:textColor="@color/white" />
+	        
+	    </LinearLayout>
+	
+	    <LinearLayout
+	        android:id="@+id/Layout_home_page_tests"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="bottom"
+	        android:layout_marginBottom="10dp"
+	        android:layout_weight="1"
+	        android:background="@color/transparentBlack"
+	        android:onClick="goToTest"
+	        android:orientation="vertical" >
+	
+	        <TextView
+	            android:id="@+id/TextView_home_page_tests_message"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center"
+	            android:text="To Study"
+	            android:textAppearance="?android:attr/textAppearanceLarge" />
+	
+	        <LinearLayout
+	            android:id="@+id/Layout_home_page_tests_list"
+	            android:orientation="vertical"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center"
+	            android:textAppearance="?android:attr/textAppearanceMedium" >
+	        </LinearLayout>
+	        
+	    	<TextView
+	            android:id="@+id/TextView_home_page_test_see_more"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center"
+	            android:text="..."
+	            android:visibility="invisible"
+	            android:textAppearance="?android:attr/textAppearanceSmall"
+	            android:textColor="@color/white" />
+	    	
+	    </LinearLayout>
+        
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/Layout_home_page_tests"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/border"
-        android:orientation="vertical"
-        android:layout_marginBottom="10dp" >
-
-        <TextView
-            android:id="@+id/TextView_home_page_tests_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/TextView_tests_message"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <LinearLayout
-            android:id="@+id/Layout_home_page_tests_list"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textAppearance="?android:attr/textAppearanceMedium" >
-        </LinearLayout>
-    </LinearLayout>
+    
 
     <!--
     <LinearLayout
@@ -146,26 +195,5 @@
             android:textAppearance="?android:attr/textAppearanceLarge" />
     </LinearLayout>
     -->
-
-    <Button
-        android:id="@+id/Button_logout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Logout"
-        android:onClick="logout" />
-    
-    <Button
-        android:id="@+id/Button_loginscreen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Show login screen"
-        android:onClick="next" />
-    
-    <Button
-        android:id="@+id/Button_quickaction"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="quick action"
-        android:onClick="openqa" />
 
 </LinearLayout>

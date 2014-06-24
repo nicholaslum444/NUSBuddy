@@ -14,6 +14,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -47,9 +48,17 @@ public class HomePage extends BaseActivity {
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        
+    	
+    	contentSetAlready = true;
     	// uses the base activity to create the layout, drawer, everything.
     	super.onCreate(savedInstanceState);
+    	
+    	DrawerLayout d = (DrawerLayout) findViewById(R.id.Layout_drawer);
+    	d.removeViewAt(0);
+    	View v = View.inflate(this, getCurrentActivityLayout(), null);
+    	v.setBackground(getResources().getDrawable(R.drawable.landscape6));
+    	d.addView(v, 0);
+    	
         
         context = this;
         sharedPrefs = getSharedPreferences("NUSBuddyPrefs", MODE_PRIVATE);
@@ -80,76 +89,81 @@ public class HomePage extends BaseActivity {
     	Collections.sort(eventsDueSoon, new UnixTimeComparator());
     	
     	LinearLayout homeworkListLayout = (LinearLayout) findViewById(R.id.Layout_home_page_homework_list);
-    	for (int i = 0; i < eventsDueSoon.size(); i++) {
-    		
-    		EventHomework e = eventsDueSoon.get(i);
+    	int numOfHomework = eventsDueSoon.size();
+    	for (int i = 0; i < 3; i++) {
     		
     		View.inflate(this, R.layout.container_homepage_homework_item, homeworkListLayout);
     		LinearLayout newHomeworkLayout = (LinearLayout) homeworkListLayout.findViewById(R.id.layout_homepage_homework_item);
     		
-    		TextView titleField = (TextView) newHomeworkLayout.findViewById(R.id.title);
-    		titleField.setText(e.getTitle());
+    		if (i >= numOfHomework) {
+    			newHomeworkLayout.setVisibility(View.INVISIBLE);
     		
-    		TextView dueField = (TextView) newHomeworkLayout.findViewById(R.id.duedate);
-    		
-    		Calendar c = Calendar.getInstance();
-    		c.setTimeInMillis(e.getUnixTime());
-    		
-    		if (e.isOnlyDateSet()) {
-    			dueField.setText(sdfDateFormat.format(c.getTime()));
     		} else {
-    			dueField.setText(sdfDateTimeFormat.format(c.getTime()));
+    			EventHomework e = eventsDueSoon.get(i);
+    		
+	    		TextView titleField = (TextView) newHomeworkLayout.findViewById(R.id.title);
+	    		TextView moduleField = (TextView) newHomeworkLayout.findViewById(R.id.modulename);
+	    		titleField.setText(e.getTitle());
+	    		moduleField.setText(e.getModule());
+	    		
+	    		TextView dueField = (TextView) newHomeworkLayout.findViewById(R.id.duedate);
+	    		
+	    		Calendar c = Calendar.getInstance();
+	    		c.setTimeInMillis(e.getUnixTime());
+	    		
+	    		if (e.isOnlyDateSet()) {
+	    			dueField.setText(sdfDateFormat.format(c.getTime()));
+	    		} else {
+	    			dueField.setText(sdfDateTimeFormat.format(c.getTime()));
+	    		}
+	    		
     		}
-    		
     		newHomeworkLayout.setId(View.generateViewId());
-    		
+    	}
+    	if (eventsDueSoon.size() > 3) {
+    		findViewById(R.id.TextView_home_page_homework_see_more).setVisibility(View.VISIBLE);
     	}
     	
     	
     	// TODO set quizzes list
-    	
-    	/*LinearLayout testsListLayout = (LinearLayout) findViewById(R.id.Layout_home_page_tests_list);
-    	ArrayList<String> testsList = new ArrayList<String>();
-    	testsList.add("cs1231 tutorial 3");
-    	testsList.add("asdasd tutasdasoal");
-    	testsList.add("stufftests");
-    	for (int i = 0; i < testsList.size(); i++) {
-    		TextView newTest = new TextView(context, null, android.R.attr.textAppearanceMedium);
-    		newTest.setGravity(Gravity.CENTER_HORIZONTAL);
-    		newTest.setTextColor(Color.parseColor("#046380"));
-    		newTest.setText(testsList.get(i));
-    		testsListLayout.addView(newTest, i);
-    	}*/
-    	
-
-    	/*ArrayList<EventTest> testsDueSoon = db.getAllEventTestsBetween(System.currentTimeMillis(), System.currentTimeMillis()+86400000);
-    	Collections.sort(eventsDueSoon, new UnixTimeComparator());
+    	ArrayList<EventTest> testsDueSoon = db.getAllEventTestsBetween(System.currentTimeMillis(), System.currentTimeMillis()+86400000);
+    	Collections.sort(testsDueSoon, new UnixTimeComparator());
     	
     	LinearLayout testsListLayout = (LinearLayout) findViewById(R.id.Layout_home_page_tests_list);
-    	for (int i = 0; i < eventsDueSoon.size(); i++) {
+    	int numOfTests = testsDueSoon.size();
+    	for (int i = 0; i < 3; i++) {
     		
-    		EventHomework e = eventsDueSoon.get(i);
+    		View.inflate(this, R.layout.container_homepage_test_item, testsListLayout);
+    		LinearLayout newTestLayout = (LinearLayout) testsListLayout.findViewById(R.id.layout_homepage_test_item);
     		
-    		View.inflate(this, R.layout.container_homepage_homework_item, testsListLayout);
-    		LinearLayout newTestLayout = (LinearLayout) testsListLayout.findViewById(R.id.layout_homepage_homework_item);
-    		
-    		TextView titleField = (TextView) newTestLayout.findViewById(R.id.title);
-    		titleField.setText(e.getTitle());
-    		
-    		TextView dueField = (TextView) newTestLayout.findViewById(R.id.duedate);
-    		
-    		Calendar c = Calendar.getInstance();
-    		c.setTimeInMillis(e.getUnixTime());
-    		
-    		if (e.isOnlyDateSet()) {
-    			dueField.setText(sdfDateFormat.format(c.getTime()));
+    		if (i >= numOfTests) {
+    			newTestLayout.setVisibility(View.INVISIBLE);
     		} else {
-    			dueField.setText(sdfDateTimeFormat.format(c.getTime()));
+	    		
+	    		EventTest e = testsDueSoon.get(i);
+	    		
+	    		TextView titleField = (TextView) newTestLayout.findViewById(R.id.title);
+	    		TextView moduleField = (TextView) newTestLayout.findViewById(R.id.modulename);
+	    		titleField.setText(e.getTitle());
+	    		moduleField.setText(e.getModule());
+	    		
+	    		TextView dueField = (TextView) newTestLayout.findViewById(R.id.duedate);
+	    		
+	    		Calendar c = Calendar.getInstance();
+	    		c.setTimeInMillis(e.getUnixTime());
+	    		
+	    		if (e.isOnlyDateSet()) {
+	    			dueField.setText(sdfDateFormat.format(c.getTime()));
+	    		} else {
+	    			dueField.setText(sdfDateTimeFormat.format(c.getTime()));
+	    		}
+	    		
     		}
-    		
     		newTestLayout.setId(View.generateViewId());
-    		
-    	}*/
+    	}
+    	if (eventsDueSoon.size() > 3) {
+    		findViewById(R.id.TextView_home_page_test_see_more).setVisibility(View.VISIBLE);
+    	}
     	
     }
     
@@ -219,12 +233,17 @@ public class HomePage extends BaseActivity {
  	}
  	
  	public void openqa(View v) {
- 		NUSBuddyDatabaseHelper db = new NUSBuddyDatabaseHelper(this);
- 		db.onUpgrade(db.getWritableDatabase(), 1, 1);
+ 		/*NUSBuddyDatabaseHelper db = new NUSBuddyDatabaseHelper(this);
+ 		db.onUpgrade(db.getWritableDatabase(), 1, 1);*/
  	}
  	
  	public void goToHomework(View v) {
  		Intent i = new Intent(this, Homework.class);
+ 		startActivity(i);
+ 	}
+ 	
+ 	public void goToTest(View v) {
+ 		Intent i = new Intent(this, TestsQuizzes.class);
  		startActivity(i);
  	}
  	
