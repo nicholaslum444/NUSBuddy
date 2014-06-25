@@ -56,7 +56,7 @@ public class HomePage extends BaseActivity {
     	DrawerLayout d = (DrawerLayout) findViewById(R.id.Layout_drawer);
     	d.removeViewAt(0);
     	View v = View.inflate(this, getCurrentActivityLayout(), null);
-    	v.setBackground(getResources().getDrawable(R.drawable.landscape6));
+    	v.setBackground(getResources().getDrawable(R.drawable.landscape7));
     	d.addView(v, 0);
     	
         
