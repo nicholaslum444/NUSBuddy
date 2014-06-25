@@ -3,6 +3,7 @@
     android:id="@+id/CalcLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center_horizontal"
     android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -34,7 +35,7 @@
 
         <LinearLayout
             android:id="@+id/Layout_details"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical" >
@@ -47,9 +48,9 @@
 
                 <TextView
                     android:id="@+id/Textview_current_cap_header"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:singleLine="true"
                     android:text="Current CAP:"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -73,10 +74,10 @@
 
                 <TextView
                     android:id="@+id/Textview_mcs_taken_header"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="MCs Taken:"
+                    android:singleLine="true"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
                 <EditText

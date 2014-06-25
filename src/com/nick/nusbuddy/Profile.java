@@ -64,6 +64,7 @@ public class Profile extends RefreshableActivity implements ProfileAsyncTaskList
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		doNotSetBackground = true;
 		super.onCreate(savedInstanceState);
 
 		sharedPrefs = this.getSharedPreferences("NUSBuddyPrefs", MODE_PRIVATE);

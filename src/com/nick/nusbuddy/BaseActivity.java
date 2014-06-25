@@ -31,6 +31,7 @@ public abstract class BaseActivity extends Activity {
 	}
 	
 	protected boolean contentSetAlready;
+	protected boolean doNotSetBackground;
 	
 	private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -76,14 +77,18 @@ public abstract class BaseActivity extends Activity {
 		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.drawer_layout);
+
+		layoutPageContent = (ScrollView) findViewById(R.id.Layout_page_content);
 		
 		if (!contentSetAlready) {
-			layoutPageContent = (ScrollView) findViewById(R.id.Layout_page_content);
-
 			// inflates the view v with the layout of currentActivityLayout
 			// then adds v to the pageContent layout
 			View v = View.inflate(currentActivity, currentActivityLayout, null);
 	    	layoutPageContent.addView(v);
+		}
+		
+		if (doNotSetBackground) {
+			layoutPageContent.setBackground(null);
 		}
     	
 		

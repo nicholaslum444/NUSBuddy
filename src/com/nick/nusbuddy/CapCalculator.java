@@ -56,6 +56,8 @@ public class CapCalculator extends BaseActivity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+
+		doNotSetBackground = true;
 		super.onCreate(savedInstanceState);
 		
 		vh = new ViewHelper();
