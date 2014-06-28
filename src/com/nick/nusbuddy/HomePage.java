@@ -102,20 +102,7 @@ public class HomePage extends BaseActivity {
     			EventHomework e = eventsDueSoon.get(i);
     		
 	    		TextView titleField = (TextView) newHomeworkLayout.findViewById(R.id.title);
-	    		//TextView moduleField = (TextView) newHomeworkLayout.findViewById(R.id.modulename);
 	    		titleField.setText(e.getTitle());
-	    		//moduleField.setText(e.getModule());
-	    		
-	    		//TextView dueField = (TextView) newHomeworkLayout.findViewById(R.id.duedate);
-	    		
-	    		//Calendar c = Calendar.getInstance();
-	    		//c.setTimeInMillis(e.getUnixTime());
-	    		
-	    		//if (e.isOnlyDateSet()) {
-	    			//dueField.setText(sdfDateFormat.format(c.getTime()));
-	    		//} else {
-	    			//dueField.setText(sdfDateTimeFormat.format(c.getTime()));
-	    		//}
 	    		
     		}
     		newHomeworkLayout.setId(View.generateViewId());
@@ -143,20 +130,7 @@ public class HomePage extends BaseActivity {
 	    		EventTest e = testsDueSoon.get(i);
 	    		
 	    		TextView titleField = (TextView) newTestLayout.findViewById(R.id.title);
-	    		//TextView moduleField = (TextView) newTestLayout.findViewById(R.id.modulename);
 	    		titleField.setText(e.getTitle());
-	    		//moduleField.setText(e.getModule());
-	    		
-	    		//TextView dueField = (TextView) newTestLayout.findViewById(R.id.duedate);
-	    		
-	    		//Calendar c = Calendar.getInstance();
-	    		//c.setTimeInMillis(e.getUnixTime());
-	    		
-	    		//if (e.isOnlyDateSet()) {
-	    			//dueField.setText(sdfDateFormat.format(c.getTime()));
-	    		//} else {
-	    			//dueField.setText(sdfDateTimeFormat.format(c.getTime()));
-	    		//}
 	    		
     		}
     		newTestLayout.setId(View.generateViewId());
@@ -240,12 +214,13 @@ public class HomePage extends BaseActivity {
  	public void goToHomework(View v) {
  		Intent i = new Intent(this, Homework.class);
  		startActivity(i);
+ 		
  	}
  	
  	public void goToTest(View v) {
  		Intent i = new Intent(this, TestsQuizzes.class);
  		startActivity(i);
+ 		
  	}
  	
-    
 }
