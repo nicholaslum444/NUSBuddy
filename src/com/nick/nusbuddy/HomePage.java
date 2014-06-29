@@ -71,6 +71,7 @@ public class HomePage extends BaseActivity {
         
     }
     
+    
     @Override
     protected void createPageContents() {
     	// TODO set welcome message morning evening etc and name
@@ -210,6 +211,11 @@ public class HomePage extends BaseActivity {
  		/*NUSBuddyDatabaseHelper db = new NUSBuddyDatabaseHelper(this);
  		db.onUpgrade(db.getWritableDatabase(), 1, 1);*/
  	}
+ 	
+ 	public void refreshContents() {
+		super.onCreate(null);
+		createPageContents();
+	}
  	
  	public void goToHomework(View v) {
  		Intent i = new Intent(this, Homework.class);
