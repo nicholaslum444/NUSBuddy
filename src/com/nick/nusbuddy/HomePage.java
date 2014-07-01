@@ -15,6 +15,7 @@ import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -83,13 +84,20 @@ public class HomePage extends BaseActivity {
     	
     	// TODO set target cap and required cap
     	
+    	// check the shared prefs for whether to show or not.
+    	LinearLayout layoutTodoTostudy = (LinearLayout) findViewById(R.id.Layout_todo_tostudy);
+    	boolean showValue = sharedPrefs.getBoolean("show_homework", false);
+    	Log.w("showval", showValue+"");
+    	if (showValue) {
+    		
+    	}
     	
     	// TODO allow user to change how many days of homrwork to show
-    	
     	ArrayList<EventHomework> eventsDueSoon = db.getAllEventHomeworksBetween(System.currentTimeMillis(), System.currentTimeMillis()+86400000);
     	Collections.sort(eventsDueSoon, new UnixTimeComparator());
     	
     	LinearLayout homeworkListLayout = (LinearLayout) findViewById(R.id.Layout_home_page_homework_list);
+    	homeworkListLayout.removeAllViews();
     	int numOfHomework = eventsDueSoon.size();
     	for (int i = 0; i < 3; i++) {
     		
@@ -118,6 +126,7 @@ public class HomePage extends BaseActivity {
     	Collections.sort(testsDueSoon, new UnixTimeComparator());
     	
     	LinearLayout testsListLayout = (LinearLayout) findViewById(R.id.Layout_home_page_tests_list);
+    	testsListLayout.removeAllViews();
     	int numOfTests = testsDueSoon.size();
     	for (int i = 0; i < 3; i++) {
     		
@@ -213,9 +222,14 @@ public class HomePage extends BaseActivity {
  	}
  	
  	public void refreshContents() {
-		super.onCreate(null);
 		createPageContents();
 	}
+ 	
+ 	@Override
+ 	protected void onResume() {
+ 		super.onResume();
+ 		refreshContents();
+ 	}
  	
  	public void goToHomework(View v) {
  		Intent i = new Intent(this, Homework.class);

@@ -1,6 +1,9 @@
 package com.nick.nusbuddy;
 
+import helpers.com.nick.nusbuddy.GlobalValues;
+
 import java.util.Locale;
+
 import org.json.*;
 
 import android.net.ConnectivityManager;
@@ -162,6 +165,8 @@ LoginAsyncTaskListener {
 				sharedPrefsEditor.putString("password", password);
 				sharedPrefsEditor.commit();
 				
+				GlobalValues.userId = userId.toLowerCase(Locale.US);
+				
 				Log.w("api", apiKey);
 				Log.w("token", authToken);
 				
@@ -203,6 +208,9 @@ LoginAsyncTaskListener {
 				authToken = result.getString("Token");
 				sharedPrefsEditor.putString("authToken", authToken);
 				sharedPrefsEditor.commit();
+				
+				String userid = sharedPrefs.getString("userId", null);
+				GlobalValues.userId = userid;
 				
 				Log.w("usr", sharedPrefs.getString("userId", "no usr"));
 				Log.w("pwd", sharedPrefs.getString("password", "no pwd"));

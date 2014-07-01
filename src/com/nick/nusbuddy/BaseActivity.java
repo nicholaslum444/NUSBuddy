@@ -3,7 +3,12 @@ package com.nick.nusbuddy;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -53,6 +58,9 @@ public abstract class BaseActivity extends Activity {
     protected abstract int getCurrentActivityLayout();
     
     protected abstract void createPageContents();
+    
+    
+    
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +76,11 @@ public abstract class BaseActivity extends Activity {
 		drawerItems.add(TestsQuizzes.class);
 		drawerItems.add(CapCalculator.class);
 		drawerItems.add(Profile.class);
+		drawerItems.add(null); //frens
+		drawerItems.add(Settings.class); // sett
+		drawerItems.add(null); // help 
+		drawerItems.add(null); // abt
+		drawerItems.add(Logout.class);
 		// end of drawer list
 		
 		

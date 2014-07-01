@@ -1,9 +1,11 @@
 package com.nick.nusbuddy;
 
+import helpers.com.nick.nusbuddy.GlobalValues;
+
 import java.util.ArrayList;
+
 import org.json.JSONException;
 import org.json.JSONObject;
-
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -60,7 +62,8 @@ public class NUSBuddyDatabaseHelper extends SQLiteOpenHelper {
     };
     
 	public NUSBuddyDatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        super(context, DATABASE_NAME + GlobalValues.userId, null, DATABASE_VERSION);
+        Log.w("ad", DATABASE_NAME + GlobalValues.userId);
     }
 
 	@Override

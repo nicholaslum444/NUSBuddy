@@ -166,5 +166,6 @@
     <string name="popup_unknown">An unknown error has occurred. Please restart the app.</string>
     <string name="title_activity_add_test">Add Test</string>
     <string name="title_activity_profile">Profile</string>
+    <string name="title_activity_logout">Logout</string>
 
 </resources>

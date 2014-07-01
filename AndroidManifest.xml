@@ -71,6 +71,14 @@
             android:name="com.nick.nusbuddy.Profile"
             android:label="@string/title_activity_profile" >
         </activity>
+        <activity
+            android:name="com.nick.nusbuddy.Logout"
+            android:label="@string/title_activity_logout" >
+        </activity>
+        <activity
+            android:name="com.nick.nusbuddy.Settings"
+            android:label="@string/title_activity_settings" >
+        </activity>
     </application>
 
 </manifest>
