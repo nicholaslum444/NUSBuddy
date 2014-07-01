@@ -7,7 +7,8 @@
         android:key="homework_days" 
         android:title="Homework Days" 
         android:summary="Show homework X days in advance" 
-        android:selectable="true"/>
+        android:selectable="true"
+        android:defaultValue="1" />
     <ListPreference 
         android:entries="@array/number_of_days_homework_titles" 
         android:entryValues="@array/number_of_days_homework_values" 
@@ -15,9 +16,10 @@
         android:key="test_days" 
         android:title="Test Days" 
         android:summary="Show tests X days in advance" 
-        android:selectable="true"/>
+        android:selectable="true"
+        android:defaultValue="1" />
     <CheckBoxPreference android:disableDependentsState="false" android:title="Show Homework" android:summary="Show homework and tests" android:key="show_homework" android:defaultValue="true" android:persistent="true"/>
-    <ListPreference android:dependency="show_homework" android:entryValues="@array/number_of_items_values" android:entries="@array/number_of_items_titles" android:key="number_of_items" android:title="Number of items" android:summary="Show x number of items"/>
+    <ListPreference android:dependency="show_homework" android:entryValues="@array/number_of_items_values" android:entries="@array/number_of_items_titles" android:key="number_of_items" android:title="Number of items" android:summary="The number of upcoming items to show"/>
     
 
 </PreferenceScreen>

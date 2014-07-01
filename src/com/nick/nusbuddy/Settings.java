@@ -39,10 +39,17 @@ public class Settings extends PreferenceActivity {
 	 */
 	private static final boolean ALWAYS_SIMPLE_PREFS = true;
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
-
+		
+		// originally the shared preferences file used to save the prefs was the default one.
+		// this line changes the shared preferences file to my own so that it saves in this one
+		getPreferenceManager().setSharedPreferencesName("NUSBuddyPrefs");
+		
+		
+		PreferenceManager.setDefaultValues(this, R.xml.pref_home_page, false);
 		setupSimplePreferencesScreen();
 	}
 

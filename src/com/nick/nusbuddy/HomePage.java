@@ -12,11 +12,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -28,7 +27,10 @@ public class HomePage extends BaseActivity {
 	Context context;
     LinearLayout layoutPageContent;
     SharedPreferences sharedPrefs;
+    SharedPreferences sharedPrefsDefault;
     Editor sharedPrefsEditor;
+    
+    long currentTime;
     
     final String DATE_TIME_FORMAT = "EEE, h:mm a";
     final String DATE_FORMAT = "EEE";
@@ -64,6 +66,9 @@ public class HomePage extends BaseActivity {
         context = this;
         sharedPrefs = getSharedPreferences("NUSBuddyPrefs", MODE_PRIVATE);
         sharedPrefsEditor = sharedPrefs.edit();
+        sharedPrefsDefault=PreferenceManager.getDefaultSharedPreferences(this);
+        
+        currentTime = System.currentTimeMillis();
         
     	db = new NUSBuddyDatabaseHelper(this);
         
@@ -81,25 +86,54 @@ public class HomePage extends BaseActivity {
     	String studentName = sharedPrefs.getString("studentName", defaultName);
     	welcomeNameView.setText(studentName);
     	
+    	TextView textViewWelcomeMessage = (TextView) findViewById(R.id.TextView_home_page_welcome_message);
+    	String message = getString(R.string.TextView_welcome_message_default);
+    	
+    	// choose the message based on the current time
+    	// 4 <= h < 12 = morning
+    	// 12 <= h < 17 = afternoon
+    	// 17 <= h < 4 = evening
+    	Calendar c = Calendar.getInstance();
+    	int h = c.get(Calendar.HOUR_OF_DAY);
+    	
+    	if (4 <= h && h < 12) {
+    		message = getString(R.string.TextView_welcome_message_morning);
+    	} else if (12 <= h && h < 17) {
+    		message = getString(R.string.TextView_welcome_message_afternoon);
+    	} else if (17 <= h || (0 <= h && h < 4) ){
+    		message = getString(R.string.TextView_welcome_message_evening);
+    	}
+    	
+    	textViewWelcomeMessage.setText(message);
     	
     	// TODO set target cap and required cap
     	
-    	// check the shared prefs for whether to show or not.
-    	LinearLayout layoutTodoTostudy = (LinearLayout) findViewById(R.id.Layout_todo_tostudy);
-    	boolean showValue = sharedPrefs.getBoolean("show_homework", false);
-    	Log.w("showval", showValue+"");
-    	if (showValue) {
-    		
+    	// get all the relevant settings. 
+    	sharedPrefs = getSharedPreferences("NUSBuddyPrefs", MODE_PRIVATE);
+    	boolean showUpcoming = sharedPrefs.getBoolean("show_homework", false);
+    	int numOfItemsToShow = Integer.parseInt(sharedPrefs.getString("number_of_items", "3"));
+    	int numOfDaysHomework = Integer.parseInt(sharedPrefs.getString("homework_days", "3"));
+    	int numOfDaysTests = Integer.parseInt(sharedPrefs.getString("test_days", "3"));
+    	Log.w("sho", showUpcoming+"");
+    	Log.w("num", numOfItemsToShow+"");
+    	Log.w("numdaysh", numOfDaysHomework+"");
+    	Log.w("numdayst", numOfDaysTests+"");
+    	
+    	LinearLayout layoutUpcoming = (LinearLayout) findViewById(R.id.Layout_todo_tostudy);
+    	if (!showUpcoming) {
+    		layoutUpcoming.setVisibility(View.INVISIBLE);
+    	} else {
+    		layoutUpcoming.setVisibility(View.VISIBLE);
     	}
     	
     	// TODO allow user to change how many days of homrwork to show
-    	ArrayList<EventHomework> eventsDueSoon = db.getAllEventHomeworksBetween(System.currentTimeMillis(), System.currentTimeMillis()+86400000);
+    	ArrayList<EventHomework> eventsDueSoon = db.getAllEventHomeworksBetween(System.currentTimeMillis(), System.currentTimeMillis() + (86400000 * numOfDaysHomework));
     	Collections.sort(eventsDueSoon, new UnixTimeComparator());
     	
     	LinearLayout homeworkListLayout = (LinearLayout) findViewById(R.id.Layout_home_page_homework_list);
     	homeworkListLayout.removeAllViews();
     	int numOfHomework = eventsDueSoon.size();
-    	for (int i = 0; i < 3; i++) {
+    	for (int i = 0; i < numOfItemsToShow; i++) {
     		
     		View.inflate(this, R.layout.container_homepage_homework_item, homeworkListLayout);
     		LinearLayout newHomeworkLayout = (LinearLayout) homeworkListLayout.findViewById(R.id.layout_homepage_homework_item);
@@ -116,19 +150,21 @@ public class HomePage extends BaseActivity {
     		}
     		newHomeworkLayout.setId(View.generateViewId());
     	}
-    	if (eventsDueSoon.size() > 3) {
+    	if (numOfHomework > numOfItemsToShow) {
     		findViewById(R.id.TextView_home_page_homework_see_more).setVisibility(View.VISIBLE);
+    	} else {
+    		findViewById(R.id.TextView_home_page_homework_see_more).setVisibility(View.INVISIBLE);
     	}
     	
     	
     	// TODO set quizzes list
-    	ArrayList<EventTest> testsDueSoon = db.getAllEventTestsBetween(System.currentTimeMillis(), System.currentTimeMillis()+86400000);
+    	ArrayList<EventTest> testsDueSoon = db.getAllEventTestsBetween(System.currentTimeMillis(), System.currentTimeMillis() + (86400000 * numOfDaysTests));
     	Collections.sort(testsDueSoon, new UnixTimeComparator());
     	
     	LinearLayout testsListLayout = (LinearLayout) findViewById(R.id.Layout_home_page_tests_list);
     	testsListLayout.removeAllViews();
     	int numOfTests = testsDueSoon.size();
-    	for (int i = 0; i < 3; i++) {
+    	for (int i = 0; i < numOfItemsToShow; i++) {
     		
     		View.inflate(this, R.layout.container_homepage_test_item, testsListLayout);
     		LinearLayout newTestLayout = (LinearLayout) testsListLayout.findViewById(R.id.layout_homepage_test_item);
@@ -145,8 +181,10 @@ public class HomePage extends BaseActivity {
     		}
     		newTestLayout.setId(View.generateViewId());
     	}
-    	if (eventsDueSoon.size() > 3) {
+    	if (numOfTests > numOfItemsToShow) {
     		findViewById(R.id.TextView_home_page_test_see_more).setVisibility(View.VISIBLE);
+    	} else {
+    		findViewById(R.id.TextView_home_page_test_see_more).setVisibility(View.INVISIBLE);
     	}
     	
     }

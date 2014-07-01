@@ -75,7 +75,7 @@
             android:name="com.nick.nusbuddy.Logout"
             android:label="@string/title_activity_logout" >
         </activity>
-        <activity
+        <activity 
             android:name="com.nick.nusbuddy.Settings"
             android:label="@string/title_activity_settings" >
         </activity>
