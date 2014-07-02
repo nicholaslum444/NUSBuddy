@@ -23,7 +23,8 @@ public class Login extends Activity implements
 StudentNameAsyncTaskListener,
 ModulesAsyncTaskListener,
 TokenValidateAsyncTaskListener,
-LoginAsyncTaskListener {
+LoginAsyncTaskListener,
+ProfileAsyncTaskListener {
 	 
 	// this view and layout
 	Context context;
@@ -273,7 +274,7 @@ LoginAsyncTaskListener {
 		}
 		
 		if (sharedPrefs.getString("modulesInfo", null) != null) {
-			goToHome();
+			runGetProfile(authToken);
 			return;
 		}
 		
@@ -287,6 +288,33 @@ LoginAsyncTaskListener {
 	@Override
 	public void onModulesTaskComplete(String modulesResponse) {
 		sharedPrefsEditor.putString("modulesInfo", modulesResponse);
+		sharedPrefsEditor.commit();
+		
+		runGetProfile(authToken);
+	}
+	
+	public void runGetProfile(String authToken) {
+		if (!hasInternetConnection()) {
+			showSplashScreen(false);
+			Toast.makeText(this, "Please check your Wifi or 3G connection", Toast.LENGTH_LONG).show();
+			return;
+		}
+		
+		if (sharedPrefs.getString("profileInfo", null) != null) {
+			goToHome();
+			return;
+		}
+		
+		pd.setMessage("Retrieving profile");
+		
+		GetProfileAsyncTask profileTask = new GetProfileAsyncTask(this);
+		
+		profileTask.execute(apiKey, authToken);
+	}
+	
+	@Override
+	public void onProfileTaskComplete(String profileResponse) {
+		sharedPrefsEditor.putString("profileInfo", profileResponse);
 		sharedPrefsEditor.commit();
 		pd.dismiss();
 		

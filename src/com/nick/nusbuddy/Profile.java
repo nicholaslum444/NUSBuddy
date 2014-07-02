@@ -29,8 +29,8 @@ public class Profile extends RefreshableActivity implements ProfileAsyncTaskList
 	
 	private DecimalFormat capFormat;
 	
-	private double currentCap;
-	private double targetCap;
+	private float currentCap;
+	private float targetCap;
 	private String spec1;
 	private String spec2;
 	
@@ -72,10 +72,10 @@ public class Profile extends RefreshableActivity implements ProfileAsyncTaskList
 		
 		capFormat = new DecimalFormat("0.00");
 		
-		currentCap = sharedPrefs.getFloat("currentCap", -1);
-		targetCap = sharedPrefs.getFloat("targetCap", -1);
-		spec1 = sharedPrefs.getString("spec1", null);
-		spec2 = sharedPrefs.getString("spec2", null);
+		currentCap = Float.parseFloat(sharedPrefs.getString("currentCap", -1+""));
+		targetCap = Float.parseFloat(sharedPrefs.getString("targetCap", -1+""));
+		spec1 = sharedPrefs.getString("specialisation", null);
+		spec2 = sharedPrefs.getString("specialisation2", null);
 		
 		apiKey = getString(R.string.api_key_mine);
 		authToken = sharedPrefs.getString("authToken", null);
@@ -167,9 +167,12 @@ public class Profile extends RefreshableActivity implements ProfileAsyncTaskList
 			String major2 = profile.getString("SecondMajor");
 			if (major2 == null || major2.length() == 0) {
 				layoutMajor2.setVisibility(View.GONE);
+				sharedPrefsEditor.putBoolean("hasSecondMajor", false);
 			} else {
 				textviewMajor2.setText(major2);
+				sharedPrefsEditor.putBoolean("hasSecondMajor", true);
 			}
+			sharedPrefsEditor.commit();
 			
 			// set up specialisations
 			if (spec1 != null) {
@@ -318,7 +321,7 @@ public class Profile extends RefreshableActivity implements ProfileAsyncTaskList
 					// set the view
 					textviewCapValue.setText(capString);
 					// save it in shared prefs.
-					sharedPrefsEditor.putFloat(tag, Float.parseFloat(capString));
+					sharedPrefsEditor.putString(tag, capString);
 					sharedPrefsEditor.commit();
 					
 					dialog.dismiss();

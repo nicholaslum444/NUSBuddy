@@ -1,8 +1,8 @@
 package com.nick.nusbuddy;
 
 import java.text.DecimalFormat;
-import helpers.com.nick.nusbuddy.ViewHelper;
 
+import helpers.com.nick.nusbuddy.ViewHelper;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +15,8 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.app.Activity;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 
 public class CapCalculator extends BaseActivity {
 	
@@ -40,6 +42,9 @@ public class CapCalculator extends BaseActivity {
 	// the hardcoded array for grade points :(
 	// TODO find a better way to store this
 	double[] points = {5, 5, 4.5, 4.0, 3.5, 3, 2.5, 2, 1.5, 1, 0, -1};
+	
+	SharedPreferences sharedPrefs;
+	Editor sharedPrefsEditor;
 	
 	LinearLayout layoutModules;
 	ViewHelper vh;
@@ -68,6 +73,9 @@ public class CapCalculator extends BaseActivity {
 		
 		layoutModules = (LinearLayout) findViewById(R.id.Layout_modules);
 		
+		sharedPrefs = this.getSharedPreferences("NUSBuddyPrefs", MODE_PRIVATE);
+		sharedPrefsEditor = sharedPrefs.edit();
+		
 		createPageContents();
 	}
 	
@@ -79,6 +87,12 @@ public class CapCalculator extends BaseActivity {
 		for (int i = 0; i < 4; i++) {
 			addModule();
 		}
+		
+		// set cap
+		EditText editTextCurrentCap = (EditText) findViewById(R.id.Edittext_current_cap);
+		float sharedPrefsCap = Float.parseFloat(sharedPrefs.getString("currentCap", -1+""));
+		editTextCurrentCap.setText(sharedPrefsCap + "");
+		
 	}
 	
 	public void updateCalculateButton() {

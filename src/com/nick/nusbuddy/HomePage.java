@@ -66,11 +66,17 @@ public class HomePage extends BaseActivity {
         context = this;
         sharedPrefs = getSharedPreferences("NUSBuddyPrefs", MODE_PRIVATE);
         sharedPrefsEditor = sharedPrefs.edit();
-        sharedPrefsDefault=PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPrefsDefault = PreferenceManager.getDefaultSharedPreferences(this);
         
         currentTime = System.currentTimeMillis();
         
     	db = new NUSBuddyDatabaseHelper(this);
+    	
+    	//
+    	sharedPrefsEditor.remove("currentCap");
+    	sharedPrefsEditor.remove("targetCap");
+    	sharedPrefsEditor.commit();
+    	//
         
         createqa();
         createPageContents();

@@ -173,7 +173,7 @@
                 android:onClick="popupEditSpecialisation"
                 android:paddingLeft="10dp"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:tag="spec1" />
+                android:tag="specialisation" />
 
         </LinearLayout>
         
@@ -199,7 +199,7 @@
                 android:onClick="popupEditSpecialisation"
                 android:paddingLeft="10dp"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:tag="spec2" />
+                android:tag="specialisation2" />
 
         </LinearLayout>
 	    

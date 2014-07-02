@@ -2,6 +2,8 @@ package com.nick.nusbuddy;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -16,8 +18,13 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -51,6 +58,90 @@ public class Settings extends PreferenceActivity {
 		
 		PreferenceManager.setDefaultValues(this, R.xml.pref_home_page, false);
 		setupSimplePreferencesScreen();
+		
+		Preference prefCurrentCap = this.findPreference("currentCap");
+		prefCurrentCap.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+			
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				// TODO Auto-generated method stub
+				String newCurrentCap = (String) newValue;
+				
+				double capValue = Double.parseDouble(newCurrentCap);
+				if (capValue > 5 || capValue < 0) {
+					Toast.makeText(Settings.this, "Invalid CAP value", Toast.LENGTH_LONG).show();
+					return false;
+				}
+				return true;
+				
+			}
+		});
+		
+		Preference prefTargetCap = this.findPreference("targetCap");
+		prefTargetCap.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+			
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				// TODO Auto-generated method stub
+				String newTargetCap = (String) newValue;
+				
+				double capValue = Double.parseDouble(newTargetCap);
+				if (capValue > 5 || capValue < 0) {
+					Toast.makeText(Settings.this, "Invalid CAP value", Toast.LENGTH_LONG).show();
+					return false;
+				} 
+				return true;
+			}
+		});
+		
+		Preference prefMc = this.findPreference("currentMcs");
+		prefMc.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				// TODO Auto-generated method stub
+				String newMcs = (String) newValue;
+				
+				int McsValue = Integer.parseInt(newMcs);
+				if (McsValue > 500 || McsValue < 0) {
+					Toast.makeText(Settings.this, "Invalid MC value", Toast.LENGTH_LONG).show();
+					return false;
+				}
+				return true;
+			}
+			
+		});
+		
+		SharedPreferences sharedPrefs = getSharedPreferences("NUSBuddyPrefs", MODE_PRIVATE);
+		Editor sharedPrefsEditor = sharedPrefs.edit();
+		boolean hasSecondMajor = false;
+		
+		try {
+			JSONObject responseObject = new JSONObject(sharedPrefs.getString("profileInfo", null));
+			JSONArray profilesArray = responseObject.getJSONArray("Results");
+			JSONObject myProfile = profilesArray.getJSONObject(0);
+			String secondMajor = myProfile.getString("SecondMajor");
+			
+			if (secondMajor == null || secondMajor.length() <= 0) {
+				sharedPrefsEditor.putBoolean("hasSecondMajor", false);
+				hasSecondMajor = false;
+			} else {
+				sharedPrefsEditor.putBoolean("hasSecondMajor", true);
+				hasSecondMajor = true;
+			}
+			
+			sharedPrefsEditor.commit();
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		Preference prefSecondSpec = this.findPreference("specialisation2");
+		prefSecondSpec.setShouldDisableView(true);
+		prefSecondSpec.setEnabled(hasSecondMajor);
+		
+		
 	}
 
 	/**
@@ -70,17 +161,17 @@ public class Settings extends PreferenceActivity {
 		// Add 'general' preferences.
 		addPreferencesFromResource(R.xml.pref_general2); 
 
-		// Add 'notifications' preferences, and a corresponding header.
+		// Add 'home page' preferences, and a corresponding header.
 		PreferenceCategory fakeHeader = new PreferenceCategory(this);
-		fakeHeader.setTitle(R.string.pref_header_notifications);
+		fakeHeader.setTitle("home");
 		getPreferenceScreen().addPreference(fakeHeader);
 		addPreferencesFromResource(R.xml.pref_home_page);
 
-		// Add 'data and sync' preferences, and a corresponding header.
+		// Add 'profile' preferences, and a corresponding header.
 		fakeHeader = new PreferenceCategory(this);
-		fakeHeader.setTitle(R.string.pref_header_data_sync);
+		fakeHeader.setTitle("profile");
 		getPreferenceScreen().addPreference(fakeHeader);
-		addPreferencesFromResource(R.xml.pref_data_sync);
+		addPreferencesFromResource(R.xml.pref_profile);
 
 		// Bind the summaries of EditText/List/Dialog/Ringtone preferences to
 		// their values. When their values change, their summaries are updated

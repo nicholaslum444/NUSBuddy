@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    <EditTextPreference 
+        android:positiveButtonText="Set" 
+        android:persistent="true" 
+        android:negativeButtonText="Cancel" 
+        android:inputType="numberDecimal"
+        android:maxLength="4"
+        android:title="Current CAP" 
+        android:key="currentCap" />
+    
+    <EditTextPreference 
+        android:positiveButtonText="Set" 
+        android:persistent="true" 
+        android:negativeButtonText="Cancel" 
+        android:inputType="numberDecimal"
+        android:maxLength="4"
+        android:title="Target Cap" 
+        android:key="targetCap" />
+    
+    <EditTextPreference 
+        android:summary="Accumulated Module Credits" 
+        android:positiveButtonText="Set" 
+        android:persistent="true" 
+        android:negativeButtonText="Cancel" 
+        android:inputType="number"
+        android:maxLength="3"
+        android:title="Current MCs" 
+        android:key="currentMcs" />
+    
+    <EditTextPreference 
+        android:positiveButtonText="Set" 
+        android:persistent="true" 
+        android:negativeButtonText="Cancel" 
+        android:title="First Major Specialisation" 
+        android:inputType="textCapWords"
+        android:key="specialisation" />
+    
+    <EditTextPreference 
+        android:positiveButtonText="Set" 
+        android:persistent="true" 
+        android:negativeButtonText="Cancel" 
+        android:title="Second Major Specialisation" 
+        android:inputType="textCapWords"
+        android:key="specialisation2" />
+    
+
+</PreferenceScreen>
