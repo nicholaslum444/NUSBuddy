@@ -95,6 +95,7 @@ public class Settings extends PreferenceActivity {
 		});
 		
 		Preference prefMc = this.findPreference("currentMcs");
+		
 		prefMc.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 
 			@Override
@@ -125,7 +126,9 @@ public class Settings extends PreferenceActivity {
 			if (secondMajor == null || secondMajor.length() <= 0) {
 				sharedPrefsEditor.putBoolean("hasSecondMajor", false);
 				hasSecondMajor = false;
+			
 			} else {
+				
 				sharedPrefsEditor.putBoolean("hasSecondMajor", true);
 				hasSecondMajor = true;
 			}
@@ -152,6 +155,7 @@ public class Settings extends PreferenceActivity {
 	@SuppressWarnings("deprecation")
 	private void setupSimplePreferencesScreen() {
 		if (!isSimplePreferences(this)) {
+			
 			return;
 		}
 
