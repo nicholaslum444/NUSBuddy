@@ -77,5 +77,21 @@
         <item >4</item>
         <item >5</item>
     </string-array>
+    
+    <!-- Announcements Settings -->
+    <string-array name="check_announcements_interval_values">
+        <item>15</item>
+        <item>3600</item>
+        <item>21600</item>
+        <item>43200</item>
+        <item>86400</item>
+    </string-array>
+    <string-array name="check_announcements_interval_titles">
+        <item>15 Seconds</item>
+        <item>1 Hour</item>
+        <item>6 Hours</item>
+        <item>12 Hours</item>
+        <item>24 Hours</item>
+    </string-array>
 
 </resources>

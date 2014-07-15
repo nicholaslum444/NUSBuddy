@@ -193,6 +193,9 @@ public class HomePage extends BaseActivity {
     		findViewById(R.id.TextView_home_page_test_see_more).setVisibility(View.INVISIBLE);
     	}
     	
+    	
+    	
+    	
     }
     
     

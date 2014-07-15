@@ -56,8 +56,11 @@ public class Settings extends PreferenceActivity {
 		getPreferenceManager().setSharedPreferencesName("NUSBuddyPrefs");
 		
 		
-		PreferenceManager.setDefaultValues(this, R.xml.pref_home_page, false);
+		PreferenceManager.setDefaultValues(this, R.xml.pref_home_page, true);
 		setupSimplePreferencesScreen();
+		
+		
+		// setting up individual items options
 		
 		Preference prefCurrentCap = this.findPreference("currentCap");
 		prefCurrentCap.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -116,6 +119,10 @@ public class Settings extends PreferenceActivity {
 		SharedPreferences sharedPrefs = getSharedPreferences("NUSBuddyPrefs", MODE_PRIVATE);
 		Editor sharedPrefsEditor = sharedPrefs.edit();
 		boolean hasSecondMajor = false;
+		String summary = "";
+		
+		Preference prefSecondSpec = this.findPreference("specialisation2");
+		prefSecondSpec.setShouldDisableView(true);
 		
 		try {
 			JSONObject responseObject = new JSONObject(sharedPrefs.getString("profileInfo", null));
@@ -126,12 +133,16 @@ public class Settings extends PreferenceActivity {
 			if (secondMajor == null || secondMajor.length() <= 0) {
 				sharedPrefsEditor.putBoolean("hasSecondMajor", false);
 				hasSecondMajor = false;
+				summary = "No Second Major";
+				prefSecondSpec.setSummary(summary);
 			
 			} else {
 				
 				sharedPrefsEditor.putBoolean("hasSecondMajor", true);
 				hasSecondMajor = true;
+				bindPreferenceSummaryToValue(prefSecondSpec);
 			}
+			prefSecondSpec.setEnabled(hasSecondMajor);
 			
 			sharedPrefsEditor.commit();
 			
@@ -140,9 +151,16 @@ public class Settings extends PreferenceActivity {
 			e.printStackTrace();
 		}
 		
-		Preference prefSecondSpec = this.findPreference("specialisation2");
-		prefSecondSpec.setShouldDisableView(true);
-		prefSecondSpec.setEnabled(hasSecondMajor);
+		bindPreferenceSummaryToValue(findPreference("specialisation"));
+		
+		
+		/*
+		 * setting up the announcements background refresh thingy
+		 */
+		
+		Preference checkAnnouncements = findPreference("check_announcements");
+		
+		
 		
 		
 	}
@@ -162,7 +180,7 @@ public class Settings extends PreferenceActivity {
 		// In the simplified UI, fragments are not used at all and we instead
 		// use the older PreferenceActivity APIs.
 
-		// Add 'general' preferences.
+		// Add 'general' preferences. This is blank.
 		addPreferencesFromResource(R.xml.pref_general2); 
 
 		// Add 'home page' preferences, and a corresponding header.
@@ -176,6 +194,12 @@ public class Settings extends PreferenceActivity {
 		fakeHeader.setTitle("profile");
 		getPreferenceScreen().addPreference(fakeHeader);
 		addPreferencesFromResource(R.xml.pref_profile);
+		
+		// Add 'announcements' preferences, and a corresponding header.
+		fakeHeader = new PreferenceCategory(this);
+		fakeHeader.setTitle("Announcements");
+		getPreferenceScreen().addPreference(fakeHeader);
+		addPreferencesFromResource(R.xml.pref_announcements);
 
 		// Bind the summaries of EditText/List/Dialog/Ringtone preferences to
 		// their values. When their values change, their summaries are updated

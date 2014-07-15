@@ -34,7 +34,8 @@
         android:entries="@array/number_of_items_titles" 
         android:key="number_of_items" 
         android:title="Number of items" 
-        android:summary="The number of upcoming items to show"/>
+        android:summary="The number of upcoming items to show"
+        android:defaultValue="1" />
     
 
 </PreferenceScreen>
