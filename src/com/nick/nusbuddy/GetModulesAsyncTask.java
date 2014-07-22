@@ -5,9 +5,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+
 import javax.net.ssl.HttpsURLConnection;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.AsyncTask;
 
 public class GetModulesAsyncTask extends AsyncTask<String, Void, String> {
@@ -15,9 +17,9 @@ public class GetModulesAsyncTask extends AsyncTask<String, Void, String> {
 	HttpsURLConnection connection;
 	String responseContent;
 	int responseCode;
-	Activity caller;
+	Context caller;
 	
-	public GetModulesAsyncTask(Activity c) {
+	public GetModulesAsyncTask(Context c) {
 		caller = c;
 	}
 	

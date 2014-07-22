@@ -43,7 +43,8 @@ public class Logout extends Activity {
     										    	sharedPrefsEditor.clear();
     										    	sharedPrefsEditor.commit();
     												startActivity(new Intent(context, Login.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
-    										    	((Activity) context).finish();
+    										    	new AnnouncementsAlarmReceiver().cancelAlarm(context);
+    												((Activity) context).finish();
     											}
     									});
     								    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

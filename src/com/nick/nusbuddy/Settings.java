@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
@@ -158,8 +159,55 @@ public class Settings extends PreferenceActivity {
 		 * setting up the announcements background refresh thingy
 		 */
 		
-		Preference checkAnnouncements = findPreference("check_announcements");
+		Preference prefAnnouncements = findPreference("check_announcements");
+		prefAnnouncements.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+			
+			AnnouncementsAlarmReceiver alarm = new AnnouncementsAlarmReceiver();
+			long interval;
+			
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				// TODO Auto-generated method stub
+				Boolean autoRefreshSelected = (Boolean) newValue;
+				
+				if (autoRefreshSelected) {
+					SharedPreferences sharedPrefs = getSharedPreferences("NUSBuddyPrefs", MODE_PRIVATE);
+					String intervalString = sharedPrefs.getString("check_announcements_interval", "21600");
+					interval = Long.parseLong(intervalString) * 1000; // in milisecs
+					alarm.setAlarm(Settings.this, interval);
+					
+					Toast.makeText(Settings.this, intervalString, Toast.LENGTH_LONG).show();
+					
+				} else {
+					alarm.cancelAlarm(Settings.this);
+					Toast.makeText(Settings.this, "cancel", Toast.LENGTH_LONG).show();
+				}
+				
+				return true;
+			}
+			
+		});
 		
+		
+		Preference prefAnnouncementsInterval = findPreference("check_announcements_interval");
+		prefAnnouncementsInterval.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+			
+			AnnouncementsAlarmReceiver alarm = new AnnouncementsAlarmReceiver();
+			
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				// TODO Auto-generated method stub
+				
+				String intervalString = (String) newValue;
+				
+				long interval = Long.parseLong(intervalString) * 1000;
+				
+				alarm.setAlarm(Settings.this, interval);
+				
+				return true;
+			}
+			
+		});
 		
 		
 		
