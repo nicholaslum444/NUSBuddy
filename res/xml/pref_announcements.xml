@@ -3,7 +3,7 @@
     
     <CheckBoxPreference 
         android:disableDependentsState="false" 
-        android:title="Check for announcements" 
+        android:title="Auto-check for announcements" 
         android:summary="Checking in the background" 
         android:key="check_announcements" 
         android:defaultValue="true" 
@@ -14,8 +14,8 @@
         android:entryValues="@array/check_announcements_interval_values" 
         android:entries="@array/check_announcements_interval_titles" 
         android:key="check_announcements_interval" 
-        android:title="Check interval" 
+        android:title="Checking interval" 
         android:summary="The interval to check"
-        android:defaultValue="15"/>
+        android:defaultValue="3600"/>
 
 </PreferenceScreen>

@@ -101,7 +101,11 @@ public class Announcements extends RefreshableActivity implements ModulesAsyncTa
 		pd.setMessage("Getting announcements...");
 		pd.show();
 		
-		if (modulesInfo == null) {
+		boolean toRefreshAnnouncements = sharedPrefs.getBoolean("toRefreshAnnouncements", false);
+		
+		if (modulesInfo == null || toRefreshAnnouncements) {
+			sharedPrefsEditor.putBoolean("toRefreshAnnouncements", false);
+			sharedPrefsEditor.commit();
 			runGetModules();
 		} else {
 			//Log.d("modules", modulesInfo);

@@ -10,6 +10,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
@@ -17,7 +18,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.nick.nusbuddy.Login"
+            android:name=".Login"
             android:label="@string/app_name"
             android:theme="@style/LoginTheme"
             android:windowSoftInputMode="adjustResize" >
@@ -28,66 +29,79 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.nick.nusbuddy.HomePage"
+            android:name=".HomePage"
             android:label="@string/title_activity_home_page" >
         </activity>
         <activity
-            android:name="com.nick.nusbuddy.Announcements"
+            android:name=".Announcements"
             android:label="@string/title_activity_announcements" >
         </activity>
         <activity
-            android:name="com.nick.nusbuddy.Gradebook"
+            android:name=".Gradebook"
             android:label="@string/title_activity_gradebook" >
         </activity>
         <activity
-            android:name="com.nick.nusbuddy.FinalExams"
+            android:name=".FinalExams"
             android:label="@string/title_activity_final_exams" >
         </activity>
         <activity
-            android:name="com.nick.nusbuddy.Homework"
+            android:name=".Homework"
             android:label="@string/title_activity_homework" >
         </activity>
         <activity
-            android:name="com.nick.nusbuddy.TestsQuizzes"
+            android:name=".TestsQuizzes"
             android:label="@string/title_activity_tests_quizzes" >
         </activity>
         <activity
-            android:name="com.nick.nusbuddy.CapCalculator"
+            android:name=".CapCalculator"
             android:label="@string/title_activity_cap_calculator" >
         </activity>
         <activity
-            android:name="com.nick.nusbuddy.AddHomework"
+            android:name=".AddHomework"
             android:label="@string/title_activity_add_homework" >
         </activity>
         <activity
-            android:name="com.nick.nusbuddy.ViewHomework"
+            android:name=".ViewHomework"
             android:label="@string/title_activity_view_homework" >
         </activity>
         <activity
-            android:name="com.nick.nusbuddy.AddTest"
+            android:name=".AddTest"
             android:label="@string/title_activity_add_test" >
         </activity>
         <activity
-            android:name="com.nick.nusbuddy.Profile"
-            android:label="@string/title_activity_profile" >
+            android:name=".Profile"
+            android:label="@string/title_activity_profile" > 
         </activity>
         <activity
-            android:name="com.nick.nusbuddy.Logout"
+            android:name=".Logout"
             android:label="@string/title_activity_logout" >
         </activity>
-        <activity 
-            android:name="com.nick.nusbuddy.Settings"
-            android:label="@string/title_activity_settings" >
+        <activity
+            android:name=".Settings"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".HomePage" >
         </activity>
-        
-        <receiver android:name=".AnnouncementsAlarmReceiver"></receiver>
-        <receiver android:name=".AnnouncementsBootReceiver">
+
+        <receiver android:name=".AnnouncementsAlarmReceiver" >
+        </receiver>
+        <receiver android:name=".AnnouncementsBootReceiver" >
             <intent-filter>
-            <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+                <action android:name="android.intent.action.BOOT_COMPLETED" >
+                </action>
             </intent-filter>
         </receiver>
-        <service android:name=".AnnouncementsSchedulingService"></service>
-        
+
+        <service android:name=".AnnouncementsSchedulingService" >
+        </service>
+
+        <activity
+            android:name=".Help"
+            android:label="@string/title_activity_help" >
+        </activity>
+        <activity
+            android:name=".About"
+            android:label="@string/title_activity_about" >
+        </activity>
     </application>
 
 </manifest>

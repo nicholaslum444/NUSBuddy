@@ -8,6 +8,10 @@ import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -17,6 +21,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 public class AnnouncementsSchedulingService extends IntentService implements ModulesAsyncTaskListener {
 
@@ -35,6 +40,8 @@ public class AnnouncementsSchedulingService extends IntentService implements Mod
 	HttpsURLConnection connection;
 	String responseContent;
 	int responseCode;
+	
+	boolean toRefreshAnnouncements;
 	
 	public AnnouncementsSchedulingService() {
 		super("AnnouncementsSchedulingService");
@@ -60,8 +67,8 @@ public class AnnouncementsSchedulingService extends IntentService implements Mod
 		Log.w("ok to make connection", "kh");
 		
 		try {
-			URL url = new URL("https://ivle.nus.edu.sg/api/Lapi.svc/Modules_Student?APIKey=" + apiKey
-						+ "&AuthToken=" + authToken + "&StudentID=" + userId + "&Duration=0" + "&IncludeAllInfo=true" + "&output=json");
+			URL url = new URL("https://ivle.nus.edu.sg/api/Lapi.svc/Announcements_Unread?APIKey=" + apiKey
+						+ "&AuthToken=" + authToken + "&TitleOnly=" + "false" );
 			//URL url = new URL("https://ivle.nus.edu.sg/api/Lapi.svc/PublicNews?APIKey=" + apiKey + "&TitleOnly=false");
 			connection = (HttpsURLConnection) url.openConnection();
 			connection.setConnectTimeout(60000);
@@ -99,20 +106,28 @@ public class AnnouncementsSchedulingService extends IntentService implements Mod
 		} finally {
 			connection.disconnect();
 			Log.w("dc connection", "u");
-			
-		}
+			  
+		} 
 		
 		Log.w(" send noti", "u");
-		String oldInfo = sharedPrefs.getString("modulesInfo", null);
-		if (oldInfo != null && responseContent.equals(oldInfo)) {
-			sharedPrefsEditor.putString("modulesInfo", responseContent);
-			sharedPrefsEditor.commit();
+		try {
+			JSONObject responseObject = new JSONObject(responseContent);
+			JSONArray resultsArray = responseObject.getJSONArray("Results");
 			
-			sendNotification("new announcements" + responseContent.length());
-		} else {
-			sendNotification("NO new announcements" + responseContent.length());
+			if (resultsArray.length() > 0) {
+				sendNotification("You have new announcements!" + " " + responseContent);
+				toRefreshAnnouncements = true;
+			} else {
+				sendNotification("You have no new announcements" + " " + responseContent);
+				toRefreshAnnouncements = false;
+			}
 			
+			
+		} catch (JSONException e) {
+			e.printStackTrace();
+			// TODO error parsing the json, what shud we do?? 
 		}
+		
 		
 		AnnouncementsAlarmReceiver.completeWakefulIntent(intent);
 		
@@ -122,11 +137,15 @@ public class AnnouncementsSchedulingService extends IntentService implements Mod
 		Log.w("create notif", "jhg");
 		notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 		
-		PendingIntent contentIntent = PendingIntent.getActivity(this, 1, new Intent(this, Announcements.class), 0);
+		sharedPrefsEditor.putBoolean("toRefreshAnnouncements", toRefreshAnnouncements);
+		sharedPrefsEditor.commit();
+		
+		Intent announcementIntent = new Intent(this, Announcements.class);
+		PendingIntent contentIntent = PendingIntent.getActivity(this, 1, announcementIntent, 0);
 		
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
 		.setSmallIcon(R.drawable.ic_launcher)
-		.setContentTitle("New Announcement")
+		.setContentTitle("NUS Buddy")
 		.setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
 		.setAutoCancel(true)
 		.setContentText(msg);

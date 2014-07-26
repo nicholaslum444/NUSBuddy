@@ -1,29 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
-    <ListPreference 
-        android:entries="@array/number_of_days_homework_titles" 
-        android:entryValues="@array/number_of_days_homework_values" 
-        android:enabled="true" 
-        android:key="homework_days" 
-        android:title="Homework Days" 
-        android:summary="Show homework X days in advance" 
-        android:selectable="true"
-        android:defaultValue="1" />
-    
-    <ListPreference 
-        android:entries="@array/number_of_days_homework_titles" 
-        android:entryValues="@array/number_of_days_homework_values" 
-        android:enabled="true" 
-        android:key="test_days" 
-        android:title="Test Days" 
-        android:summary="Show tests X days in advance" 
-        android:selectable="true"
-        android:defaultValue="1" />
     
     <CheckBoxPreference 
         android:disableDependentsState="false" 
-        android:title="Show Homework" 
-        android:summary="Show homework and tests" 
+        android:title="Show To-Do Lists" 
+        android:summary="Show upcoming homework and tests on this app's home screen" 
         android:key="show_homework" 
         android:defaultValue="true" 
         android:persistent="true"/>
@@ -35,6 +16,26 @@
         android:key="number_of_items" 
         android:title="Number of items" 
         android:summary="The number of upcoming items to show"
+        android:defaultValue="3" />
+    
+    <ListPreference 
+        android:entries="@array/number_of_days_homework_titles" 
+        android:entryValues="@array/number_of_days_homework_values" 
+        android:enabled="true" 
+        android:key="homework_days" 
+        android:title="Homework Due Date Filter" 
+        android:summary="Show homework X days in advance" 
+        android:selectable="true"
+        android:defaultValue="1" />
+    
+    <ListPreference 
+        android:entries="@array/number_of_days_homework_titles" 
+        android:entryValues="@array/number_of_days_homework_values" 
+        android:enabled="true" 
+        android:key="test_days" 
+        android:title="Test Date Filter" 
+        android:summary="Show tests X days in advance" 
+        android:selectable="true"
         android:defaultValue="1" />
     
 

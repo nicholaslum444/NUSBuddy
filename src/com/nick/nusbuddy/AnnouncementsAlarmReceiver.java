@@ -48,7 +48,7 @@ public class AnnouncementsAlarmReceiver extends WakefulBroadcastReceiver {
 	public void cancelAlarm(Context context) {
 		if (alarmMgr != null) {
 			alarmMgr.cancel(alarmIntent);
-			Toast.makeText(context, "this", Toast.LENGTH_LONG).show();
+			//Toast.makeText(context, "this", Toast.LENGTH_LONG).show();
 			Log.w("cancel","calcen");
 		}
 		

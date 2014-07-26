@@ -76,10 +76,9 @@ public abstract class BaseActivity extends Activity {
 		drawerItems.add(TestsQuizzes.class);
 		drawerItems.add(CapCalculator.class);
 		drawerItems.add(Profile.class);
-		drawerItems.add(null); //frens
 		drawerItems.add(Settings.class); // sett
-		drawerItems.add(null); // help 
-		drawerItems.add(null); // abt
+		drawerItems.add(Help.class); // help 
+		drawerItems.add(About.class); // abt
 		drawerItems.add(Logout.class);
 		// end of drawer list
 		

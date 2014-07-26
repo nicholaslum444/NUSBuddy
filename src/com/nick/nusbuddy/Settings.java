@@ -51,7 +51,7 @@ public class Settings extends PreferenceActivity {
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
-		
+		getActionBar().setDisplayHomeAsUpEnabled(true);
 		// originally the shared preferences file used to save the prefs was the default one.
 		// this line changes the shared preferences file to my own so that it saves in this one
 		getPreferenceManager().setSharedPreferencesName("NUSBuddyPrefs");
@@ -163,7 +163,6 @@ public class Settings extends PreferenceActivity {
 		prefAnnouncements.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 			
 			AnnouncementsAlarmReceiver alarm = new AnnouncementsAlarmReceiver();
-			long interval;
 			
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -173,14 +172,14 @@ public class Settings extends PreferenceActivity {
 				if (autoRefreshSelected) {
 					SharedPreferences sharedPrefs = getSharedPreferences("NUSBuddyPrefs", MODE_PRIVATE);
 					String intervalString = sharedPrefs.getString("check_announcements_interval", "21600");
-					interval = Long.parseLong(intervalString) * 1000; // in milisecs
+					long interval = Long.parseLong(intervalString) * 1000; // in milisecs
 					alarm.setAlarm(Settings.this, interval);
 					
-					Toast.makeText(Settings.this, intervalString, Toast.LENGTH_LONG).show();
+					//Toast.makeText(Settings.this, intervalString, Toast.LENGTH_LONG).show();
 					
 				} else {
 					alarm.cancelAlarm(Settings.this);
-					Toast.makeText(Settings.this, "cancel", Toast.LENGTH_LONG).show();
+					//Toast.makeText(Settings.this, "cancel", Toast.LENGTH_LONG).show();
 				}
 				
 				return true;
@@ -294,7 +293,7 @@ public class Settings extends PreferenceActivity {
 		if (!isSimplePreferences(this)) {
 			loadHeadersFromResource(R.xml.pref_headers, target);
 		}
-	}
+	} 
 
 	/**
 	 * A preference value change listener that updates the preference's summary

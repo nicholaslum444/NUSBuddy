@@ -38,7 +38,6 @@
         <item>Tests and Quizzes</item>
         <item>CAP Calculator</item>
         <item>Profile</item>
-        <item>Friends</item>
         <item>Settings</item>
         <item>Help</item>
         <item>About</item>
@@ -167,5 +166,7 @@
     <string name="title_activity_add_test">Add Test</string>
     <string name="title_activity_profile">Profile</string>
     <string name="title_activity_logout">Logout</string>
+    <string name="title_activity_help">Help</string>
+    <string name="title_activity_about">About</string>
 
 </resources>
