@@ -1,9 +1,14 @@
 package com.nick.nusbuddy;
 
 import android.annotation.TargetApi;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -21,6 +26,7 @@ import android.preference.RingtonePreference;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import java.util.Calendar;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -164,22 +170,50 @@ public class Settings extends PreferenceActivity {
 			
 			AnnouncementsAlarmReceiver alarm = new AnnouncementsAlarmReceiver();
 			
+			
+			private AlarmManager  alarmMgr = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+			Intent intent = new Intent(getApplicationContext(), AnnouncementsAlarmReceiver.class);
+			private PendingIntent alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 12345, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+			
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
 				// TODO Auto-generated method stub
 				Boolean autoRefreshSelected = (Boolean) newValue;
 				
-				if (autoRefreshSelected) {
+				if (autoRefreshSelected.booleanValue()) {
 					SharedPreferences sharedPrefs = getSharedPreferences("NUSBuddyPrefs", MODE_PRIVATE);
 					String intervalString = sharedPrefs.getString("check_announcements_interval", "21600");
 					long interval = Long.parseLong(intervalString) * 1000; // in milisecs
-					alarm.setAlarm(Settings.this, interval);
+					//alarm.setAlarm(getApplicationContext(), interval);
+					
+					
+					
+					Calendar calendar = Calendar.getInstance();
+					calendar.setTimeInMillis(System.currentTimeMillis());
+					
+					alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP,
+							System.currentTimeMillis() + interval, interval, alarmIntent);
+					
+					/*ComponentName receiver = new ComponentName(getApplicationContext(), AnnouncementsBootReceiver.class);
+					PackageManager pm = getApplicationContext().getPackageManager();
+					
+					pm.setComponentEnabledSetting(receiver, 
+							PackageManager.COMPONENT_ENABLED_STATE_ENABLED, 
+							PackageManager.DONT_KILL_APP);*/
+					
+					
+					
+					
 					
 					//Toast.makeText(Settings.this, intervalString, Toast.LENGTH_LONG).show();
 					
 				} else {
-					alarm.cancelAlarm(Settings.this);
+					//alarm.cancelAlarm(getApplicationContext());
 					//Toast.makeText(Settings.this, "cancel", Toast.LENGTH_LONG).show();
+					
+					
+					alarmMgr.cancel(alarmIntent);
+					
 				}
 				
 				return true;
@@ -193,6 +227,11 @@ public class Settings extends PreferenceActivity {
 			
 			AnnouncementsAlarmReceiver alarm = new AnnouncementsAlarmReceiver();
 			
+			private AlarmManager  alarmMgr = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+			Intent intent = new Intent(getApplicationContext(), AnnouncementsAlarmReceiver.class);
+			private PendingIntent alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 12345, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+			
+			
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
 				// TODO Auto-generated method stub
@@ -201,7 +240,15 @@ public class Settings extends PreferenceActivity {
 				
 				long interval = Long.parseLong(intervalString) * 1000;
 				
-				alarm.setAlarm(Settings.this, interval);
+				//alarm.setAlarm(Settings.this, interval);
+				
+				
+				Calendar calendar = Calendar.getInstance();
+				calendar.setTimeInMillis(System.currentTimeMillis());
+				
+				alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP,
+						System.currentTimeMillis() + interval, interval, alarmIntent);
+				
 				
 				return true;
 			}
