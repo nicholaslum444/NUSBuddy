@@ -228,9 +228,10 @@ public class FinalExams extends RefreshableActivity implements ModulesAsyncTaskL
 			
 		for (int i = 0; i < numOfModules; i++) {
 			
-			String finalsJSONString = modulesFinalsDataList.get(i);
+			final String finalsJSONString = modulesFinalsDataList.get(i);
 			
 			if (finalsJSONString != null) {
+				//Toast.makeText(this, finalsJSONString, Toast.LENGTH_LONG).show();
 				try {
 					JSONObject obj = new JSONObject(finalsJSONString);
 					JSONObject finalsData = obj.getJSONArray("Results").getJSONObject(0);
@@ -263,26 +264,31 @@ public class FinalExams extends RefreshableActivity implements ModulesAsyncTaskL
 					TextView examSessionValue = (TextView) findViewById(R.id.TextView_final_exams_exam_session_value);
 					examSessionValue.setText(session);
 					
+					LinearLayout containerForModuleDetails = (LinearLayout) findViewById(R.id.Layout_final_exam_module_details);
+					
 					// uniquely set all the IDs so that they don't conflict when i add more of this layout.
 					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
 						containerName.setId(View.generateViewId());
 						examDateValue.setId(View.generateViewId());
 						examTimeValue.setId(View.generateViewId());
 						examSessionValue.setId(View.generateViewId());
+						containerForModuleDetails.setId(View.generateViewId());
 					} else {
 						containerName.setId(new Random().nextInt(Integer.MAX_VALUE));
 						examDateValue.setId(new Random().nextInt(Integer.MAX_VALUE));
 						examTimeValue.setId(new Random().nextInt(Integer.MAX_VALUE));
 						examSessionValue.setId(new Random().nextInt(Integer.MAX_VALUE));
+						containerForModuleDetails.setId(View.generateViewId());
 					}
 					
 					// TODO set a clicklestener to show the "exam info" popup when clicked
-					containerForModule.setOnClickListener(new OnClickListener() {
-
+					containerForModuleDetails.setOnClickListener(new OnClickListener() {
+						
 						@Override
 						public void onClick(View v) {
+							//Toast.makeText(FinalExams.this, finalsJSONString, Toast.LENGTH_LONG).show();
 							b.setTitle(moduleCode);
-							b.setMessage(examInfo);
+							b.setMessage(finalsJSONString);
 							b.create().show();
 						}
 						

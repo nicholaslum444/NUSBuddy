@@ -31,6 +31,7 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:padding="5dp"
 		    android:paddingTop="0dp" >
 
@@ -39,13 +40,14 @@
 		        android:layout_weight="1"
 		        android:layout_width="0dp"
 		        android:layout_height="wrap_content"
+		        android:gravity="center"
 		        android:maxLines="1"
                 android:text="@string/TextView_final_exams_exam_date"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
             
             <TextView
                 android:id="@+id/TextView_final_exams_exam_time"
-		        android:layout_weight="1"
+		        android:layout_weight="0"
 		        android:layout_width="0dp"
 		        android:layout_height="wrap_content"
 		        android:maxLines="1"
@@ -57,6 +59,7 @@
 		        android:layout_weight="1"
 		        android:layout_width="0dp"
 		        android:layout_height="wrap_content"
+		        android:gravity="center"
 		        android:maxLines="1"
                 android:text="@string/TextView_final_exams_exam_session"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -68,6 +71,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
+            android:gravity="center"
             android:paddingBottom="5dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
@@ -78,13 +82,14 @@
 		        android:layout_weight="1"
 		        android:layout_width="0dp"
 		        android:layout_height="wrap_content"
+		        android:gravity="center"
 		        android:maxLines="1"
 		        android:text="@string/TextView_final_exams_exam_date_value"
 		        android:textAppearance="?android:attr/textAppearanceMedium" />
 		    
 		    <TextView
 		        android:id="@+id/TextView_final_exams_exam_time_value"
-		        android:layout_weight="1"
+		        android:layout_weight="0"
 		        android:layout_width="0dp"
 		        android:layout_height="wrap_content"
 		        android:maxLines="1"
@@ -96,6 +101,7 @@
 		        android:layout_weight="1"
 		        android:layout_width="0dp"
 		        android:layout_height="wrap_content"
+		        android:gravity="center"
 		        android:maxLines="1"
 		        android:text="@string/TextView_final_exams_exam_session_value"
 		        android:textAppearance="?android:attr/textAppearanceMedium" />

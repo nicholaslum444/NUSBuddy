@@ -91,7 +91,9 @@ public class CapCalculator extends BaseActivity {
 		// set cap
 		EditText editTextCurrentCap = (EditText) findViewById(R.id.Edittext_current_cap);
 		float sharedPrefsCap = Float.parseFloat(sharedPrefs.getString("currentCap", -1+""));
-		editTextCurrentCap.setText(sharedPrefsCap + "");
+		if (sharedPrefsCap >= 0) {
+			editTextCurrentCap.setText(sharedPrefsCap + "");
+		}
 		
 	}
 	
